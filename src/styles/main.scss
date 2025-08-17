@@ -1,0 +1,12 @@
+// Базовые стили
+@import './base/variables';
+@import './utils/mixins';
+
+// Глобальные стили
+@import '../index.scss';
+
+// Компоненты
+@import '../components/ui/Button/Button.scss';
+
+// Страницы
+@import '../App.scss';

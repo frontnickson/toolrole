@@ -1,0 +1,12 @@
+@import "../../styles/base/variables";
+
+.container{
+  position: relative;
+  max-width: $max-width;
+  margin: 0 auto;
+}
+
+.main{
+  height: 100vh;
+  padding-top: 100px;
+}

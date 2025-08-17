@@ -1,0 +1,29 @@
+@import '../../../../styles/base/_variables.scss';
+@import '../../../../styles/utils/mixins';
+
+.container {
+    background-color: rgb(195, 195, 195);
+    height: 650px;
+    border-radius: $border-radius-md;
+    padding: 45px;
+}
+
+.main{
+    @include flex-column;
+    gap: 15px;
+}
+
+.title{
+    @include flex-column;
+    gap: 15px;
+}
+
+.title h1 {
+    font-size: 120px;
+    line-height: 120px;
+    font-weight: 400;
+}
+
+.title p{
+    font-size: 24px;
+}
