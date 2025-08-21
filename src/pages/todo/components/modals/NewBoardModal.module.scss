@@ -1,0 +1,359 @@
+@import '../../../../styles/base/variables';
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-xl;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid $gray-200;
+
+  h2 {
+    margin: 0;
+    font-size: $font-size-xl;
+    font-weight: 600;
+    color: $gray-900;
+  }
+
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $gray-400;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: $border-radius-md;
+    transition: all $transition-normal;
+
+    &:hover {
+      background: $gray-100;
+      color: $gray-600;
+    }
+  }
+}
+
+.form {
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: $gray-700;
+    font-size: $font-size-sm;
+  }
+
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    transition: all $transition-normal;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+    }
+
+    &.error {
+      border-color: $red-500;
+      box-shadow: 0 0 0 3px rgba($red-500, 0.1);
+    }
+  }
+
+  .textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .errorText {
+    color: $error-color;
+    font-size: $font-size-xs;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  .preview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: $gray-50;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    color: $gray-600;
+    border-left: 3px solid $primary-500;
+  }
+
+  .selectedPreview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: $gray-50;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    color: $gray-600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .finalPreview {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: $gray-50;
+    border-radius: $border-radius-md;
+    border: 1px solid $gray-200;
+
+    h4 {
+      margin: 0 0 1rem 0;
+      font-size: $font-size-sm;
+      color: $gray-700;
+      font-weight: 600;
+    }
+
+    .boardPreview {
+      .boardHeader {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: $border-radius-md;
+        margin-bottom: 1rem;
+
+        .boardIcon {
+          font-size: 2rem;
+        }
+
+        .boardInfo {
+          h3 {
+            margin: 0 0 0.25rem 0;
+            color: $white;
+            font-size: $font-size-lg;
+            font-weight: 600;
+          }
+
+          p {
+            margin: 0;
+            color: rgba($white, 0.9);
+            font-size: $font-size-sm;
+          }
+        }
+      }
+
+      .boardTemplate {
+        font-size: $font-size-xs;
+        color: $gray-600;
+        padding: 0.5rem;
+        background: $white;
+        border-radius: $border-radius-sm;
+        border: 1px solid $gray-200;
+      }
+    }
+  }
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+
+  .templateOption {
+    padding: 1rem;
+    border: 2px solid $gray-200;
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    transition: all $transition-normal;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &:hover {
+      border-color: $primary-300;
+      background: rgba($primary-50, 0.1);
+    }
+
+    &.selected {
+      border-color: $primary-500;
+      background: rgba($primary-50, 0.2);
+    }
+
+    .templateIcon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .templateInfo {
+      h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: $font-size-sm;
+        font-weight: 600;
+        color: $gray-900;
+      }
+
+      p {
+        margin: 0;
+        font-size: $font-size-xs;
+        color: $gray-600;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.5rem;
+
+  .colorOption {
+    width: 32px;
+    height: 32px;
+    border: 2px solid $gray-200;
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    transition: all $transition-normal;
+    position: relative;
+
+    &:hover {
+      transform: scale(1.1);
+      border-color: $gray-400;
+    }
+
+    &.selected {
+      border-color: $gray-800;
+      transform: scale(1.1);
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: $white;
+        font-weight: bold;
+        font-size: 0.875rem;
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid $gray-200;
+
+  .cancelBtn,
+  .createBtn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-normal;
+  }
+
+  .cancelBtn {
+    background: $gray-100;
+    color: $gray-700;
+
+    &:hover {
+      background: $gray-200;
+    }
+  }
+
+  .createBtn {
+    background: $primary-500;
+    color: $white;
+
+    &:hover {
+      background: $primary-600;
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  .modalHeader {
+    padding: 1rem 1rem 0.75rem;
+
+    h2 {
+      font-size: $font-size-lg;
+    }
+  }
+
+  .form {
+    padding: 1rem;
+  }
+
+  .templateGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .colorGrid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+
+    .colorOption {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .formActions {
+    flex-direction: column;
+
+    .cancelBtn,
+    .createBtn {
+      width: 100%;
+    }
+  }
+}

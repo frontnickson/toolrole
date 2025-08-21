@@ -1,21 +1,36 @@
 import React from "react";
 
-import { default as LandingFooter } from "./components/LandingFooter";
-import { default as LandingHeader } from "./components/LandingHeader";
-import { default as LandingMain } from "./components/LandingMain";
+import { LandingHeader, LandingFooter } from "./components";
+import Hero from "./sections/Hero";
+import Features from "./sections/Features";
+import AgentAI from "./sections/AgentAI";
+import Price from "./sections/Price";
+// import Contact from "./sections/Contact";
 
 import styles from './Landing.module.scss';
 
 const Landing: React.FC = () => {
   return (
     <div className={styles.container}>
-      {/* header */}
+      {/* Header */}
       <LandingHeader />
 
-      {/* main */}
-      <div className={styles.main}>
-        <LandingMain />
-      </div>
+      {/* Main content */}
+      <main className={styles.main}>
+        <div id="main">
+          <Hero />
+        </div>
+        <div id="about">
+          <Features />
+        </div>
+        <AgentAI />
+        <div id="price">
+          <Price />
+        </div>
+        {/* <div id="contact">
+          <Contact />
+        </div> */}
+      </main>
 
       {/* Footer */}
       <LandingFooter />

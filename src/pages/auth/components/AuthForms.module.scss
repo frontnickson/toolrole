@@ -1,0 +1,150 @@
+@import "../../../styles/utils/_mixins.scss";
+@import "../../../styles/base/_variables.scss";
+
+.formContainer {
+  @include flex-column;
+  gap: 2rem;
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $gray-900;
+    text-align: center;
+    margin: 0;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+    color: $gray-600;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.form {
+  @include flex-column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.formRow {
+  @include flex-between;
+  gap: 1rem;
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.inputGroup {
+  @include flex-column;
+  gap: 0.5rem;
+  width: 100%;
+  
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $gray-700;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid $gray-200;
+    border-radius: $border-radius-md;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &::placeholder {
+      color: $gray-400;
+    }
+    
+    &.inputError {
+      border-color: $error-color;
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+      }
+    }
+  }
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: $error-color;
+  margin-top: 0.25rem;
+}
+
+.errorMessage {
+  padding: 0.75rem 1rem;
+  background: rgba($error-color, 0.1);
+  border: 1px solid rgba($error-color, 0.2);
+  border-radius: $border-radius-md;
+  color: $error-color;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.forgotPassword {
+  text-align: right;
+  
+  .forgotButton {
+    background: none;
+    border: none;
+    color: $primary-color;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+  }
+}
+
+.submitButton {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.switchForm {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid $gray-200;
+  
+  p {
+    margin: 0;
+    color: $gray-600;
+    font-size: 0.875rem;
+  }
+  
+  .switchButton {
+    background: none;
+    border: none;
+    color: $primary-color;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+  }
+}

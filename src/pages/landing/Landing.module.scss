@@ -1,12 +1,13 @@
-@import "../../styles/base/variables";
+@import "../../styles/utils/_mixins.scss";
+@import "../../styles/base/_variables.scss";
 
-.container{
-  position: relative;
-  max-width: $max-width;
-  margin: 0 auto;
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.main{
-  height: 100vh;
-  padding-top: 100px;
+.main {
+  flex: 1;
+  margin-top: 80px; // Отступ для фиксированного header
 }

@@ -1,0 +1,404 @@
+@import "../../../../styles/utils/_mixins.scss";
+@import "../../../../styles/base/_variables.scss";
+
+.searchOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5vh 2rem;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.searchContainer {
+  background: $white;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-xl;
+  width: 100%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: searchSlideIn 0.3s ease-out;
+}
+
+@keyframes searchSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.searchHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 1px solid $gray-200;
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $gray-800;
+    margin: 0;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: $gray-400;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: $border-radius-md;
+    transition: all $transition-normal;
+    
+    &:hover {
+      background: $gray-100;
+      color: $gray-600;
+    }
+  }
+}
+
+.searchInputContainer {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid $gray-200;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  
+  .searchIcon {
+    position: absolute;
+    left: 1rem;
+    font-size: 1.125rem;
+    color: $gray-400;
+    z-index: 1;
+  }
+  
+  .searchInput {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid $gray-200;
+    border-radius: $border-radius-lg;
+    font-size: 1rem;
+    background: $gray-50;
+    transition: all $transition-normal;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      background: $white;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+  
+  .clearButton {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: $gray-400;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: $border-radius-sm;
+    transition: all $transition-normal;
+    
+    &:hover {
+      background: $gray-100;
+      color: $gray-600;
+    }
+  }
+}
+
+.filterToggle {
+  background: $gray-100;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-md;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: $gray-600;
+  cursor: pointer;
+  transition: all $transition-normal;
+  
+  &:hover {
+    background: $gray-200;
+    color: $gray-700;
+  }
+  
+  &.active {
+    background: $primary-color;
+    color: $white;
+    border-color: $primary-color;
+  }
+}
+
+.filtersPanel {
+  background: $gray-50;
+  border-top: 1px solid $gray-200;
+  padding: 1rem 2rem;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $gray-700;
+  }
+  
+  select {
+    padding: 0.5rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-md;
+    font-size: 0.875rem;
+    background: $white;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+}
+
+.clearFiltersButton {
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius-md;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: $gray-600;
+  cursor: pointer;
+  transition: all $transition-normal;
+  align-self: flex-end;
+  
+  &:hover {
+    background: $gray-50;
+    border-color: $gray-400;
+  }
+}
+
+.searchResults {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 2rem 2rem;
+}
+
+.searchHint {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: $gray-500;
+  
+  .hintIcon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.noResults {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: $gray-500;
+  
+  .noResultsIcon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  small {
+    font-size: 0.875rem;
+    color: $gray-400;
+  }
+}
+
+.resultsHeader {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $gray-200;
+  
+  span {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $gray-600;
+  }
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.resultItem {
+  background: $white;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-lg;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all $transition-normal;
+  
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.taskTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $gray-800;
+  margin: 0;
+  flex: 1;
+}
+
+.taskMeta {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.taskStatus,
+.taskPriority {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: $border-radius-sm;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.taskStatus {
+  background: $blue-100;
+  color: $blue-700;
+}
+
+.taskPriority {
+  background: $orange-100;
+  color: $orange-700;
+}
+
+.taskDescription {
+  font-size: 0.875rem;
+  color: $gray-600;
+  line-height: 1.5;
+  margin: 0 0 0.75rem 0;
+}
+
+.taskTags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 0.75rem;
+  background: $gray-100;
+  color: $gray-600;
+  padding: 0.25rem 0.5rem;
+  border-radius: $border-radius-sm;
+  font-weight: 500;
+}
+
+.moreTags {
+  font-size: 0.75rem;
+  color: $gray-400;
+  font-weight: 500;
+}
+
+.taskDueDate {
+  font-size: 0.75rem;
+  color: $gray-500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .searchOverlay {
+    padding: 2rem 1rem;
+  }
+  
+  .searchContainer {
+    max-height: 90vh;
+  }
+  
+  .searchHeader,
+  .searchInputContainer,
+  .searchResults {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .taskHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .taskMeta {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .filterRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .clearFiltersButton {
+    align-self: stretch;
+  }
+}

@@ -1,0 +1,164 @@
+@import "../../../../styles/utils/_mixins.scss";
+@import '../../../../styles/base/variables';
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  height: 100%;
+  min-height: 600px;
+}
+
+.column {
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.columnHeader {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid $gray-200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  .columnTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    .columnIcon {
+      font-size: 1.25rem;
+    }
+    
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $gray-800;
+      margin: 0;
+    }
+  }
+  
+  .taskCount {
+    background: $gray-100;
+    color: $gray-600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+.columnContent {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 200px;
+}
+
+.addTaskButton {
+  width: 100%;
+  padding: 1rem;
+  background: $gray-50;
+  border: 2px dashed $gray-300;
+  border-radius: $border-radius-md;
+  color: $gray-600;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-normal;
+  
+  &:hover {
+    background: $gray-100;
+    border-color: $gray-400;
+    color: $gray-700;
+  }
+}
+
+.addTaskForm {
+  background: $white;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-md;
+  padding: 1rem;
+  box-shadow: $shadow-sm;
+  
+  .taskTitleInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-md;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+  
+  .taskDescriptionInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-md;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    resize: vertical;
+    min-height: 60px;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+  
+  .taskFormActions {
+    display: flex;
+    gap: 0.75rem;
+    
+    button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: $border-radius-md;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all $transition-normal;
+    }
+    
+    .addTaskBtn {
+      background: $primary-color;
+      color: $white;
+      
+      &:hover {
+        background: $primary-hover;
+      }
+    }
+    
+    .cancelBtn {
+      background: $gray-200;
+      color: $gray-700;
+      
+      &:hover {
+        background: $gray-300;
+      }
+    }
+  }
+}

@@ -1,0 +1,157 @@
+@import "../../../../styles/utils/mixins";
+@import "../../../../styles/base/variables";
+
+.container {
+  width: 100%;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.content {
+  @include flex-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  gap: 3rem;
+}
+
+.textContent {
+  flex: 1;
+  max-width: 600px;
+}
+
+.header {
+  @include flex-column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: $font-size-4xl;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #475569;
+  margin: 0;
+  
+  strong {
+    color: #1e293b;
+  }
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  @include flex-column;
+  gap: 1rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(148, 163, 184, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.bullet {
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-top: 0.1rem;
+}
+
+.description {
+  color: #475569;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.imageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  border-radius: $border-radius-lg;
+  max-width: 100%;
+  height: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+// Адаптивность
+@media (max-width: 1100px) {
+  .content {
+    text-align: center;
+    align-items: center;
+    flex-wrap: wrap;
+    @include flex-center;
+    gap: 2rem;
+  }
+  
+  .textContent {
+    max-width: 100%;
+  }
+  
+  .title {
+    font-size: $font-size-3xl;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 3rem 0;
+  }
+  
+  .content {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+  
+  .title {
+    font-size: $font-size-2xl;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .featureItem {
+    padding: 0.5rem;
+  }
+  
+  .description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .imageContainer {
+    display: none;
+  }
+}

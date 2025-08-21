@@ -3,7 +3,7 @@ export const APP_NAME = 'Project Mind';
 export const APP_VERSION = '1.0.0';
 
 // API константы
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 export const API_TIMEOUT = 10000;
 
 // Локальное хранилище

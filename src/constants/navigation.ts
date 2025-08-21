@@ -25,4 +25,12 @@ export const navItems: NavItems = [
     },
     link: "/price",
   },
+  // {
+  //   id: 4,
+  //   title: {
+  //     ru: "Контакты",
+  //     en: "Contact",
+  //   },
+  //   link: "/contact",
+  // },
 ];

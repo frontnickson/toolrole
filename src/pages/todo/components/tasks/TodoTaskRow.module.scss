@@ -1,0 +1,245 @@
+@import '../../../../styles/base/variables';
+
+.taskRow {
+  transition: background-color $transition-normal;
+
+  &:hover {
+    background: $gray-50;
+  }
+
+  &.overdue {
+    background: rgba($red-50, 0.3);
+  }
+}
+
+.editingRow {
+  background: $blue-50;
+}
+
+// Колонки таблицы
+.checkboxCol {
+  text-align: center;
+}
+
+.titleCol {
+  .taskTitle {
+    .titleText {
+      font-weight: 500;
+      color: $gray-900;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .description {
+      font-size: $font-size-xs;
+      color: $gray-600;
+      display: block;
+      line-height: 1.4;
+    }
+  }
+}
+
+.statusCol {
+  .statusBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+  }
+}
+
+.priorityCol {
+  .priorityBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+  }
+}
+
+.assigneeCol {
+  .assignee {
+    color: $gray-700;
+    font-size: $font-size-sm;
+  }
+}
+
+.dueDateCol {
+  .dueDate {
+    color: $gray-700;
+    font-size: $font-size-sm;
+
+    &.overdue {
+      color: $red-600;
+      font-weight: 500;
+
+      .overdueLabel {
+        display: block;
+        font-size: $font-size-xs;
+        color: $red-500;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .noDueDate {
+    color: $gray-400;
+    font-style: italic;
+  }
+}
+
+.tagsCol {
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    .tag {
+      background: $gray-100;
+      color: $gray-700;
+      padding: 0.125rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-xs;
+      font-weight: 500;
+    }
+
+    .moreTags {
+      background: $gray-200;
+      color: $gray-600;
+      padding: 0.125rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-xs;
+      font-weight: 500;
+    }
+  }
+}
+
+.actionsCol {
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+
+    .actionBtn {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: $border-radius-sm;
+      cursor: pointer;
+      transition: all $transition-normal;
+      font-size: 1rem;
+
+      &:hover {
+        background: $gray-100;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .editActions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+
+    .saveBtn,
+    .cancelBtn {
+      padding: 0.25rem 0.5rem;
+      border: none;
+      border-radius: $border-radius-sm;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all $transition-normal;
+    }
+
+    .saveBtn {
+      background: $green-500;
+      color: $white;
+
+      &:hover {
+        background: $green-600;
+      }
+    }
+
+    .cancelBtn {
+      background: $red-500;
+      color: $white;
+
+      &:hover {
+        background: $red-600;
+      }
+    }
+  }
+}
+
+// Поля редактирования
+.editInput {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 2px rgba($primary-500, 0.1);
+  }
+}
+
+.editSelect {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  background: $white;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 2px rgba($primary-500, 0.1);
+  }
+}
+
+// Чекбокс
+.taskCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: $primary-500;
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .taskRow {
+    td {
+      padding: 0.5rem 0.25rem;
+    }
+  }
+
+  .titleCol .taskTitle .description {
+    display: none;
+  }
+
+  .tagsCol .tags {
+    .tag:not(:first-child) {
+      display: none;
+    }
+  }
+
+  .actionsCol .actions {
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .actionBtn {
+      padding: 0.25rem;
+      font-size: 0.875rem;
+    }
+  }
+}

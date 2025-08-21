@@ -22,6 +22,7 @@ body {
   line-height: $line-height-normal;
   font-size: 16px;
   min-height: 100vh;
+  color: $gray-900;
 }
 
 ul{
@@ -35,4 +36,9 @@ a{
 
 code {
   font-family: $font-family-mono;
+}
+
+h1,h2,h3,h4,h5,h6{
+  margin: 0;
+  padding: 0;
 }

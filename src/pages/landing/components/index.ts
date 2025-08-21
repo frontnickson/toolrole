@@ -1,3 +1,5 @@
-import LandingHeader from "./LandingHeader";
-import LandingMain from "./LandingMain";
-import LandingFooter from "./LandingFooter";
+// Header components
+export * from './Header';
+
+// Footer components  
+export * from './Footer';
