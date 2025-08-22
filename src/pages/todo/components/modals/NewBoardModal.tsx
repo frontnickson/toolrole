@@ -117,8 +117,6 @@ const NewBoardModal: React.FC<NewBoardModalProps> = ({ isOpen, onClose, onCreate
 
   const iconOptions = ['📋', '📊', '🔄', '🎯', '🧪', '✅', '🐛', '📈', '🚀', '💡'];
 
-
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
