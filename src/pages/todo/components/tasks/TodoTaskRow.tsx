@@ -27,13 +27,13 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
     title: task.title,
     description: task.description || '',
     priority: task.priority,
-    dueDate: task.dueDate ? task.dueDate.toISOString().split('T')[0] : ''
+    dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
   });
 
   const handleSave = () => {
     onUpdate(task.id, {
       ...editData,
-      dueDate: editData.dueDate ? new Date(editData.dueDate) : undefined
+      dueDate: editData.dueDate ? new Date(editData.dueDate).getTime() : undefined
     });
     setIsEditing(false);
   };
@@ -43,14 +43,14 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
       title: task.title,
       description: task.description || '',
       priority: task.priority,
-      dueDate: task.dueDate ? task.dueDate.toISOString().split('T')[0] : ''
+      dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
     });
     setIsEditing(false);
   };
 
   const getStatusLabel = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.TODO:
+      case TaskStatus.PLANNING:
         return 'К выполнению';
       case TaskStatus.IN_PROGRESS:
         return 'В работе';
@@ -62,6 +62,10 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
         return 'Завершено';
       case TaskStatus.CANCELLED:
         return 'Отменено';
+      case TaskStatus.BLOCKED:
+        return 'Заблокировано';
+      case TaskStatus.ON_HOLD:
+        return 'Приостановлено';
       default:
         return status;
     }
@@ -69,6 +73,8 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
 
   const getPriorityLabel = (priority: TaskPriority) => {
     switch (priority) {
+      case TaskPriority.CRITICAL:
+        return 'Критично';
       case TaskPriority.URGENT:
         return 'Срочно';
       case TaskPriority.HIGH:
@@ -82,7 +88,8 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
     }
   };
 
-  const formatDate = (date: Date) => {
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -100,7 +107,7 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
     }
   };
 
-  const isOverdue = task.dueDate && new Date() > task.dueDate && task.status !== TaskStatus.COMPLETED;
+  const isOverdue = task.dueDate && new Date() > new Date(task.dueDate) && task.status !== TaskStatus.COMPLETED;
 
   if (isEditing) {
     return (
@@ -151,7 +158,7 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
         <td className={styles.tagsCol}>
           <div className={styles.tags}>
             {task.tags.slice(0, 2).map((tag, index) => (
-              <span key={index} className={styles.tag}>#{tag}</span>
+              <span key={index} className={styles.tag}>#{tag.name}</span>
             ))}
             {task.tags.length > 2 && (
               <span className={styles.moreTags}>+{task.tags.length - 2}</span>
@@ -218,7 +225,7 @@ const TodoTaskRow: React.FC<TodoTaskRowProps> = ({
       <td className={styles.tagsCol}>
         <div className={styles.tags}>
           {task.tags.slice(0, 2).map((tag, index) => (
-            <span key={index} className={styles.tag}>#{tag}</span>
+            <span key={index} className={styles.tag}>#{tag.name}</span>
           ))}
           {task.tags.length > 2 && (
             <span className={styles.moreTags}>+{task.tags.length - 2}</span>

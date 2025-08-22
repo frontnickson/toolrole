@@ -7,7 +7,7 @@ const Profile: React.FC = () => {
   const { user, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    full_name: '',
+    fullName: '',
     username: '',
     email: '',
     bio: ''
@@ -19,7 +19,7 @@ const Profile: React.FC = () => {
     
     if (user) {
       setFormData({
-        full_name: user.full_name || '',
+        fullName: user.fullName || '',
         username: user.username || '',
         email: user.email || '',
         bio: user.bio || ''
@@ -44,7 +44,7 @@ const Profile: React.FC = () => {
   const handleCancel = () => {
     if (user) {
       setFormData({
-        full_name: user.full_name || '',
+        fullName: user.fullName || '',
         username: user.username || '',
         email: user.email || '',
         bio: user.bio || ''
@@ -90,10 +90,10 @@ const Profile: React.FC = () => {
           <div className={styles.profileSection}>
             <div className={styles.avatarSection}>
               <div className={styles.avatar}>
-                {user?.avatar_url ? (
-                  <img src={user.avatar_url} alt="Avatar" />
+                {user?.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="Avatar" />
                 ) : (
-                  <span>{user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}</span>
+                  <span>{user?.fullName?.charAt(0) || user?.username?.charAt(0) || 'U'}</span>
                 )}
               </div>
               <Button variant="secondary" size="sm">
@@ -103,21 +103,21 @@ const Profile: React.FC = () => {
 
             <div className={styles.infoSection}>
               <div className={styles.formGroup}>
-                <label htmlFor="full_name" className={styles.label}>
+                <label htmlFor="fullName" className={styles.label}>
                   Полное имя
                 </label>
                 {isEditing ? (
                   <input
                     type="text"
-                    id="full_name"
-                    name="full_name"
-                    value={formData.full_name}
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
                     onChange={handleInputChange}
                     className={styles.input}
                     placeholder="Введите полное имя"
                   />
                 ) : (
-                  <div className={styles.value}>{user?.full_name || 'Не указано'}</div>
+                  <div className={styles.value}>{user?.fullName || 'Не указано'}</div>
                 )}
               </div>
 
@@ -170,14 +170,16 @@ const Profile: React.FC = () => {
                 <label className={styles.label}>Статус</label>
                 <div className={styles.status}>
                   <span className={styles.statusDot}></span>
-                  {user?.is_active ? 'Активен' : 'Неактивен'}
+                  <div className={styles.value}>
+                    {user?.isActive ? 'Активен' : 'Неактивен'}
+                  </div>
                 </div>
               </div>
 
               <div className={styles.formGroup}>
                 <label className={styles.label}>Дата регистрации</label>
                 <div className={styles.value}>
-                  {user?.created_at ? new Date(user.created_at).toLocaleDateString('ru-RU') : 'Не указано'}
+                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('ru-RU') : 'Не указано'}
                 </div>
               </div>
             </div>

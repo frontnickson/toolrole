@@ -119,7 +119,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
 
   // Получаем имя пользователя из разных источников
   const getUserName = () => {
-    if (user?.full_name) return user.full_name;
+    if (user?.fullName) return user.fullName;
     if (user?.username) return user.username;
     if (user?.email) return user.email.split('@')[0];
     return 'Пользователь';
@@ -127,7 +127,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
 
   // Получаем аватар пользователя
   const getUserAvatar = () => {
-    if (user?.avatar_url) return user.avatar_url;
+    if (user?.avatarUrl) return user.avatarUrl;
     return getUserName().charAt(0).toUpperCase();
   };
 
@@ -163,8 +163,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
         ref={dropdownRef}
       >
         <div className={styles.avatar}>
-          {user?.avatar_url ? (
-            <img src={user.avatar_url} alt="Avatar" />
+          {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt="Avatar" />
           ) : (
             <span>{getUserAvatar()}</span>
           )}
@@ -184,8 +184,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
         <div className={styles.dropdownMenu}>
           <div className={styles.menuHeader}>
             <div className={styles.menuAvatar}>
-              {user?.avatar_url ? (
-                <img src={user.avatar_url} alt="Avatar" />
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt="Avatar" />
               ) : (
                 <span>{getUserAvatar()}</span>
               )}

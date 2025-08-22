@@ -1,10 +1,10 @@
 import React from 'react';
-import { TodoStatus } from '../types/index';
+import { TaskStatus } from '../../../../types';
 import styles from './TodoFilter.module.scss';
 
 interface TodoFilterProps {
-  currentFilter: TodoStatus | 'all';
-  onFilterChange: (filter: TodoStatus | 'all') => void;
+  currentFilter: TaskStatus | 'all';
+  onFilterChange: (filter: TaskStatus | 'all') => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
 }
@@ -17,9 +17,9 @@ const TodoFilter: React.FC<TodoFilterProps> = ({
 }) => {
   const filters = [
     { value: 'all', label: 'Все задачи' },
-    { value: TodoStatus.TODO, label: 'К выполнению' },
-    { value: TodoStatus.IN_PROGRESS, label: 'В работе' },
-    { value: TodoStatus.COMPLETED, label: 'Завершено' }
+    { value: TaskStatus.PLANNING, label: 'Планирование' },
+    { value: TaskStatus.IN_PROGRESS, label: 'В работе' },
+    { value: TaskStatus.COMPLETED, label: 'Завершено' }
   ];
 
   return (
@@ -46,7 +46,7 @@ const TodoFilter: React.FC<TodoFilterProps> = ({
               name="statusFilter"
               value={filter.value}
               checked={currentFilter === filter.value}
-              onChange={() => onFilterChange(filter.value as TodoStatus | 'all')}
+              onChange={() => onFilterChange(filter.value as TaskStatus | 'all')}
             />
             <span className={styles.filterLabel}>{filter.label}</span>
           </label>

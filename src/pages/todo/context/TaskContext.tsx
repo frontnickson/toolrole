@@ -1,5 +1,6 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import type { Task } from '../../../types';
+import React, { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
+import type { Task } from '../../../types/board';
 
 interface TaskContextType {
   tasks: Task[];

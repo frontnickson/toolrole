@@ -14,26 +14,30 @@ export interface Notification {
   readAt?: Date;
 }
 
-export enum NotificationType {
-  TASK_ASSIGNED = 'task_assigned',
-  TASK_DUE_SOON = 'task_due_soon',
-  TASK_OVERDUE = 'task_overdue',
-  TASK_COMPLETED = 'task_completed',
-  COMMENT_ADDED = 'comment_added',
-  MENTION = 'mention',
-  BOARD_INVITE = 'board_invite',
-  TEAM_INVITE = 'team_invite',
-  FRIEND_REQUEST = 'friend_request',
-  SYSTEM_UPDATE = 'system_update',
-  SECURITY_ALERT = 'security_alert'
-}
+export const NotificationType = {
+  TASK_ASSIGNED: 'task_assigned',
+  TASK_DUE_SOON: 'task_due_soon',
+  TASK_OVERDUE: 'task_overdue',
+  TASK_COMPLETED: 'task_completed',
+  COMMENT_ADDED: 'comment_added',
+  MENTION: 'mention',
+  BOARD_INVITE: 'board_invite',
+  TEAM_INVITE: 'team_invite',
+  FRIEND_REQUEST: 'friend_request',
+  SYSTEM_UPDATE: 'system_update',
+  SECURITY_ALERT: 'security_alert'
+} as const;
 
-export enum NotificationPriority {
-  LOW = 'low',
-  NORMAL = 'normal',
-  HIGH = 'high',
-  URGENT = 'urgent'
-}
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
+
+export const NotificationPriority = {
+  LOW: 'low',
+  NORMAL: 'normal',
+  HIGH: 'high',
+  URGENT: 'urgent'
+} as const;
+
+export type NotificationPriority = typeof NotificationPriority[keyof typeof NotificationPriority];
 
 export interface NotificationData {
   taskId?: string;
@@ -41,7 +45,7 @@ export interface NotificationData {
   commentId?: string;
   userId?: string;
   teamId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean | null>;
 }
 
 // Настройки уведомлений для пользователей
@@ -77,12 +81,14 @@ export interface QuietHours {
   daysOfWeek: number[]; // 0-6, Sunday = 0
 }
 
-export enum DigestFrequency {
-  NEVER = 'never',
-  DAILY = 'daily',
-  WEEKLY = 'weekly',
-  MONTHLY = 'monthly'
-}
+export const DigestFrequency = {
+  NEVER: 'never',
+  DAILY: 'daily',
+  WEEKLY: 'weekly',
+  MONTHLY: 'monthly'
+} as const;
+
+export type DigestFrequency = typeof DigestFrequency[keyof typeof DigestFrequency];
 
 // Шаблоны уведомлений
 export interface NotificationTemplate {

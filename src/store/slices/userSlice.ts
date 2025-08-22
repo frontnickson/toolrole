@@ -6,6 +6,7 @@ export interface ExtendedUser {
   id: number;
   email: string;
   username: string;
+  accessToken?: string; // Токен аутентификации для API запросов
 
   // Личные данные
   firstName: string;

@@ -1,60 +1,96 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import type { Task, Comment, Activity, Attachment, Subtask } from '../../../../types';
+import { useSelector, useDispatch } from 'react-redux';
+import type { Task, Comment, Subtask, Attachment, Activity, TaskTag } from '../../../../types';
 import { TaskStatus, TaskPriority } from '../../../../types';
+import { updateTask, deleteTask, moveTaskByStatus } from '../../../../store/slices/boardSlice';
+import type { RootState } from '../../../../store';
+import CustomSelect from './CustomSelect';
 import styles from './TaskPage.module.scss';
 
-interface TaskPageProps {
-  tasks: Task[];
-  onUpdateTask: (id: string, updates: Partial<Task>) => void;
-  onDeleteTask: (id: string) => void;
-}
-
-const TaskPage: React.FC<TaskPageProps> = ({
-  tasks,
-  onUpdateTask,
-  onDeleteTask
-}) => {
+const TaskPage: React.FC = () => {
+  
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const { currentBoard } = useSelector((state: RootState) => state.boards);
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  
   const [task, setTask] = useState<Task | null>(null);
   const [newComment, setNewComment] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangingDate, setIsChangingDate] = useState(false);
   const [editData, setEditData] = useState<Partial<Task>>({});
 
-  // Находим задачу по ID
+  // Опции для статуса
+  const statusOptions = [
+    { value: TaskStatus.PLANNING, label: 'К выполнению', color: '#FF6B6B' },
+    { value: TaskStatus.IN_PROGRESS, label: 'В работе', color: '#4ECDC4' },
+    { value: TaskStatus.REVIEW, label: 'На проверке', color: '#FFA726' },
+    { value: TaskStatus.COMPLETED, label: 'Завершено', color: '#45B7D1' },
+    { value: TaskStatus.TESTING, label: 'Тестирование', color: '#AB47BC' },
+    { value: TaskStatus.CANCELLED, label: 'Отменено', color: '#95A5A6' },
+    { value: TaskStatus.BLOCKED, label: 'Заблокировано', color: '#E74C3C' },
+    { value: TaskStatus.ON_HOLD, label: 'На паузе', color: '#95A5A6' }
+  ];
+
+  // Опции для приоритета
+  const priorityOptions = [
+    { value: TaskPriority.LOW, label: 'Низкий', color: '#27AE60' },
+    { value: TaskPriority.MEDIUM, label: 'Средний', color: '#F39C12' },
+    { value: TaskPriority.HIGH, label: 'Высокий', color: '#E74C3C' },
+    { value: TaskPriority.URGENT, label: 'Срочно', color: '#8E44AD' },
+    { value: TaskPriority.CRITICAL, label: 'Критический', color: '#8B0000' }
+  ];
+
+  // Находим задачу по ID из текущей доски
   useEffect(() => {
-    if (taskId && tasks.length > 0) {
-      const foundTask = tasks.find(t => t.id === taskId);
+    console.log('=== TaskPage useEffect ===');
+    console.log('taskId:', taskId);
+    console.log('currentBoard:', currentBoard);
+    console.log('currentBoard?.columns:', currentBoard?.columns);
+    
+    if (taskId && currentBoard) {
+      const foundTask = currentBoard.columns.flatMap(col => col.tasks).find(t => t.id === taskId);
+      console.log('foundTask:', foundTask);
+      
       if (foundTask) {
         setTask(foundTask);
         setEditData({
           title: foundTask.title,
           description: foundTask.description,
+          status: foundTask.status,
           priority: foundTask.priority,
           dueDate: foundTask.dueDate,
           tags: foundTask.tags
         });
+      } else {
+        console.log('Задача не найдена!');
       }
     }
-  }, [taskId, tasks]);
+  }, [taskId, currentBoard]);
 
   // Обработчик добавления комментария
   const handleAddComment = () => {
-    if (!task || !newComment.trim()) return;
+    if (!task || !newComment.trim() || !currentBoard) return;
 
     const comment: Comment = {
-      id: `comment_${Date.now()}`,
+      id: Date.now().toString(),
       taskId: task.id,
-      authorId: 'user1', // В реальном приложении брать из контекста пользователя
+      boardId: task.boardId,
+      authorId: currentUser?.id?.toString() || 'unknown',
       content: newComment.trim(),
       mentions: [],
       attachments: [],
       isEdited: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       replies: [],
-      likes: []
+      likes: [],
+      reactions: [],
+      isPinned: false,
+      isPrivate: false
     };
 
     const updatedTask = {
@@ -62,48 +98,107 @@ const TaskPage: React.FC<TaskPageProps> = ({
       comments: [...task.comments, comment]
     };
 
-    onUpdateTask(task.id, { comments: updatedTask.comments });
+    dispatch(updateTask({
+      boardId: currentBoard.id,
+      taskId: task.id,
+      updates: { comments: updatedTask.comments }
+    }));
+    
     setNewComment('');
-  };
-
-  // Обработчик изменения статуса
-  const handleStatusChange = (newStatus: TaskStatus) => {
-    if (!task) return;
-    onUpdateTask(task.id, { status: newStatus });
-  };
-
-  // Обработчик изменения приоритета
-  const handlePriorityChange = (newPriority: TaskPriority) => {
-    if (!task) return;
-    onUpdateTask(task.id, { priority: newPriority });
   };
 
   // Обработчик сохранения изменений
   const handleSaveChanges = () => {
-    if (!task) return;
-    onUpdateTask(task.id, editData);
+    if (!task || !currentBoard) return;
+    
+    // Если изменился статус, используем moveTaskByStatus
+    if (editData.status && editData.status !== task.status) {
+      dispatch(moveTaskByStatus({
+        boardId: currentBoard.id,
+        taskId: task.id,
+        newStatus: editData.status
+      }));
+      
+      // Показываем уведомление о перемещении
+      const statusText = {
+        [TaskStatus.PLANNING]: 'К выполнению',
+        [TaskStatus.IN_PROGRESS]: 'В работе',
+        [TaskStatus.REVIEW]: 'На проверке',
+        [TaskStatus.COMPLETED]: 'Завершено',
+        [TaskStatus.TESTING]: 'Тестирование',
+        [TaskStatus.CANCELLED]: 'Отменено',
+        [TaskStatus.BLOCKED]: 'Заблокировано',
+        [TaskStatus.ON_HOLD]: 'На паузе'
+      }[editData.status] || editData.status;
+      
+      alert(`Задача перемещена в колонку: ${statusText}`);
+      
+      // Обновляем остальные поля через updateTask
+      const otherUpdates = { ...editData };
+      delete otherUpdates.status;
+      
+      if (Object.keys(otherUpdates).length > 0) {
+        dispatch(updateTask({
+          boardId: currentBoard.id,
+          taskId: task.id,
+          updates: otherUpdates
+        }));
+      }
+    } else {
+      // Если статус не изменился, используем обычный updateTask
+      dispatch(updateTask({
+        boardId: currentBoard.id,
+        taskId: task.id,
+        updates: editData
+      }));
+    }
+    
     setIsEditing(false);
   };
 
   // Обработчик удаления задачи
   const handleDeleteTask = () => {
-    if (!task) return;
+    if (!task || !currentBoard) return;
     if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
-      onDeleteTask(task.id);
+      dispatch(deleteTask({
+        boardId: currentBoard.id,
+        taskId: task.id
+      }));
       navigate('/todo');
     }
   };
 
   // Обработчик изменения тегов
   const handleTagsChange = (tags: string[]) => {
-    if (!task) return;
-    onUpdateTask(task.id, { tags });
+    if (!task || !currentBoard) return;
+    const taskTags: TaskTag[] = tags.map(tag => ({
+      id: Date.now().toString() + Math.random(),
+      name: tag,
+      color: '#007bff',
+      description: '',
+      createdAt: Date.now(),
+      createdBy: currentUser?.id?.toString() || 'unknown'
+    }));
+    dispatch(updateTask({
+      boardId: currentBoard.id,
+      taskId: task.id,
+      updates: { tags: taskTags }
+    }));
   };
 
-  // Обработчик изменения даты выполнения
-  const handleDueDateChange = (dueDate: Date | undefined) => {
-    if (!task) return;
-    onUpdateTask(task.id, { dueDate });
+  // Обработчик быстрого изменения даты
+  const handleQuickDateChange = (newDate: string) => {
+    if (!task || !currentBoard) return;
+    
+    const timestamp = newDate ? new Date(newDate).getTime() : undefined;
+    
+    dispatch(updateTask({
+      boardId: currentBoard.id,
+      taskId: task.id,
+      updates: { dueDate: timestamp }
+    }));
+    
+    setIsChangingDate(false);
   };
 
   if (!task) {
@@ -118,18 +213,21 @@ const TaskPage: React.FC<TaskPageProps> = ({
 
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.TODO: return '#FF6B6B';
+      case TaskStatus.PLANNING: return '#FF6B6B';
       case TaskStatus.IN_PROGRESS: return '#4ECDC4';
       case TaskStatus.REVIEW: return '#FFA726';
       case TaskStatus.TESTING: return '#AB47BC';
       case TaskStatus.COMPLETED: return '#45B7D1';
       case TaskStatus.CANCELLED: return '#95A5A6';
+      case TaskStatus.BLOCKED: return '#E74C3C';
+      case TaskStatus.ON_HOLD: return '#95A5A6';
       default: return '#95A5A6';
     }
   };
 
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
+      case TaskPriority.CRITICAL: return '#8B0000';
       case TaskPriority.LOW: return '#27AE60';
       case TaskPriority.MEDIUM: return '#F39C12';
       case TaskPriority.HIGH: return '#E74C3C';
@@ -199,39 +297,44 @@ const TaskPage: React.FC<TaskPageProps> = ({
                 
                 <div className={styles.editFields}>
                   <div className={styles.field}>
+                    <label>Статус:</label>
+                    <CustomSelect
+                      options={statusOptions}
+                      value={editData.status || task.status}
+                      onChange={(value) => setEditData({ ...editData, status: value as TaskStatus })}
+                      placeholder="Выберите статус"
+                    />
+                  </div>
+                  
+                  <div className={styles.field}>
                     <label>Приоритет:</label>
-                    <select
+                    <CustomSelect
+                      options={priorityOptions}
                       value={editData.priority || TaskPriority.MEDIUM}
-                      onChange={(e) => setEditData({ ...editData, priority: e.target.value as TaskPriority })}
-                    >
-                      <option value={TaskPriority.LOW}>Низкий</option>
-                      <option value={TaskPriority.MEDIUM}>Средний</option>
-                      <option value={TaskPriority.HIGH}>Высокий</option>
-                      <option value={TaskPriority.URGENT}>Срочно</option>
-                    </select>
+                      onChange={(value) => setEditData({ ...editData, priority: value as TaskPriority })}
+                      placeholder="Выберите приоритет"
+                    />
                   </div>
                   
                   <div className={styles.field}>
                     <label>Дата выполнения:</label>
                     <input
                       type="date"
-                      value={editData.dueDate ? editData.dueDate.toISOString().split('T')[0] : ''}
+                      value={editData.dueDate ? new Date(editData.dueDate).toISOString().split('T')[0] : ''}
                       onChange={(e) => setEditData({ 
                         ...editData, 
-                        dueDate: e.target.value ? new Date(e.target.value) : undefined 
+                        dueDate: e.target.value ? new Date(e.target.value).getTime() : undefined 
                       })}
                     />
+                    <small className={styles.fieldHint}>Измените дату для отображения в календаре на другой день</small>
                   </div>
                   
                   <div className={styles.field}>
                     <label>Теги:</label>
                     <input
                       type="text"
-                      value={editData.tags?.join(', ') || ''}
-                      onChange={(e) => setEditData({ 
-                        ...editData, 
-                        tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean) 
-                      })}
+                      value={editData.tags?.map((tag: TaskTag) => tag.name).join(', ') || ''}
+                      onChange={(e) => handleTagsChange(e.target.value.split(',').map(tag => tag.trim()).filter(Boolean))}
                       placeholder="Теги через запятую"
                     />
                   </div>
@@ -249,21 +352,22 @@ const TaskPage: React.FC<TaskPageProps> = ({
                       className={styles.status}
                       style={{ backgroundColor: getStatusColor(task.status) }}
                     >
-                      {task.status === TaskStatus.TODO && 'К выполнению'}
+                      {task.status === TaskStatus.PLANNING && 'Планирование'}
                       {task.status === TaskStatus.IN_PROGRESS && 'В работе'}
                       {task.status === TaskStatus.REVIEW && 'На проверке'}
                       {task.status === TaskStatus.TESTING && 'Тестирование'}
                       {task.status === TaskStatus.COMPLETED && 'Завершено'}
                       {task.status === TaskStatus.CANCELLED && 'Отменено'}
+                      {task.status === TaskStatus.BLOCKED && 'Заблокировано'}
+                      {task.status === TaskStatus.ON_HOLD && 'На паузе'}
                     </span>
-                  </div>
-                  
-                  <div className={styles.metaItem}>
+                    <span className={styles.separator}>|</span>
                     <span className={styles.label}>Приоритет:</span>
                     <span 
                       className={styles.priority}
                       style={{ backgroundColor: getPriorityColor(task.priority) }}
                     >
+                      {task.priority === TaskPriority.CRITICAL && 'Критический'}
                       {task.priority === TaskPriority.LOW && 'Низкий'}
                       {task.priority === TaskPriority.MEDIUM && 'Средний'}
                       {task.priority === TaskPriority.HIGH && 'Высокий'}
@@ -274,9 +378,45 @@ const TaskPage: React.FC<TaskPageProps> = ({
                   {task.dueDate && (
                     <div className={styles.metaItem}>
                       <span className={styles.label}>Дата выполнения:</span>
-                      <span className={styles.dueDate}>
-                        {task.dueDate.toLocaleDateString('ru-RU')}
-                      </span>
+                      {isChangingDate ? (
+                        <div className={styles.quickDateChange}>
+                          <input
+                            type="date"
+                            defaultValue={new Date(task.dueDate).toISOString().split('T')[0]}
+                            onBlur={(e) => handleQuickDateChange(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleQuickDateChange(e.currentTarget.value);
+                              } else if (e.key === 'Escape') {
+                                setIsChangingDate(false);
+                              }
+                            }}
+                            className={styles.quickDateInput}
+                            autoFocus
+                          />
+                          <button 
+                            className={styles.cancelDateBtn}
+                            onClick={() => setIsChangingDate(false)}
+                            title="Отменить"
+                          >
+                            ❌
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <span className={styles.dueDate}>
+                            {new Date(task.dueDate).toLocaleDateString('ru-RU')}
+                          </span>
+                          <button 
+                            className={styles.changeDateBtn}
+                            onClick={() => setIsChangingDate(true)}
+                            title="Изменить дату"
+                          >
+                            ✏️
+                          </button>
+                          <small className={styles.dateHint}>Нажмите ✏️ для быстрого изменения</small>
+                        </>
+                      )}
                     </div>
                   )}
                   
@@ -284,9 +424,9 @@ const TaskPage: React.FC<TaskPageProps> = ({
                     <div className={styles.metaItem}>
                       <span className={styles.label}>Теги:</span>
                       <div className={styles.tags}>
-                        {task.tags.map((tag, index) => (
+                        {task.tags.map((tag: TaskTag, index: number) => (
                           <span key={index} className={styles.tag}>
-                            {tag}
+                            {tag.name}
                           </span>
                         ))}
                       </div>
@@ -302,18 +442,23 @@ const TaskPage: React.FC<TaskPageProps> = ({
             <div className={styles.subtasks}>
               <h3>Подзадачи</h3>
               <div className={styles.subtasksList}>
-                {task.subtasks.map((subtask) => (
+                {task.subtasks.map((subtask: Subtask) => (
                   <div key={subtask.id} className={styles.subtask}>
                     <input
                       type="checkbox"
                       checked={subtask.isCompleted}
                       onChange={() => {
+                        if (!currentBoard) return;
                         const updatedSubtasks = task.subtasks.map(s =>
                           s.id === subtask.id 
                             ? { ...s, isCompleted: !s.isCompleted }
                             : s
                         );
-                        onUpdateTask(task.id, { subtasks: updatedSubtasks });
+                        dispatch(updateTask({
+                          boardId: currentBoard.id,
+                          taskId: task.id,
+                          updates: { subtasks: updatedSubtasks }
+                        }));
                       }}
                     />
                     <span className={subtask.isCompleted ? styles.completed : ''}>
@@ -330,7 +475,7 @@ const TaskPage: React.FC<TaskPageProps> = ({
             <div className={styles.attachments}>
               <h3>Вложения</h3>
               <div className={styles.attachmentsList}>
-                {task.attachments.map((attachment) => (
+                {task.attachments.map((attachment: Attachment) => (
                   <div key={attachment.id} className={styles.attachment}>
                     <span className={styles.attachmentIcon}>📎</span>
                     <span className={styles.attachmentName}>{attachment.fileName}</span>
@@ -364,12 +509,12 @@ const TaskPage: React.FC<TaskPageProps> = ({
             </div>
             
             <div className={styles.commentsList}>
-              {task.comments.map((comment) => (
+              {task.comments.map((comment: Comment) => (
                 <div key={comment.id} className={styles.comment}>
                   <div className={styles.commentHeader}>
                     <span className={styles.commentAuthor}>Пользователь</span>
                     <span className={styles.commentDate}>
-                      {comment.createdAt.toLocaleDateString('ru-RU')}
+                      {new Date(comment.createdAt).toLocaleDateString('ru-RU')}
                     </span>
                   </div>
                   <div className={styles.commentContent}>
@@ -389,61 +534,60 @@ const TaskPage: React.FC<TaskPageProps> = ({
             
             <div className={styles.actionGroup}>
               <label>Изменить статус:</label>
-              <select
+              <CustomSelect
+                options={statusOptions}
                 value={task.status}
-                onChange={(e) => handleStatusChange(e.target.value as TaskStatus)}
-              >
-                <option value={TaskStatus.TODO}>К выполнению</option>
-                <option value={TaskStatus.IN_PROGRESS}>В работе</option>
-                <option value={TaskStatus.REVIEW}>На проверке</option>
-                <option value={TaskStatus.TESTING}>Тестирование</option>
-                <option value={TaskStatus.COMPLETED}>Завершено</option>
-                <option value={TaskStatus.CANCELLED}>Отменено</option>
-              </select>
+                onChange={(value) => {
+                  const newStatus = value as TaskStatus;
+                  if (newStatus !== task.status) {
+                    dispatch(moveTaskByStatus({
+                      boardId: currentBoard?.id || '',
+                      taskId: task.id,
+                      newStatus: newStatus
+                    }));
+                  }
+                  setEditData(prev => ({ ...prev, status: newStatus }));
+                }}
+                placeholder="Выберите статус"
+              />
             </div>
             
             <div className={styles.actionGroup}>
               <label>Изменить приоритет:</label>
-              <select
+              <CustomSelect
+                options={priorityOptions}
                 value={task.priority}
-                onChange={(e) => handlePriorityChange(e.target.value as TaskPriority)}
-              >
-                <option value={TaskPriority.LOW}>Низкий</option>
-                <option value={TaskPriority.MEDIUM}>Средний</option>
-                <option value={TaskPriority.HIGH}>Высокий</option>
-                <option value={TaskPriority.URGENT}>Срочно</option>
-              </select>
+                onChange={(value) => {
+                  const newPriority = value as TaskPriority;
+                  if (newPriority !== task.priority && currentBoard) {
+                    dispatch(updateTask({
+                      boardId: currentBoard.id,
+                      taskId: task.id,
+                      updates: { priority: newPriority }
+                    }));
+                  }
+                }}
+                placeholder="Выберите приоритет"
+              />
             </div>
           </div>
 
           {/* Активность */}
-          <div className={styles.activity}>
-            <h3>Активность</h3>
-            <div className={styles.activityList}>
-              {task.activity.map((activity) => (
+          {task.activities && task.activities.length > 0 && (
+            <div className={styles.activitySection}>
+              <h3>Активность</h3>
+              {task.activities.map((activity: Activity) => (
                 <div key={activity.id} className={styles.activityItem}>
-                  <span className={styles.activityIcon}>📝</span>
-                  <div className={styles.activityContent}>
-                    <span className={styles.activityAction}>
-                      {activity.action === 'created' && 'Задача создана'}
-                      {activity.action === 'updated' && 'Задача обновлена'}
-                      {activity.action === 'status_changed' && 'Статус изменен'}
-                      {activity.action === 'assigned' && 'Назначена'}
-                      {activity.action === 'commented' && 'Добавлен комментарий'}
-                      {activity.action === 'attachment_added' && 'Добавлено вложение'}
-                      {activity.action === 'due_date_changed' && 'Изменена дата выполнения'}
-                      {activity.action === 'priority_changed' && 'Изменен приоритет'}
-                      {activity.action === 'archived' && 'Задача архивирована'}
-                      {activity.action === 'restored' && 'Задача восстановлена'}
-                    </span>
-                    <span className={styles.activityTime}>
-                      {activity.timestamp.toLocaleDateString('ru-RU')}
-                    </span>
-                  </div>
+                  <span className={styles.activityAction}>
+                    {activity.action}
+                  </span>
+                  <span className={styles.activityTime}>
+                    {new Date(activity.timestamp).toLocaleDateString('ru-RU')}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

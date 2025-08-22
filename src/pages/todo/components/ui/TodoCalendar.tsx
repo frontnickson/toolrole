@@ -5,21 +5,17 @@ import styles from './TodoCalendar.module.scss';
 
 interface TodoCalendarProps {
   tasks: Task[];
-  onUpdateTask: (id: string, updates: Partial<Task>) => void;
-  onDeleteTask: (id: string) => void;
-  onToggleStatus: (id: string) => void;
   onTaskClick?: (taskId: string) => void;
 }
 
-const TodoCalendar: React.FC<TodoCalendarProps> = ({
-  tasks,
-  onUpdateTask,
-  onDeleteTask,
-  onToggleStatus,
-  onTaskClick
-}) => {
+const TodoCalendar: React.FC<TodoCalendarProps> = ({ tasks, onTaskClick }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
+
+  // Отладочная информация
+  console.log('TodoCalendar received tasks:', tasks);
+  console.log('Tasks with dueDate:', tasks.filter(t => t.dueDate));
+  console.log('Tasks without dueDate:', tasks.filter(t => !t.dueDate));
 
   // Получаем текущий месяц
   const currentMonth = currentDate.getMonth();
@@ -76,9 +72,39 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
   // Получаем задачи для конкретной даты
   const getTasksForDate = (date: Date) => {
     return tasks.filter(task => {
+      // Проверяем наличие dueDate
       if (!task.dueDate) return false;
-      const taskDate = new Date(task.dueDate);
-      return taskDate.toDateString() === date.toDateString();
+      
+      try {
+        // Обрабатываем разные форматы dueDate
+        let taskDate: Date;
+        
+        if (typeof task.dueDate === 'number') {
+          // Если dueDate это timestamp
+          taskDate = new Date(task.dueDate);
+        } else if (task.dueDate && typeof task.dueDate === 'object' && 'getTime' in task.dueDate) {
+          // Если dueDate это Date объект
+          taskDate = task.dueDate as Date;
+        } else {
+          // Если dueDate это строка
+          taskDate = new Date(task.dueDate);
+        }
+        
+        // Проверяем валидность даты
+        if (isNaN(taskDate.getTime())) {
+          console.warn('Invalid dueDate for task:', task.id, task.dueDate);
+          return false;
+        }
+        
+        // Сравниваем даты (только день, месяц, год)
+        const taskDateString = taskDate.toDateString();
+        const targetDateString = date.toDateString();
+        
+        return taskDateString === targetDateString;
+      } catch (error) {
+        console.error('Error processing dueDate for task:', task.id, task.dueDate, error);
+        return false;
+      }
     });
   };
 
@@ -137,7 +163,7 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
   // Получаем цвет для статуса задачи
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.TODO:
+      case TaskStatus.PLANNING:
         return styles.todoStatus;
       case TaskStatus.IN_PROGRESS:
         return styles.inProgressStatus;
@@ -149,6 +175,10 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
         return styles.completedStatus;
       case TaskStatus.CANCELLED:
         return styles.cancelledStatus;
+      case TaskStatus.BLOCKED:
+        return styles.blockedStatus;
+      case TaskStatus.ON_HOLD:
+        return styles.onHoldStatus;
       default:
         return '';
     }
@@ -157,6 +187,8 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
   // Получаем цвет для приоритета
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
+      case TaskPriority.CRITICAL:
+        return styles.criticalPriority;
       case TaskPriority.URGENT:
         return styles.urgentPriority;
       case TaskPriority.HIGH:
@@ -187,7 +219,6 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
 
         <div className={styles.daysGrid}>
           {days.map((day, index) => {
-            const isToday = day.date.toDateString() === today.toDateString();
             const dayTasks = getTasksForDate(day.date);
             
             return (
@@ -195,7 +226,7 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
                 key={index}
                 className={`${styles.dayCell} ${
                   !day.isCurrentMonth ? styles.otherMonth : ''
-                } ${isToday ? styles.today : ''}`}
+                } ${day.date.toDateString() === today.toDateString() ? styles.today : ''}`}
               >
                 <div className={styles.dayHeader}>
                   <span className={styles.dayNumber}>{day.date.getDate()}</span>
@@ -216,7 +247,8 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
                       <div className={styles.taskHeader}>
                         <span className={styles.taskTitle}>{task.title}</span>
                         <span className={`${styles.taskPriority} ${getPriorityColor(task.priority)}`}>
-                          {task.priority === TaskPriority.URGENT ? '🔥' : 
+                          {task.priority === TaskPriority.CRITICAL ? '💥' :
+                           task.priority === TaskPriority.URGENT ? '🔥' : 
                            task.priority === TaskPriority.HIGH ? '🔴' : 
                            task.priority === TaskPriority.MEDIUM ? '🟡' : '🟢'}
                         </span>
@@ -286,7 +318,8 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
                       <div className={styles.taskHeader}>
                         <span className={styles.taskTitle}>{task.title}</span>
                         <span className={`${styles.taskPriority} ${getPriorityColor(task.priority)}`}>
-                          {task.priority === TaskPriority.URGENT ? '🔥' : 
+                          {task.priority === TaskPriority.CRITICAL ? '💥' :
+                           task.priority === TaskPriority.URGENT ? '🔥' : 
                            task.priority === TaskPriority.HIGH ? '🔴' : 
                            task.priority === TaskPriority.MEDIUM ? '🟡' : '🟢'}
                         </span>
@@ -307,8 +340,6 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
 
   // Рендерим дневной вид
   const renderDayView = () => {
-    const today = new Date();
-    const isToday = currentDate.toDateString() === today.toDateString();
     const dayTasks = getTasksForDate(currentDate);
 
     return (
@@ -342,7 +373,8 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
                 <div className={styles.taskHeader}>
                   <span className={styles.taskTitle}>{task.title}</span>
                   <span className={`${styles.taskPriority} ${getPriorityColor(task.priority)}`}>
-                    {task.priority === TaskPriority.URGENT ? '🔥' : 
+                    {task.priority === TaskPriority.CRITICAL ? '💥' :
+                     task.priority === TaskPriority.URGENT ? '🔥' : 
                      task.priority === TaskPriority.HIGH ? '🔴' : 
                      task.priority === TaskPriority.MEDIUM ? '🟡' : '🟢'}
                   </span>
@@ -367,17 +399,20 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
   // Получаем заголовок для текущего вида
   const getViewTitle = () => {
     switch (viewMode) {
-      case 'month':
+      case 'month': {
         return `${getMonthName(currentMonth)} ${currentYear}`;
-      case 'week':
+      }
+      case 'week': {
         const weekStart = new Date(currentDate);
         const dayOfWeek = currentDate.getDay();
         weekStart.setDate(currentDate.getDate() - dayOfWeek);
         const weekEnd = new Date(weekStart);
         weekEnd.setDate(weekStart.getDate() + 6);
         return `${weekStart.getDate()} ${getMonthName(weekStart.getMonth())} - ${weekEnd.getDate()} ${getMonthName(weekEnd.getMonth())} ${currentYear}`;
-      case 'day':
+      }
+      case 'day': {
         return `${currentDate.getDate()} ${getMonthName(currentDate.getMonth())} ${currentYear}`;
+      }
       default:
         return '';
     }
@@ -389,6 +424,10 @@ const TodoCalendar: React.FC<TodoCalendarProps> = ({
       <div className={styles.calendarHeader}>
         <div className={styles.headerLeft}>
           <h2>Календарь задач</h2>
+          <div className={styles.taskCountInfo}>
+            <span>Всего задач: {tasks.length}</span>
+            <span>С датой: {tasks.filter(t => t.dueDate).length}</span>
+          </div>
           <div className={styles.viewModeToggle}>
             <button
               className={`${styles.viewBtn} ${viewMode === 'month' ? styles.active : ''}`}

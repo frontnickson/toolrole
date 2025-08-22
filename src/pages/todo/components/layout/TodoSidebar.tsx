@@ -218,19 +218,23 @@ const TodoSidebar: React.FC<TodoSidebarProps> = ({ selectedProject, onProjectCha
     
     dispatch(action);
 
+    // Автоматически выбираем созданную доску
     setTimeout(() => {
       console.log('🔍 Проверяем состояние store через 50ms:');
       console.log('🔍 Все доски в store:', boards);
       console.log('🔍 Количество досок:', boards.length);
       console.log('🔍 Мои доски:', myBoards);
       console.log('🔍 Количество моих досок:', myBoards.length);
+      
+      // Автоматически выбираем созданную доску
+      onProjectChange(newBoard.id);
+      
+      console.log('✅ Автоматически выбрана созданная доска:', newBoard.id);
     }, 50);
     
     setRefreshKey(prev => prev + 1);
     
-    alert(`Доска "${newBoard.title}" успешно создана!`);
-    
-    onProjectChange(newBoard.id);
+    alert(`Доска "${newBoard.title}" успешно создана и выбрана!`);
   };
 
   return (
@@ -293,8 +297,9 @@ const TodoSidebar: React.FC<TodoSidebarProps> = ({ selectedProject, onProjectCha
           <h3 className={styles.sectionTitle}>My Projects</h3>
           <div className={styles.sectionActions}>
             <button 
-              className={styles.addProjectBtn}
+              className={styles.addProjectBtn} 
               onClick={handleCreateBoard}
+              title="Создать новую доску"
             >
               +
             </button>
@@ -316,6 +321,12 @@ const TodoSidebar: React.FC<TodoSidebarProps> = ({ selectedProject, onProjectCha
           <div className={styles.emptyState}>
             <span className={styles.emptyIcon}>📁</span>
             <span className={styles.emptyText}>Нет созданных досок</span>
+            <button 
+              className={styles.createFirstBoardBtn}
+              onClick={handleCreateBoard}
+            >
+              🚀 Создать первую доску
+            </button>
           </div>
         ) : (
           <>

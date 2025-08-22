@@ -3,12 +3,11 @@ import styles from './NewBoardModal.module.scss';
 import { addBoard } from '../../../../store/slices/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../../store';
-import type { Board } from '../../../../types/board';
 
 interface NewBoardModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateBoard?: (board: Board) => void;
+  onCreateBoard?: (boardId: string) => void;
 }
 
 const NewBoardModal: React.FC<NewBoardModalProps> = ({ isOpen, onClose, onCreateBoard }) => {
@@ -118,476 +117,7 @@ const NewBoardModal: React.FC<NewBoardModalProps> = ({ isOpen, onClose, onCreate
 
   const iconOptions = ['📋', '📊', '🔄', '🎯', '🧪', '✅', '🐛', '📈', '🚀', '💡'];
 
-  // Функция для получения колонок по шаблону
-  const getColumnsByTemplate = (templateId: string) => {
-    switch (templateId) {
-      case 'kanban':
-        return [
-          { 
-            id: `col_${Date.now()}_1`, 
-            boardId: '', // Будет установлено позже
-            title: 'К выполнению', 
-            description: 'Задачи для выполнения',
-            icon: '📝',
-            color: '#EF4444',
-            order: 1, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_2`, 
-            boardId: '', // Будет установлено позже
-            title: 'В работе', 
-            description: 'Задачи в работе',
-            icon: '🔄',
-            color: '#F59E0B',
-            order: 2, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_3`, 
-            boardId: '', // Будет установлено позже
-            title: 'На проверке', 
-            description: 'Задачи на проверке',
-            icon: '👀',
-            color: '#8B5CF6',
-            order: 3, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_4`, 
-            boardId: '', // Будет установлено позже
-            title: 'Готово', 
-            description: 'Завершенные задачи',
-            icon: '✅',
-            color: '#10B981',
-            order: 4, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          }
-        ];
-      case 'scrum':
-        return [
-          { 
-            id: `col_${Date.now()}_1`, 
-            boardId: '', // Будет установлено позже
-            title: 'Бэклог', 
-            description: 'Задачи в бэклоге',
-            icon: '📋',
-            color: '#6B7280',
-            order: 1, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_2`, 
-            boardId: '', // Будет установлено позже
-            title: 'Спринт', 
-            description: 'Задачи в текущем спринте',
-            icon: '🚀',
-            color: '#3B82F6',
-            order: 2, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_3`, 
-            boardId: '', // Будет установлено позже
-            title: 'В работе', 
-            description: 'Задачи в работе',
-            icon: '🔄',
-            color: '#F59E0B',
-            order: 3, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_4`, 
-            boardId: '', // Будет установлено позже
-            title: 'Тестирование', 
-            description: 'Задачи на тестировании',
-            icon: '🧪',
-            color: '#8B5CF6',
-            order: 4, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_5`, 
-            boardId: '', // Будет установлено позже
-            title: 'Готово', 
-            description: 'Завершенные задачи',
-            icon: '✅',
-            color: '#10B981',
-            order: 5, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          }
-        ];
-      default:
-        return [
-          { 
-            id: `col_${Date.now()}_1`, 
-            boardId: '', // Будет установлено позже
-            title: 'Новые задачи', 
-            description: 'Новые задачи для выполнения',
-            icon: '📝',
-            color: '#EF4444',
-            order: 1, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_2`, 
-            boardId: '', // Будет установлено позже
-            title: 'В работе', 
-            description: 'Задачи в работе',
-            icon: '🔄',
-            color: '#F59E0B',
-            order: 2, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          },
-          { 
-            id: `col_${Date.now()}_3`, 
-            boardId: '', // Будет установлено позже
-            title: 'Завершено', 
-            description: 'Завершенные задачи',
-            icon: '✅',
-            color: '#10B981',
-            order: 3, 
-            isLocked: false,
-            isCollapsed: false,
-            taskLimit: undefined,
-            wipLimit: undefined,
-            tasks: [],
-            settings: {
-              allowTaskCreation: true,
-              allowTaskEditing: true,
-              allowTaskMoving: true,
-              allowTaskDeletion: true,
-              allowSubtaskCreation: true,
-              allowCommentCreation: true,
-              allowAttachmentUpload: true,
-              autoSortTasks: false,
-              sortBy: 'order' as const,
-              sortDirection: 'asc' as const
-            },
-            statistics: {
-              totalTasks: 0,
-              completedTasks: 0,
-              inProgressTasks: 0,
-              overdueTasks: 0,
-              averageTaskDuration: 0,
-              totalComments: 0,
-              totalAttachments: 0,
-              lastTaskUpdate: Date.now()
-            },
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-          }
-        ];
-    }
-  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -615,10 +145,165 @@ const NewBoardModal: React.FC<NewBoardModalProps> = ({ isOpen, onClose, onCreate
       icon: formData.icon,
       color: formData.color,
       ownerId: currentUser?.id?.toString() || '',
-      columns: getColumnsByTemplate(formData.template).map(col => ({
-        ...col,
-        boardId: `board_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-      })),
+      // Создаем 4 стандартные колонки по умолчанию, которые защищены от изменений
+      columns: [
+        {
+          id: `col_${Date.now()}_planning`,
+          boardId: `board_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: 'Начало работы',
+          description: 'Задачи, которые нужно начать выполнять',
+          icon: '📋',
+          color: '#3b82f6',
+          order: 0,
+          isLocked: false,
+          isCollapsed: false,
+          isStandard: true,
+          taskLimit: undefined,
+          wipLimit: undefined,
+          tasks: [],
+          settings: {
+            allowTaskCreation: true,
+            allowTaskEditing: true,
+            allowTaskMoving: true,
+            allowTaskDeletion: true,
+            allowSubtaskCreation: true,
+            allowCommentCreation: true,
+            allowAttachmentUpload: true,
+            autoSortTasks: false,
+            sortBy: 'order' as const,
+            sortDirection: 'asc' as const
+          },
+          statistics: {
+            totalTasks: 0,
+            completedTasks: 0,
+            inProgressTasks: 0,
+            overdueTasks: 0,
+            averageTaskDuration: 0,
+            totalComments: 0,
+            totalAttachments: 0,
+            lastTaskUpdate: Date.now()
+          },
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        },
+        {
+          id: `col_${Date.now()}_progress`,
+          boardId: `board_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: 'В работе',
+          description: 'Задачи, которые выполняются в данный момент',
+          icon: '⚡',
+          color: '#f59e0b',
+          order: 1,
+          isLocked: false,
+          isCollapsed: false,
+          isStandard: true,
+          taskLimit: undefined,
+          wipLimit: undefined,
+          tasks: [],
+          settings: {
+            allowTaskCreation: true,
+            allowTaskEditing: true,
+            allowTaskMoving: true,
+            allowTaskDeletion: true,
+            allowSubtaskCreation: true,
+            allowCommentCreation: true,
+            allowAttachmentUpload: true,
+            autoSortTasks: false,
+            sortBy: 'order' as const,
+            sortDirection: 'asc' as const
+          },
+          statistics: {
+            totalTasks: 0,
+            completedTasks: 0,
+            inProgressTasks: 0,
+            overdueTasks: 0,
+            averageTaskDuration: 0,
+            totalComments: 0,
+            totalAttachments: 0,
+            lastTaskUpdate: Date.now()
+          },
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        },
+        {
+          id: `col_${Date.now()}_review`,
+          boardId: `board_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: 'Проверка',
+          description: 'Задачи, готовые к проверке и тестированию',
+          icon: '👀',
+          color: '#8b5cf6',
+          order: 2,
+          isLocked: false,
+          isCollapsed: false,
+          isStandard: true,
+          taskLimit: undefined,
+          wipLimit: undefined,
+          tasks: [],
+          settings: {
+            allowTaskCreation: true,
+            allowTaskEditing: true,
+            allowTaskMoving: true,
+            allowTaskDeletion: true,
+            allowSubtaskCreation: true,
+            allowCommentCreation: true,
+            allowAttachmentUpload: true,
+            autoSortTasks: false,
+            sortBy: 'order' as const,
+            sortDirection: 'asc' as const
+          },
+          statistics: {
+            totalTasks: 0,
+            completedTasks: 0,
+            inProgressTasks: 0,
+            overdueTasks: 0,
+            averageTaskDuration: 0,
+            totalComments: 0,
+            totalAttachments: 0,
+            lastTaskUpdate: Date.now()
+          },
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        },
+        {
+          id: `col_${Date.now()}_completed`,
+          boardId: `board_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: 'Завершение',
+          description: 'Завершенные задачи',
+          icon: '✅',
+          color: '#10b981',
+          order: 3,
+          isLocked: false,
+          isCollapsed: false,
+          isStandard: true,
+          taskLimit: undefined,
+          wipLimit: undefined,
+          tasks: [],
+          settings: {
+            allowTaskCreation: true,
+            allowTaskEditing: true,
+            allowTaskMoving: true,
+            allowTaskDeletion: true,
+            allowSubtaskCreation: true,
+            allowCommentCreation: true,
+            allowAttachmentUpload: true,
+            autoSortTasks: false,
+            sortBy: 'order' as const,
+            sortDirection: 'asc' as const
+          },
+          statistics: {
+            totalTasks: 0,
+            completedTasks: 0,
+            inProgressTasks: 0,
+            overdueTasks: 0,
+            averageTaskDuration: 0,
+            totalComments: 0,
+            totalAttachments: 0,
+            lastTaskUpdate: Date.now()
+          },
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        }
+      ],
       createdAt: Date.now(),
       updatedAt: Date.now()
     };
@@ -632,7 +317,7 @@ const NewBoardModal: React.FC<NewBoardModalProps> = ({ isOpen, onClose, onCreate
     
     // Вызываем callback для уведомления родительского компонента
     if (onCreateBoard) {
-      onCreateBoard(newBoard);
+      onCreateBoard(newBoard.id);
     }
     
     // Закрываем модальное окно

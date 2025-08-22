@@ -112,19 +112,23 @@ export interface PrivacySettings {
   allowFriendRequests: boolean;
 }
 
-export enum UserRole {
-  ADMIN = 'admin',
-  MODERATOR = 'moderator',
-  USER = 'user',
-  GUEST = 'guest'
-}
+export const UserRole = {
+  ADMIN: 'admin',
+  MODERATOR: 'moderator',
+  USER: 'user',
+  GUEST: 'guest'
+} as const;
 
-export enum UserStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  SUSPENDED = 'suspended',
-  DELETED = 'deleted'
-}
+export type UserRole = typeof UserRole[keyof typeof UserRole];
+
+export const UserStatus = {
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+  SUSPENDED: 'suspended',
+  DELETED: 'deleted'
+} as const;
+
+export type UserStatus = typeof UserStatus[keyof typeof UserStatus];
 
 // Друзья и социальные связи
 export interface Friendship {
@@ -136,12 +140,14 @@ export interface Friendship {
   acceptedAt?: Date;
 }
 
-export enum FriendshipStatus {
-  PENDING = 'pending',
-  ACCEPTED = 'accepted',
-  REJECTED = 'rejected',
-  BLOCKED = 'blocked'
-}
+export const FriendshipStatus = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected',
+  BLOCKED: 'blocked'
+} as const;
+
+export type FriendshipStatus = typeof FriendshipStatus[keyof typeof FriendshipStatus];
 
 export interface FriendRequest {
   id: string;
@@ -171,12 +177,14 @@ export interface TeamMember {
   permissions: Permission[];
 }
 
-export enum TeamRole {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-  MEMBER = 'member',
-  VIEWER = 'viewer'
-}
+export const TeamRole = {
+  OWNER: 'owner',
+  ADMIN: 'admin',
+  MEMBER: 'member',
+  VIEWER: 'viewer'
+} as const;
+
+export type TeamRole = typeof TeamRole[keyof typeof TeamRole];
 
 export interface Permission {
   id: string;

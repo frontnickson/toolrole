@@ -71,7 +71,7 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
     const matchesSearch = searchQuery === '' || 
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      task.tags.some(tag => tag.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
     if (!matchesSearch) return false;
 
@@ -118,18 +118,21 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
 
   const getStatusLabel = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.TODO: return 'К выполнению';
+      case TaskStatus.PLANNING: return 'Планирование';
       case TaskStatus.IN_PROGRESS: return 'В работе';
       case TaskStatus.REVIEW: return 'На проверке';
       case TaskStatus.TESTING: return 'Тестирование';
       case TaskStatus.COMPLETED: return 'Завершено';
       case TaskStatus.CANCELLED: return 'Отменено';
+      case TaskStatus.BLOCKED: return 'Заблокировано';
+      case TaskStatus.ON_HOLD: return 'На паузе';
       default: return status;
     }
   };
 
   const getPriorityLabel = (priority: TaskPriority) => {
     switch (priority) {
+      case TaskPriority.CRITICAL: return 'Критичный';
       case TaskPriority.LOW: return 'Низкий';
       case TaskPriority.MEDIUM: return 'Средний';
       case TaskPriority.HIGH: return 'Высокий';
@@ -140,6 +143,7 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
 
   const getPriorityIcon = (priority: TaskPriority) => {
     switch (priority) {
+      case TaskPriority.CRITICAL: return '💥';
       case TaskPriority.LOW: return '🟢';
       case TaskPriority.MEDIUM: return '🟡';
       case TaskPriority.HIGH: return '🔴';
@@ -150,12 +154,14 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
 
   const getStatusIcon = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.TODO: return '📅';
+      case TaskStatus.PLANNING: return '📅';
       case TaskStatus.IN_PROGRESS: return '⚡';
       case TaskStatus.REVIEW: return '👀';
       case TaskStatus.TESTING: return '🧪';
       case TaskStatus.COMPLETED: return '✅';
       case TaskStatus.CANCELLED: return '❌';
+      case TaskStatus.BLOCKED: return '🚫';
+      case TaskStatus.ON_HOLD: return '⏸️';
       default: return '📋';
     }
   };
@@ -212,12 +218,14 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
                   onChange={(e) => setFilters({...filters, status: e.target.value as TaskStatus | 'all'})}
                 >
                   <option value="all">Все статусы</option>
-                  <option value={TaskStatus.TODO}>К выполнению</option>
+                  <option value={TaskStatus.PLANNING}>Планирование</option>
                   <option value={TaskStatus.IN_PROGRESS}>В работе</option>
                   <option value={TaskStatus.REVIEW}>На проверке</option>
                   <option value={TaskStatus.TESTING}>Тестирование</option>
                   <option value={TaskStatus.COMPLETED}>Завершено</option>
                   <option value={TaskStatus.CANCELLED}>Отменено</option>
+                  <option value={TaskStatus.BLOCKED}>Заблокировано</option>
+                  <option value={TaskStatus.ON_HOLD}>На паузе</option>
                 </select>
               </div>
 
@@ -228,6 +236,7 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
                   onChange={(e) => setFilters({...filters, priority: e.target.value as TaskPriority | 'all'})}
                 >
                   <option value="all">Все приоритеты</option>
+                  <option value={TaskPriority.CRITICAL}>Критичный</option>
                   <option value={TaskPriority.LOW}>Низкий</option>
                   <option value={TaskPriority.MEDIUM}>Средний</option>
                   <option value={TaskPriority.HIGH}>Высокий</option>
@@ -296,7 +305,7 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
                     {task.tags.length > 0 && (
                       <div className={styles.taskTags}>
                         {task.tags.slice(0, 3).map((tag, index) => (
-                          <span key={index} className={styles.tag}>#{tag}</span>
+                          <span key={index} className={styles.tag}>#{tag.name}</span>
                         ))}
                         {task.tags.length > 3 && (
                           <span className={styles.moreTags}>+{task.tags.length - 3}</span>
@@ -306,7 +315,7 @@ const TodoSearch: React.FC<TodoSearchProps> = ({ tasks, onTaskClick, isOpen, onC
                     
                     {task.dueDate && (
                       <div className={styles.taskDueDate}>
-                        📅 {task.dueDate.toLocaleDateString('ru-RU')}
+                        📅 {new Date(task.dueDate).toLocaleDateString('ru-RU')}
                       </div>
                     )}
                   </div>

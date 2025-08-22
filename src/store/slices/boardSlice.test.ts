@@ -2,7 +2,7 @@
 // Этот файл можно запустить в браузере для проверки
 
 import { configureStore } from '@reduxjs/toolkit';
-import boardReducer, { createLocalBoard, setCurrentBoard } from './boardSlice';
+import boardReducer, { setCurrentBoard } from './boardSlice';
 import type { Board } from '../../types/board';
 
 // Создаем тестовый store
@@ -56,7 +56,7 @@ const testBoard: Board = {
     overdueTasks: 0,
     totalMembers: 1,
     activeMembers: 1,
-    lastActivity: new Date(),
+    lastActivity: Date.now(),
     completionRate: 0,
     averageTaskDuration: 0,
     totalComments: 0,
@@ -64,8 +64,8 @@ const testBoard: Board = {
   },
   isTemplate: false,
   templateId: undefined,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
   isArchived: false,
   isPublic: false
 };
@@ -80,39 +80,22 @@ export function runBoardSliceTests() {
   console.log('Количество досок:', initialState.boards.boards.length);
   console.log('Текущая доска:', initialState.boards.currentBoard);
   
-  // Тест 2: Создаем доску
-  console.log('\n📊 Тест 2: Создание доски');
-  testStore.dispatch(createLocalBoard(testBoard));
-  const stateAfterCreate = testStore.getState();
-  console.log('Количество досок после создания:', stateAfterCreate.boards.boards.length);
-  console.log('Доска в массиве:', stateAfterCreate.boards.boards[0]);
-  
-  // Тест 3: Устанавливаем как текущую
-  console.log('\n📊 Тест 3: Установка текущей доски');
+  // Тест 2: Устанавливаем как текущую
+  console.log('\n📊 Тест 2: Установка текущей доски');
   testStore.dispatch(setCurrentBoard(testBoard));
   const stateAfterSetCurrent = testStore.getState();
   console.log('Текущая доска:', stateAfterSetCurrent.boards.currentBoard);
   
-  // Тест 4: Проверяем кэш
-  console.log('\n📊 Тест 4: Проверка кэша');
-  console.log('Доска в кэше:', stateAfterSetCurrent.boards.boardCache[testBoard.id]);
-  
-  // Тест 5: Проверяем статистику
-  console.log('\n📊 Тест 5: Проверка статистики');
-  console.log('Глобальная статистика:', stateAfterSetCurrent.boards.globalStatistics);
+  // Тест 3: Проверяем статистику
+  console.log('\n📊 Тест 3: Проверка статистики');
+  console.log('Статистика доски:', stateAfterSetCurrent.boards.currentBoard?.statistics);
   
   console.log('\n✅ Все тесты завершены!');
-  
-  return {
-    initialState,
-    stateAfterCreate,
-    stateAfterSetCurrent
-  };
 }
 
 // Автоматический запуск тестов в браузере
 if (typeof window !== 'undefined') {
-  // @ts-ignore
+  // @ts-expect-error - добавляем функцию в глобальный объект window для тестирования
   window.runBoardSliceTests = runBoardSliceTests;
   console.log('🧪 Тесты boardSlice готовы к запуску. Вызовите window.runBoardSliceTests() в консоли браузера');
 }

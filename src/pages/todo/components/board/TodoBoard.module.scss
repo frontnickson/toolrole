@@ -1,164 +1,932 @@
 @import "../../../../styles/utils/_mixins.scss";
 @import '../../../../styles/base/variables';
 
+// ===== ОСНОВНОЙ КОНТЕЙНЕР ДОСКИ =====
 .board {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+  @include flex-safari-column;
   height: 100%;
-  min-height: 600px;
+  @include box-sizing-safari;
 }
 
-.column {
-  background: $white;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-}
-
-.columnHeader {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid $gray-200;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.boardContent {
+  @include flex-safari(row, nowrap, flex-start, stretch);
+  gap: 1.5rem;
+  padding: 1.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: calc(100vh - 200px);
+  @include box-sizing-safari;
+  @include hide-scrollbar-safari;
   
-  .columnTitle {
-    display: flex;
-    align-items: center;
+  // Адаптивность для мобильных устройств
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 1rem;
+    
+    .column {
+      min-width: 280px;
+      max-width: 280px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.75rem;
     gap: 0.75rem;
     
-    .columnIcon {
-      font-size: 1.25rem;
+    .column {
+      min-width: 260px;
+      max-width: 260px;
     }
-    
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: $gray-800;
-      margin: 0;
+  }
+}
+
+// ===== КОЛОНКА =====
+.column {
+  background: $white;
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari($shadow-sm);
+  border: 1px solid $gray-200;
+  width: 320px; // Фиксированная ширина для всех колонок
+  min-width: 320px;
+  max-width: 320px;
+  @include flex-safari-column;
+  @include box-sizing-safari;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  
+  &:hover {
+    @include box-shadow-safari($shadow-md);
+    @include transform-safari(translateY(-1px));
+  }
+}
+
+// ===== ЗАГОЛОВОК КОЛОНКИ =====
+.columnHeader {
+  @include flex-safari(row, nowrap, space-between, center);
+  padding: 1rem;
+  border-bottom: 1px solid $gray-200;
+  background: $gray-50;
+  @include border-radius-safari($border-radius-md $border-radius-md 0 0);
+  @include box-sizing-safari;
+  
+  // Если нет кнопок действий, заголовок занимает всю ширину
+  &:has(.columnActions:empty) {
+    .columnTitle {
+      flex: 1;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
     }
   }
   
-  .taskCount {
-    background: $gray-100;
-    color: $gray-600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+  // Альтернативный способ для браузеров без поддержки :has()
+  .columnActions:empty + .columnTitle {
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
   }
 }
 
-.columnContent {
+.columnTitle {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.75rem;
+  @include box-sizing-safari;
   flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-height: 200px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  
+  h3 {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $gray-800;
+    margin: 0;
+    line-height: 1.4;
+    @include transition-safari(color);
+    
+    &:hover {
+      color: $gray-900;
+    }
+  }
 }
 
+.columnTitleInput {
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  padding: 0.5rem;
+  border: 2px solid $blue-300;
+  @include border-radius-safari($border-radius-sm);
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $gray-800;
+  background: $white;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    outline: none;
+    border-color: $blue-500;
+    @include box-shadow-safari(0 0 0 3px rgba(59, 130, 246, 0.1));
+  }
+}
+
+.columnActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 0.5rem;
+  @include box-sizing-safari;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  
+  // Если нет кнопок действий, скрываем контейнер
+  &:empty {
+    display: none;
+  }
+}
+
+.columnActionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  @include border-radius-safari($border-radius-sm);
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  font-size: 0.875rem;
+  opacity: 0.7;
+  
+  &:hover {
+    opacity: 1;
+    background: $gray-100;
+    @include transform-safari(scale(1.1));
+  }
+  
+  &:active {
+    @include transform-safari(scale(0.95));
+  }
+}
+
+.taskCount {
+  background: #3b82f6;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  @include box-shadow-safari(0 1px 3px rgba(0, 0, 0, 0.1));
+  @include appearance-safari;
+}
+
+// ===== КОНТЕНТ КОЛОНКИ =====
+.columnContent {
+  padding: 1rem;
+  @include flex-safari-column;
+  gap: 0.75rem;
+  min-height: 200px;
+  @include box-sizing-safari;
+}
+
+// ===== КНОПКА ДОБАВЛЕНИЯ ЗАДАЧИ =====
 .addTaskButton {
   width: 100%;
-  padding: 1rem;
+  padding: 0.75rem;
   background: $gray-50;
   border: 2px dashed $gray-300;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   color: $gray-600;
-  font-size: 0.875rem;
+  font-size: $font-size-sm;
   font-weight: 500;
   cursor: pointer;
-  transition: all $transition-normal;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  @include flex-safari-center;
   
   &:hover {
     background: $gray-100;
     border-color: $gray-400;
     color: $gray-700;
+    @include transform-safari(scale(1.02));
+  }
+  
+  &:active {
+    @include transform-safari(scale(0.98));
   }
 }
 
+// ===== ФОРМА ДОБАВЛЕНИЯ ЗАДАЧИ =====
 .addTaskForm {
   background: $white;
+  @include border-radius-safari($border-radius-md);
+  @include box-shadow-safari($shadow-md);
   border: 1px solid $gray-200;
-  border-radius: $border-radius-md;
   padding: 1rem;
-  box-shadow: $shadow-sm;
+  @include flex-safari-column;
+  gap: 0.75rem;
+  @include box-sizing-safari;
   
-  .taskTitleInput {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid $gray-300;
-    border-radius: $border-radius-md;
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
+  .formHeader {
+    @include flex-safari-column;
+    gap: 0.25rem;
+    @include box-sizing-safari;
     
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    h4 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: $gray-800;
+      margin: 0;
     }
     
-    &::placeholder {
-      color: $gray-400;
+    small {
+      font-size: $font-size-xs;
+      color: $gray-500;
+      font-style: italic;
+    }
+  }
+}
+
+.taskTitleInput, .taskDescriptionInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid $gray-300;
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  color: $gray-700;
+  background: $white;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    outline: none;
+    border-color: $blue-500;
+    @include box-shadow-safari(0 0 0 3px rgba(59, 130, 246, 0.1));
+  }
+  
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+.taskTitleInput {
+  font-weight: 500;
+}
+
+.taskDescriptionInput {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.taskFormActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  @include box-sizing-safari;
+  
+  .addTaskBtn, .cancelBtn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid;
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+    
+    &:hover {
+      opacity: 0.9;
+      @include transform-safari(translateY(-1px));
+    }
+    
+    &:active {
+      @include transform-safari(translateY(0));
     }
   }
   
-  .taskDescriptionInput {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid $gray-300;
-    border-radius: $border-radius-md;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-    resize: vertical;
-    min-height: 60px;
+  .addTaskBtn {
+    background: $blue-500;
+    color: $white;
+    border-color: $blue-500;
     
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    &:hover {
+      background: $blue-600;
+      border-color: $blue-600;
     }
     
-    &::placeholder {
-      color: $gray-400;
+    &:disabled {
+      background: $gray-400;
+      border-color: $gray-400;
+      cursor: not-allowed;
+      opacity: 0.7;
     }
   }
   
-  .taskFormActions {
-    display: flex;
-    gap: 0.75rem;
+  .cancelBtn {
+    background: $white;
+    color: $gray-600;
+    border-color: $gray-300;
     
-    button {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      border-radius: $border-radius-md;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all $transition-normal;
+    &:hover {
+      background: $gray-50;
+      border-color: $gray-400;
     }
+  }
+}
+
+// ===== КНОПКА ДОБАВЛЕНИЯ КОЛОНКИ =====
+.addColumnButton {
+  width: 320px; // Фиксированная ширина, как у колонок
+  min-width: 320px;
+  max-width: 320px;
+  height: 60px;
+  background: $gray-50;
+  border: 2px dashed $gray-300;
+  @include border-radius-safari($border-radius-lg);
+  color: $gray-600;
+  font-size: $font-size-base;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  @include flex-safari-center;
+  align-self: flex-start; // Выравнивание по верху
+  margin-top: 0; // Убираем отступ сверху
+  
+  &:hover {
+    background: $gray-100;
+    border-color: $gray-400;
+    color: $gray-700;
+    @include transform-safari(scale(1.02));
+  }
+  
+  &:active {
+    @include transform-safari(scale(0.98));
+  }
+  
+  // Адаптивность для разных размеров экрана
+  @media (min-width: 1201px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: 60px;
+  }
+  
+  @media (max-width: 1200px) {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    height: 55px;
+  }
+  
+  @media (max-width: 768px) {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    height: 50px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+    height: 45px;
+  }
+}
+
+// ===== ФОРМА ДОБАВЛЕНИЯ КОЛОНКИ =====
+.addColumnForm {
+  width: 320px; // Фиксированная ширина, как у колонок
+  min-width: 320px;
+  max-width: 320px;
+  height: fit-content; // Высота по содержимому
+  max-height: 400px; // Максимальная высота
+  background: $white;
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari($shadow-lg);
+  border: 1px solid $gray-200;
+  padding: 1rem; // Уменьшили padding для компактности
+  @include flex-safari-column;
+  gap: 0.75rem; // Уменьшили gap между элементами
+  @include box-sizing-safari;
+  align-self: flex-start; // Выравнивание по верху
+  margin-top: 0; // Убираем отступ сверху
+  
+  // Адаптивность для разных размеров экрана
+  @media (min-width: 1201px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    padding: 1rem;
+  }
+  
+  @media (max-width: 1200px) {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    padding: 0.875rem;
+  }
+  
+  @media (max-width: 768px) {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    padding: 0.875rem;
+  }
+  
+  @media (max-width: 480px) {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+    padding: 0.75rem;
+  }
+}
+
+.addColumnHeader {
+  @include flex-safari(row, nowrap, space-between, center);
+  margin-bottom: 0.25rem; // Уменьшили отступ
+  @include box-sizing-safari;
+  
+  h4 {
+    font-size: $font-size-base; // Уменьшили размер шрифта
+    font-weight: 600;
+    color: $gray-800;
+    margin: 0;
+  }
+  
+  .closeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    @include border-radius-safari($border-radius-sm);
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+    font-size: 1.25rem;
+    color: $gray-500;
     
-    .addTaskBtn {
-      background: $primary-color;
-      color: $white;
-      
-      &:hover {
-        background: $primary-hover;
-      }
-    }
-    
-    .cancelBtn {
-      background: $gray-200;
+    &:hover {
+      background: $gray-100;
       color: $gray-700;
+    }
+    
+    &:active {
+      background: $gray-200;
+    }
+  }
+}
+
+.columnDescriptionInput {
+  width: 100%;
+  padding: 0.5rem; // Уменьшили padding
+  border: 1px solid $gray-300;
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  color: $gray-700;
+  background: $white;
+  resize: vertical;
+  min-height: 60px; // Уменьшили минимальную высоту
+  max-height: 120px; // Добавили максимальную высоту
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    outline: none;
+    border-color: $blue-500;
+    @include box-shadow-safari(0 0 0 3px rgba(59, 130, 246, 0.1));
+  }
+  
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+.columnFormActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 0.5rem; // Уменьшили gap
+  margin-top: 0.25rem; // Уменьшили отступ сверху
+  @include box-sizing-safari;
+  
+  .addColumnBtn, .cancelBtn {
+    padding: 0.5rem 1rem; // Уменьшили padding кнопок
+    border: 1px solid;
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+    
+    &:hover {
+      opacity: 0.9;
+      @include transform-safari(translateY(-1px));
+    }
+    
+    &:active {
+      @include transform-safari(translateY(0));
+    }
+  }
+  
+  .addColumnBtn {
+    background: $blue-500;
+    color: $white;
+    border-color: $blue-500;
+    
+    &:hover {
+      background: $blue-600;
+      border-color: $blue-600;
+    }
+    
+    &:disabled {
+      background: $gray-400;
+      border-color: $gray-400;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+  
+  .cancelBtn {
+    background: $white;
+    color: $gray-600;
+    border-color: $gray-300;
+    
+    &:hover {
+      background: $gray-50;
+      border-color: $gray-400;
+    }
+  }
+}
+
+// ===== СООБЩЕНИЕ ОБ ОТСУТСТВИИ ДОСКИ =====
+.noBoard {
+  @include flex-safari-center;
+  height: 60vh;
+  text-align: center;
+  padding: 2rem;
+  @include box-sizing-safari;
+  background: $gray-50;
+  @include border-radius-safari($border-radius-lg);
+  border: 2px dashed $gray-300;
+  margin: 2rem;
+}
+
+.noBoardContent {
+  @include flex-safari-column;
+  gap: 1.5rem;
+  max-width: 500px;
+  @include box-sizing-safari;
+  
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $gray-800;
+    margin: 0;
+  }
+  
+  p {
+    font-size: $font-size-lg;
+    color: $gray-600;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.noBoardActions {
+  @include flex-safari-column;
+  gap: 1rem;
+  margin-top: 1rem;
+  @include box-sizing-safari;
+}
+
+.createFirstBoardBtn, .selectBoardBtn {
+  padding: 1rem 2rem;
+  background: $blue-500;
+  color: $white;
+  border: none;
+  @include border-radius-safari($border-radius-lg);
+  font-size: $font-size-lg;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    background: $blue-600;
+    @include transform-safari(translateY(-2px));
+    @include box-shadow-safari($shadow-lg);
+  }
+  
+  &:active {
+    background: $blue-700;
+    @include transform-safari(translateY(0));
+  }
+}
+
+.noBoardHint {
+  font-size: $font-size-sm;
+  color: $gray-500;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+// ===== АДАПТИВНОСТЬ =====
+@media (min-width: 1201px) {
+  .board {
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .column {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+  }
+  
+  .addColumnForm {
+    height: fit-content;
+    max-height: 400px;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnButton {
+    align-self: flex-start;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .board {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+  
+  .column {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+  }
+  
+  .addColumnForm {
+    height: fit-content;
+    max-height: 380px;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnButton {
+    align-self: flex-start;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .board {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .column {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+  
+  .columnHeader {
+    padding: 0.75rem 0.75rem 0.5rem 0.75rem;
+  }
+  
+  .columnTitle {
+    margin-bottom: 0.375rem;
+    
+    h3 {
+      font-size: 0.875rem;
+    }
+  }
+  
+  .columnContent {
+    padding: 0.5rem;
+    gap: 0.375rem;
+  }
+  
+  .addTaskForm {
+    padding: 0.75rem;
+  }
+  
+  .addColumnButton {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnForm {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    height: fit-content;
+    max-height: 350px;
+    padding: 0.75rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .taskFormActions,
+  .columnFormActions {
+    @include flex-safari-column;
+    gap: 0.375rem;
+    
+    .addTaskBtn,
+    .cancelBtn,
+    .addColumnBtn {
+      justify-content: center;
+      -webkit-justify-content: center;
+      -ms-flex-pack: center;
+      padding: 0.625rem 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .board {
+    @include flex-safari-column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+  
+  .column {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+  }
+  
+  .columnHeader {
+    padding: 0.5rem;
+  }
+  
+  .columnContent {
+    padding: 0.375rem;
+  }
+  
+  .addTaskButton {
+    padding: 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .addTaskForm {
+    padding: 0.625rem;
+  }
+  
+  .addColumnButton {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+    padding: 0.625rem;
+    font-size: 0.75rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnForm {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+    height: fit-content;
+    max-height: 300px;
+    padding: 0.625rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .taskTitleInput,
+  .taskDescriptionInput,
+  .columnTitleInput,
+  .columnDescriptionInput {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .taskFormActions,
+  .columnFormActions {
+    .addTaskBtn,
+    .cancelBtn,
+    .addColumnBtn {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// ===== SAFARI-СПЕЦИФИЧНЫЕ ИСПРАВЛЕНИЯ =====
+@supports (-webkit-touch-callout: none) {
+  // Safari на iOS
+  .boardContent {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .column {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  .addColumnButton,
+  .addColumnForm {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+// Исправления для Safari на macOS
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .boardContent {
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 8px;
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f3f4;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #c1c7cd;
+      border-radius: 4px;
+      border: 1px solid #f1f3f4;
       
       &:hover {
-        background: $gray-300;
+        background: #a8b0b8;
       }
     }
+  }
+}
+
+.columnIcon {
+  font-size: 1.125rem;
+  opacity: 0.8;
+  color: $gray-600;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  @include box-sizing-safari;
+}
+
+// ===== СТИЛИ ДЛЯ СТАНДАРТНЫХ КОЛОНОК =====
+.standardColumnTitle {
+  position: relative;
+  color: $gray-600 !important;
+  font-weight: 500 !important;
+  
+  &:hover {
+    color: $gray-600 !important;
+  }
+}
+
+.standardColumnBadge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  cursor: help;
+  @include transition-safari(opacity);
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Стили для заголовков стандартных колонок
+.columnTitle h3.standardColumnTitle {
+  cursor: not-allowed !important;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(156, 163, 175, 0.1);
+    @include border-radius-safari($border-radius-sm);
+    pointer-events: none;
   }
 }

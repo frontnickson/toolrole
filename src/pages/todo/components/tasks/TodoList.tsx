@@ -31,7 +31,7 @@ const TodoList: React.FC<TodoListProps> = ({
     const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+                         task.tags.some(tag => tag.name.toLowerCase().includes(searchQuery.toLowerCase()));
     
     return matchesStatus && matchesPriority && matchesSearch;
   });
@@ -47,6 +47,7 @@ const TodoList: React.FC<TodoListProps> = ({
         break;
       case 'priority': {
         const priorityOrder = { 
+          [TaskPriority.CRITICAL]: 5,
           [TaskPriority.URGENT]: 4, 
           [TaskPriority.HIGH]: 3, 
           [TaskPriority.MEDIUM]: 2, 
@@ -62,12 +63,14 @@ const TodoList: React.FC<TodoListProps> = ({
         break;
       case 'status': {
         const statusOrder = { 
-          [TaskStatus.TODO]: 1, 
+          [TaskStatus.PLANNING]: 1, 
           [TaskStatus.IN_PROGRESS]: 2, 
           [TaskStatus.REVIEW]: 3, 
           [TaskStatus.TESTING]: 4, 
           [TaskStatus.COMPLETED]: 5,
-          [TaskStatus.CANCELLED]: 6
+          [TaskStatus.CANCELLED]: 6,
+          [TaskStatus.BLOCKED]: 7,
+          [TaskStatus.ON_HOLD]: 8
         };
         aValue = statusOrder[a.status] || 0;
         bValue = statusOrder[b.status] || 0;
@@ -104,7 +107,7 @@ const TodoList: React.FC<TodoListProps> = ({
 
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.TODO:
+      case TaskStatus.PLANNING:
         return styles.todoStatus;
       case TaskStatus.IN_PROGRESS:
         return styles.inProgressStatus;
@@ -121,6 +124,8 @@ const TodoList: React.FC<TodoListProps> = ({
 
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
+      case TaskPriority.CRITICAL:
+        return styles.criticalPriority;
       case TaskPriority.URGENT:
         return styles.urgentPriority;
       case TaskPriority.HIGH:
@@ -160,7 +165,7 @@ const TodoList: React.FC<TodoListProps> = ({
               className={styles.filterSelect}
             >
               <option value="all">Все статусы</option>
-              <option value={TaskStatus.TODO}>К выполнению</option>
+              <option value={TaskStatus.PLANNING}>К выполнению</option>
               <option value={TaskStatus.IN_PROGRESS}>В работе</option>
               <option value={TaskStatus.REVIEW}>На проверке</option>
               <option value={TaskStatus.TESTING}>Тестирование</option>

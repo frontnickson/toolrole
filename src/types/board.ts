@@ -1,12 +1,14 @@
 // ===== ОСНОВНЫЕ ТИПЫ ДОСОК =====
 
-export enum BoardRole {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-  MEMBER = 'member',
-  VIEWER = 'viewer',
-  GUEST = 'guest'
-}
+export const BoardRole = {
+  OWNER: 'owner',
+  ADMIN: 'admin',
+  MEMBER: 'member',
+  VIEWER: 'viewer',
+  GUEST: 'guest'
+} as const;
+
+export type BoardRole = typeof BoardRole[keyof typeof BoardRole];
 
 export interface Board {
   id: string;
@@ -123,6 +125,7 @@ export interface Column {
   order: number;
   isLocked: boolean;
   isCollapsed: boolean;
+  isStandard?: boolean; // Флаг для стандартных колонок по умолчанию
   taskLimit?: number;
   wipLimit?: number; // Work In Progress limit
   tasks: Task[];
@@ -218,33 +221,39 @@ export interface Task {
   customFields: Record<string, string | number | boolean | Date | null>;
 }
 
-export enum TaskStatus {
-  PLANNING = 'planning',
-  IN_PROGRESS = 'in_progress',
-  REVIEW = 'review',
-  TESTING = 'testing',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled',
-  BLOCKED = 'blocked',
-  ON_HOLD = 'on_hold'
-}
+export const TaskStatus = {
+  PLANNING: 'planning',
+  IN_PROGRESS: 'in_progress',
+  REVIEW: 'review',
+  TESTING: 'testing',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+  BLOCKED: 'blocked',
+  ON_HOLD: 'on_hold'
+} as const;
 
-export enum TaskPriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  URGENT = 'urgent',
-  CRITICAL = 'critical'
-}
+export type TaskStatus = typeof TaskStatus[keyof typeof TaskStatus];
 
-export enum TaskType {
-  TASK = 'task',
-  BUG = 'bug',
-  FEATURE = 'feature',
-  STORY = 'story',
-  EPIC = 'epic',
-  SUBTASK = 'subtask'
-}
+export const TaskPriority = {
+  LOW: 'low',
+  MEDIUM: 'medium',
+  HIGH: 'high',
+  URGENT: 'urgent',
+  CRITICAL: 'critical'
+} as const;
+
+export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+
+export const TaskType = {
+  TASK: 'task',
+  BUG: 'bug',
+  FEATURE: 'feature',
+  STORY: 'story',
+  EPIC: 'epic',
+  SUBTASK: 'subtask'
+} as const;
+
+export type TaskType = typeof TaskType[keyof typeof TaskType];
 
 export interface TaskTag {
   id: string;
@@ -369,53 +378,55 @@ export interface Activity {
   userAgent?: string;
 }
 
-export enum ActivityAction {
+export const ActivityAction = {
   // Задачи
-  TASK_CREATED = 'task_created',
-  TASK_UPDATED = 'task_updated',
-  TASK_DELETED = 'task_deleted',
-  TASK_ARCHIVED = 'task_archived',
-  TASK_RESTORED = 'task_restored',
-  TASK_MOVED = 'task_moved',
-  TASK_ASSIGNED = 'task_assigned',
-  TASK_UNASSIGNED = 'task_unassigned',
+  TASK_CREATED: 'task_created',
+  TASK_UPDATED: 'task_updated',
+  TASK_DELETED: 'task_deleted',
+  TASK_ARCHIVED: 'task_archived',
+  TASK_RESTORED: 'task_restored',
+  TASK_MOVED: 'task_moved',
+  TASK_ASSIGNED: 'task_assigned',
+  TASK_UNASSIGNED: 'task_unassigned',
   
   // Статусы
-  STATUS_CHANGED = 'status_changed',
-  PRIORITY_CHANGED = 'priority_changed',
-  DUE_DATE_CHANGED = 'due_date_changed',
+  STATUS_CHANGED: 'status_changed',
+  PRIORITY_CHANGED: 'priority_changed',
+  DUE_DATE_CHANGED: 'due_date_changed',
   
   // Комментарии
-  COMMENT_ADDED = 'comment_added',
-  COMMENT_EDITED = 'comment_edited',
-  COMMENT_DELETED = 'comment_deleted',
-  COMMENT_PINNED = 'comment_pinned',
+  COMMENT_ADDED: 'comment_added',
+  COMMENT_EDITED: 'comment_edited',
+  COMMENT_DELETED: 'comment_deleted',
+  COMMENT_PINNED: 'comment_pinned',
   
   // Вложения
-  ATTACHMENT_ADDED = 'attachment_added',
-  ATTACHMENT_DELETED = 'attachment_deleted',
+  ATTACHMENT_ADDED: 'attachment_added',
+  ATTACHMENT_DELETED: 'attachment_deleted',
   
   // Подзадачи
-  SUBTASK_ADDED = 'subtask_added',
-  SUBTASK_COMPLETED = 'subtask_completed',
-  SUBTASK_DELETED = 'subtask_deleted',
+  SUBTASK_ADDED: 'subtask_added',
+  SUBTASK_COMPLETED: 'subtask_completed',
+  SUBTASK_DELETED: 'subtask_deleted',
   
   // Участники
-  WATCHER_ADDED = 'watcher_added',
-  WATCHER_REMOVED = 'watcher_removed',
-  COLLABORATOR_ADDED = 'collaborator_added',
-  COLLABORATOR_REMOVED = 'collaborator_removed',
+  WATCHER_ADDED: 'watcher_added',
+  WATCHER_REMOVED: 'watcher_removed',
+  COLLABORATOR_ADDED: 'collaborator_added',
+  COLLABORATOR_REMOVED: 'collaborator_removed',
   
   // Время
-  TIME_LOGGED = 'time_logged',
-  TIME_ESTIMATE_CHANGED = 'time_estimate_changed',
+  TIME_LOGGED: 'time_logged',
+  TIME_ESTIMATE_CHANGED: 'time_estimate_changed',
   
   // Теги и метки
-  TAG_ADDED = 'tag_added',
-  TAG_REMOVED = 'tag_removed',
-  LABEL_ADDED = 'label_added',
-  LABEL_REMOVED = 'label_removed'
-}
+  TAG_ADDED: 'tag_added',
+  TAG_REMOVED: 'tag_removed',
+  LABEL_ADDED: 'label_added',
+  LABEL_REMOVED: 'label_removed'
+} as const;
+
+export type ActivityAction = typeof ActivityAction[keyof typeof ActivityAction];
 
 export interface ActivityDetails {
   field?: string;
@@ -450,17 +461,19 @@ export interface BoardTemplate {
   totalRatings: number;
 }
 
-export enum TemplateCategory {
-  SOFTWARE_DEVELOPMENT = 'software_development',
-  PROJECT_MANAGEMENT = 'project_management',
-  MARKETING = 'marketing',
-  SALES = 'sales',
-  SUPPORT = 'support',
-  HR = 'hr',
-  FINANCE = 'finance',
-  OPERATIONS = 'operations',
-  CUSTOM = 'custom'
-}
+export const TemplateCategory = {
+  SOFTWARE_DEVELOPMENT: 'software_development',
+  PROJECT_MANAGEMENT: 'project_management',
+  MARKETING: 'marketing',
+  SALES: 'sales',
+  SUPPORT: 'support',
+  HR: 'hr',
+  FINANCE: 'finance',
+  OPERATIONS: 'operations',
+  CUSTOM: 'custom'
+} as const;
+
+export type TemplateCategory = typeof TemplateCategory[keyof typeof TemplateCategory];
 
 export interface ColumnTemplate {
   id: string;

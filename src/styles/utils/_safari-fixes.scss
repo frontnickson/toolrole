@@ -1,0 +1,500 @@
+// ===== SAFARI-СПЕЦИФИЧНЫЕ ИСПРАВЛЕНИЯ =====
+
+// Глобальные исправления для Safari
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+// Исправления для flexbox в Safari
+.flex-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.flex-column {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.flex-center {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.flex-between {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+// Исправления для grid в Safari
+.grid-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+// Исправления для transform в Safari
+.transform-safe {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+// Исправления для transition в Safari
+.transition-safe {
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+// Исправления для border-radius в Safari
+.border-radius-safe {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
+// Исправления для box-shadow в Safari
+.box-shadow-safe {
+  -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Исправления для appearance в Safari
+.appearance-none {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+// Исправления для user-select в Safari
+.user-select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// Исправления для overflow в Safari
+.overflow-safe {
+  -webkit-overflow-scrolling: touch;
+}
+
+// Исправления для position: sticky в Safari
+.sticky-safe {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+// Исправления для backdrop-filter в Safari
+.backdrop-blur-safe {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  
+  @supports not (-webkit-backdrop-filter: blur(10px)) {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// Исправления для text-overflow в Safari
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Исправления для line-clamp в Safari
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Исправления для gap в Safari (fallback для старых версий)
+.gap-fallback {
+  > * + * {
+    margin-left: 1rem;
+  }
+}
+
+// Исправления для min() и max() в Safari
+.width-responsive {
+  width: 100%;
+  max-width: 320px;
+  min-width: 280px;
+}
+
+// Исправления для CSS Custom Properties в Safari
+:root {
+  --safari-safe-transition: 0.2s ease;
+  --safari-safe-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --safari-safe-radius: 8px;
+}
+
+// Исправления для анимаций в Safari
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes slideUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+// Исправления для медиа-запросов в Safari
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .safari-specific {
+    // Safari-специфичные стили
+  }
+}
+
+// Исправления для touch-устройств (Safari на iOS)
+@supports (-webkit-touch-callout: none) {
+  .ios-safari {
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+// Исправления для высокого DPI экранов в Safari
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-dpi {
+    // Стили для высокого DPI
+  }
+}
+
+// Исправления для темной темы в Safari
+@media (prefers-color-scheme: dark) {
+  .dark-mode-safe {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+}
+
+// Исправления для reduced motion в Safari
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -o-animation: none;
+    animation: none;
+  }
+}
+
+// Исправления для focus в Safari
+.focus-safe:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+// Исправления для hover в Safari (только для устройств с мышью)
+@media (hover: hover) {
+  .hover-safe:hover {
+    // Стили для hover
+  }
+}
+
+// Исправления для активного состояния в Safari
+.active-safe:active {
+  -webkit-transform: scale(0.98);
+  transform: scale(0.98);
+}
+
+// Исправления для disabled состояния в Safari
+.disabled-safe:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// Исправления для placeholder в Safari
+.placeholder-safe::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+// Исправления для selection в Safari
+.selection-safe::selection {
+  background: #007bff;
+  color: #ffffff;
+}
+
+.selection-safe::-moz-selection {
+  background: #007bff;
+  color: #ffffff;
+}
+
+// Исправления для scrollbar в Safari
+.scrollbar-safe {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f3f4;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c7cd;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #a8b0b8;
+    }
+  }
+  
+  scrollbar-width: thin;
+  scrollbar-color: #c1c7cd #f1f3f4;
+}
+
+// Исправления для input в Safari
+.input-safe {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  font-size: 14px;
+  background: #ffffff;
+  
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    -webkit-box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+}
+
+// Исправления для button в Safari
+.button-safe {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+  
+  &:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+  }
+}
+
+// Исправления для img в Safari
+.img-safe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Исправления для svg в Safari
+.svg-safe {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+// Исправления для table в Safari
+.table-safe {
+  border-collapse: collapse;
+  width: 100%;
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+}
+
+// Исправления для form в Safari
+.form-safe {
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .form-input {
+    @extend .input-safe;
+    width: 100%;
+  }
+  
+  .form-textarea {
+    @extend .input-safe;
+    width: 100%;
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+// Исправления для modal в Safari
+.modal-safe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  
+  .modal-content {
+    background: #ffffff;
+    border-radius: 8px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+}
+
+// Исправления для tooltip в Safari
+.tooltip-safe {
+  position: relative;
+  
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333333;
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// Исправления для dropdown в Safari
+.dropdown-safe {
+  position: relative;
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 1000;
+    display: none;
+    
+    &.show {
+      display: block;
+    }
+  }
+  
+  .dropdown-item {
+    display: block;
+    padding: 8px 16px;
+    color: #333333;
+    text-decoration: none;
+    
+    &:hover {
+      background: #f8f9fa;
+    }
+  }
+}

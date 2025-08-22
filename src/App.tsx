@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import AppRoutes from './components/layout/AppRoutes';
 import './App.scss';
 

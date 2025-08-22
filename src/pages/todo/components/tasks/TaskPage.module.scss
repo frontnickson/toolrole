@@ -1,15 +1,15 @@
 @import '../../../../styles/base/variables';
+@import '../../../../styles/utils/_mixins.scss';
 
 .taskPage {
   min-height: 100vh;
   background: $gray-50;
   padding: 2rem;
+  @include box-sizing-safari;
 }
 
 .loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-safari-center;
   height: 50vh;
   
   h2 {
@@ -19,30 +19,30 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-safari(row, nowrap, space-between, center);
   margin-bottom: 2rem;
   padding: 1.5rem;
   background: $white;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-sm;
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari($shadow-sm);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 }
 
 .backButton {
-  display: flex;
-  align-items: center;
+  @include flex-safari(row, nowrap, flex-start, center);
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   background: $gray-100;
   border: 1px solid $gray-300;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   color: $gray-700;
   font-size: $font-size-sm;
   font-weight: 500;
   cursor: pointer;
-  transition: all $transition-normal;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
 
   &:hover {
     background: $gray-200;
@@ -51,18 +51,20 @@
 }
 
 .headerActions {
-  display: flex;
+  @include flex-safari(row, nowrap, flex-start, center);
   gap: 1rem;
 }
 
 .editButton, .saveButton, .deleteButton {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   font-size: $font-size-sm;
   font-weight: 500;
   cursor: pointer;
-  transition: all $transition-normal;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
 }
 
 .editButton {
@@ -96,35 +98,37 @@
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: 2rem;
+  @include box-sizing-safari;
 }
 
 .mainContent {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 2rem;
 }
 
 .taskInfo {
   background: $white;
-  border-radius: $border-radius-lg;
+  @include border-radius-safari($border-radius-lg);
   padding: 2rem;
-  box-shadow: $shadow-sm;
+  @include box-shadow-safari($shadow-sm);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 }
 
 .editForm {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 1.5rem;
 }
 
 .titleInput {
   padding: 1rem;
   border: 2px solid $gray-200;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   font-size: $font-size-lg;
   font-weight: 600;
-  transition: border-color $transition-normal;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
 
   &:focus {
     outline: none;
@@ -135,10 +139,12 @@
 .descriptionInput {
   padding: 1rem;
   border: 2px solid $gray-200;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   font-size: $font-size-base;
   resize: vertical;
-  transition: border-color $transition-normal;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
 
   &:focus {
     outline: none;
@@ -150,12 +156,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
+  @include box-sizing-safari;
 }
 
 .field {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 0.5rem;
+  @include box-sizing-safari;
 
   label {
     font-size: $font-size-sm;
@@ -166,15 +173,129 @@
   select, input {
     padding: 0.75rem;
     border: 1px solid $gray-300;
-    border-radius: $border-radius-md;
+    @include border-radius-safari($border-radius-md);
     font-size: $font-size-sm;
-    transition: border-color $transition-normal;
+    @include transition-safari(border-color);
+    @include appearance-safari;
+    @include box-sizing-safari;
 
     &:focus {
       outline: none;
       border-color: $blue-500;
     }
   }
+  
+  .fieldHint {
+    font-size: $font-size-xs;
+    color: $gray-500;
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+}
+
+// ===== КАСТОМНЫЕ СЕЛЕКТЫ ДЛЯ SAFARI =====
+.customSelect {
+  position: relative;
+  @include box-sizing-safari;
+}
+
+.customSelectTrigger {
+  @include flex-safari(row, nowrap, space-between, center);
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid $gray-300;
+  @include border-radius-safari($border-radius-md);
+  background: $white;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    border-color: $gray-400;
+    background: $gray-50;
+  }
+  
+  &.open {
+    border-color: $blue-500;
+    @include box-shadow-safari(0 0 0 3px rgba(59, 130, 246, 0.1));
+  }
+  
+  .selectedValue {
+    font-size: $font-size-sm;
+    color: $gray-700;
+    font-weight: 500;
+  }
+  
+  .arrow {
+    font-size: 0.75rem;
+    color: $gray-500;
+    @include transition-safari(transform);
+    
+    &.open {
+      @include transform-safari(rotate(180deg));
+    }
+  }
+}
+
+.customSelectDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: $white;
+  border: 1px solid $gray-300;
+  @include border-radius-safari($border-radius-md);
+  @include box-shadow-safari($shadow-lg);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  @include box-sizing-safari;
+  @include hide-scrollbar-safari;
+  
+  .customSelectOption {
+    padding: 0.75rem;
+    cursor: pointer;
+    @include transition-safari(background-color);
+    @include box-sizing-safari;
+    
+    &:hover {
+      background: $gray-50;
+    }
+    
+    &.selected {
+      background: $blue-50;
+      color: $blue-700;
+      font-weight: 500;
+    }
+    
+    .optionLabel {
+      font-size: $font-size-sm;
+      color: inherit;
+    }
+    
+    .optionColor {
+      width: 12px;
+      height: 12px;
+      @include border-radius-safari(50%);
+      display: inline-block;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+  }
+}
+
+// ===== СТАТУС И ПРИОРИТЕТ =====
+.status, .priority {
+  padding: 0.5rem 1rem;
+  @include border-radius-safari($border-radius-full);
+  color: $white;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  @include box-sizing-safari;
+  @include box-shadow-safari(0 1px 3px rgba(0, 0, 0, 0.1));
 }
 
 .taskTitle {
@@ -193,32 +314,34 @@
 }
 
 .taskMeta {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari(row, nowrap, flex-start, center);
   gap: 1rem;
+  flex-wrap: wrap;
+  @include box-sizing-safari;
 }
 
 .metaItem {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  @include box-sizing-safari;
 }
 
 .label {
   font-size: $font-size-sm;
   font-weight: 600;
   color: $gray-600;
-  min-width: 120px;
+  min-width: auto;
+  white-space: nowrap;
 }
 
-.status, .priority {
-  padding: 0.5rem 1rem;
-  border-radius: $border-radius-full;
-  color: $white;
-  font-size: $font-size-xs;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.separator {
+  font-size: $font-size-sm;
+  color: $gray-400;
+  font-weight: 400;
+  margin: 0 0.25rem;
+  opacity: 0.7;
 }
 
 .dueDate {
@@ -227,28 +350,104 @@
   font-weight: 500;
 }
 
+.changeDateBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  @include border-radius-safari($border-radius-sm);
+  @include transition-safari(background-color);
+  font-size: 0.875rem;
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    background-color: $gray-100;
+  }
+  
+  &:active {
+    background-color: $gray-200;
+  }
+}
+
+.quickDateChange {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.5rem;
+  @include box-sizing-safari;
+}
+
+.quickDateInput {
+  padding: 0.5rem;
+  border: 1px solid $blue-300;
+  @include border-radius-safari($border-radius-sm);
+  font-size: $font-size-sm;
+  background: $white;
+  color: $gray-700;
+  outline: none;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    border-color: $blue-500;
+    @include box-shadow-safari(0 0 0 2px rgba(59, 130, 246, 0.1));
+  }
+}
+
+.cancelDateBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  @include border-radius-safari($border-radius-sm);
+  @include transition-safari(background-color);
+  font-size: 0.875rem;
+  color: $red-500;
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    background-color: $red-50;
+  }
+  
+  &:active {
+    background-color: $red-100;
+  }
+}
+
+.dateHint {
+  font-size: $font-size-xs;
+  color: $gray-500;
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
 .tags {
-  display: flex;
+  @include flex-safari(row, nowrap, flex-start, center);
   flex-wrap: wrap;
   gap: 0.5rem;
+  @include box-sizing-safari;
 }
 
 .tag {
   padding: 0.25rem 0.75rem;
   background: $gray-100;
   border: 1px solid $gray-300;
-  border-radius: $border-radius-full;
+  @include border-radius-safari($border-radius-full);
   font-size: $font-size-xs;
   color: $gray-700;
   font-weight: 500;
+  @include box-sizing-safari;
 }
 
 .subtasks, .attachments, .comments {
   background: $white;
-  border-radius: $border-radius-lg;
+  @include border-radius-safari($border-radius-lg);
   padding: 2rem;
-  box-shadow: $shadow-sm;
+  @include box-shadow-safari($shadow-sm);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 
   h3 {
     font-size: $font-size-lg;
@@ -259,24 +458,25 @@
 }
 
 .subtasksList {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 0.75rem;
 }
 
 .subtask {
-  display: flex;
-  align-items: center;
+  @include flex-safari(row, nowrap, flex-start, center);
   gap: 0.75rem;
   padding: 0.75rem;
   background: $gray-50;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 
   input[type="checkbox"] {
     width: 18px;
     height: 18px;
     accent-color: $green-500;
+    @include appearance-safari;
+    @include box-sizing-safari;
   }
 
   span {
@@ -292,20 +492,19 @@
 }
 
 .attachmentsList {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 0.75rem;
 }
 
 .attachment {
-  display: flex;
-  align-items: center;
+  @include flex-safari(row, nowrap, flex-start, center);
   gap: 0.75rem;
   padding: 1rem;
   background: $gray-50;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   border: 1px solid $gray-200;
-  transition: all $transition-normal;
+  @include transition-safari(all);
+  @include box-sizing-safari;
 
   &:hover {
     background: $gray-100;
@@ -319,6 +518,9 @@
 
 .attachmentName {
   flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   font-size: $font-size-sm;
   color: $gray-700;
   font-weight: 500;
@@ -331,17 +533,20 @@
 
 .addComment {
   margin-bottom: 2rem;
+  @include box-sizing-safari;
 }
 
 .addComment textarea {
   width: 100%;
   padding: 1rem;
   border: 2px solid $gray-200;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   font-size: $font-size-base;
   resize: vertical;
   margin-bottom: 1rem;
-  transition: border-color $transition-normal;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
 
   &:focus {
     outline: none;
@@ -354,11 +559,13 @@
   background: $blue-500;
   color: $white;
   border: none;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   font-size: $font-size-sm;
   font-weight: 500;
   cursor: pointer;
-  transition: all $transition-normal;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
 
   &:hover:not(:disabled) {
     background: $blue-600;
@@ -371,23 +578,22 @@
 }
 
 .commentsList {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 1.5rem;
 }
 
 .comment {
   padding: 1.5rem;
   background: $gray-50;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 }
 
 .commentHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-safari(row, nowrap, space-between, center);
   margin-bottom: 1rem;
+  @include box-sizing-safari;
 }
 
 .commentAuthor {
@@ -408,17 +614,18 @@
 }
 
 .sidebar {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 2rem;
+  @include box-sizing-safari;
 }
 
 .quickActions, .activity {
   background: $white;
-  border-radius: $border-radius-lg;
+  @include border-radius-safari($border-radius-lg);
   padding: 1.5rem;
-  box-shadow: $shadow-sm;
+  @include box-shadow-safari($shadow-sm);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 
   h3 {
     font-size: $font-size-base;
@@ -429,10 +636,10 @@
 }
 
 .actionGroup {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
+  @include box-sizing-safari;
 
   label {
     font-size: $font-size-sm;
@@ -443,9 +650,11 @@
   select {
     padding: 0.75rem;
     border: 1px solid $gray-300;
-    border-radius: $border-radius-md;
+    @include border-radius-safari($border-radius-md);
     font-size: $font-size-sm;
-    transition: border-color $transition-normal;
+    @include transition-safari(border-color);
+    @include appearance-safari;
+    @include box-sizing-safari;
 
     &:focus {
       outline: none;
@@ -455,19 +664,18 @@
 }
 
 .activityList {
-  display: flex;
-  flex-direction: column;
+  @include flex-safari-column;
   gap: 1rem;
 }
 
 .activityItem {
-  display: flex;
-  align-items: flex-start;
+  @include flex-safari(row, nowrap, flex-start, center);
   gap: 0.75rem;
   padding: 1rem;
   background: $gray-50;
-  border-radius: $border-radius-md;
+  @include border-radius-safari($border-radius-md);
   border: 1px solid $gray-200;
+  @include box-sizing-safari;
 }
 
 .activityIcon {
@@ -477,9 +685,12 @@
 
 .activityContent {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  @include flex-safari-column;
   gap: 0.25rem;
+  @include box-sizing-safari;
 }
 
 .activityAction {
@@ -491,6 +702,28 @@
 .activityTime {
   font-size: $font-size-xs;
   color: $gray-500;
+}
+
+// ===== SAFARI-СПЕЦИФИЧНЫЕ ИСПРАВЛЕНИЯ =====
+@supports (-webkit-touch-callout: none) {
+  // Safari на iOS
+  .customSelectDropdown {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .quickDateInput {
+    -webkit-appearance: none;
+    border-radius: 6px;
+  }
+}
+
+// Исправления для Safari на macOS
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .customSelectTrigger {
+    &::-webkit-select-placeholder {
+      color: $gray-400;
+    }
+  }
 }
 
 // Адаптивность
@@ -510,13 +743,17 @@
   }
 
   .header {
-    flex-direction: column;
+    @include flex-safari-column;
     gap: 1rem;
     align-items: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
   }
 
   .headerActions {
     justify-content: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
   }
 
   .taskTitle {
@@ -525,5 +762,15 @@
 
   .editFields {
     grid-template-columns: 1fr;
+  }
+  
+  .customSelectDropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    @include transform-safari(translate(-50%, -50%));
+    width: 90vw;
+    max-width: 300px;
+    max-height: 60vh;
   }
 }

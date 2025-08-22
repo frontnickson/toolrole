@@ -10,45 +10,63 @@ import TodoCalendar from './components/ui/TodoCalendar';
 import NewBoardModal from './components/modals/NewBoardModal';  
 import BoardSettingsMenu from './components/board/BoardSettingsMenu';
 import TodoSearch from './components/ui/TodoSearch';     
-import type { Task } from '../../types';
-import { TaskStatus } from '../../types';
 import styles from './Todo.module.scss';
-import type { Board } from '../../types';
-import { store } from '../../store';
 
-interface TodoProps {
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-}
+/**
+ * Основной компонент для управления задачами (Todo)
+ * Предоставляет интерфейс для работы с досками и переключения между различными представлениями
+ */
+const Todo: React.FC = () => {
 
-const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
-
+  // Хук для программной навигации между страницами
   const navigate = useNavigate();
+  // Хук для отправки действий в Redux store
   const dispatch = useDispatch();
+  
+  // Получаем данные текущего пользователя из Redux store
   const { currentUser } = useSelector((state: RootState) => state.user);
+  // Получаем текущую выбранную доску из Redux store
   const { currentBoard } = useSelector((state: RootState) => state.boards);
+  // Получаем все доски пользователя из Redux store
   const { boards } = useSelector((state: RootState) => state.boards);
-  const [selectedProject, setSelectedProject] = useState('Student Project');
+  
+  // Состояние для выбранного проекта/доски
+  const [selectedProject, setSelectedProject] = useState<string>('');
+  // Состояние для текущего режима отображения (список, доска, календарь)
   const [viewMode, setViewMode] = useState<'list' | 'board' | 'calendar'>('board');
   
-  // Состояние для модальных окон
-  const [isNewBoardModalOpen, setIsNewBoardModalOpen] = useState(false);
-  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
+  // Состояния для управления модальными окнами и UI элементами
+  const [isNewBoardModalOpen, setIsNewBoardModalOpen] = useState(false); // Модальное окно создания новой доски
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);   // Меню настроек доски
+  const [isSearchOpen, setIsSearchOpen] = useState(false);              // Поиск задач
+  const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);  // Флаг обновления избранного (для предотвращения двойных кликов)
+  
+  // Получаем доски текущего пользователя
+  const userBoards = boards.filter(board => 
+    board.ownerId === currentUser?.id?.toString()
+  );
 
-  // Функция для установки текущей доски при выборе проекта
+  /**
+   * Обработчик изменения выбранного проекта
+   * Устанавливает новую выбранную доску и обновляет Redux store
+   * @param projectId - ID выбранного проекта/доски
+   */
   const handleProjectChange = (projectId: string) => {
     setSelectedProject(projectId);
     
-    // Находим доску по ID и устанавливаем её как текущую
+    // Находим доску по ID и устанавливаем её как текущую в Redux store
     const selectedBoard = boards.find(board => board.id === projectId);
     if (selectedBoard) {
       dispatch(setCurrentBoard(selectedBoard));
+      // Сохраняем выбранную доску в localStorage для персистентности
+      localStorage.setItem('selectedBoardId', projectId);
     }
   };
 
-  // Горячие клавиши для поиска
+  /**
+   * Настройка горячих клавиш для быстрого доступа к функциям
+   * Ctrl+K (Windows) или Cmd+K (Mac) открывает поиск задач
+   */
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ctrl+K или Cmd+K для открытия поиска
@@ -64,7 +82,10 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
     };
   }, []);
 
-  // Проверяем аутентификацию пользователя
+  /**
+   * Проверка аутентификации пользователя и инициализация данных
+   * Перенаправляет неаутентифицированных пользователей на страницу входа
+   */
   React.useEffect(() => {
     if (!currentUser) {
       // Если пользователь не аутентифицирован, перенаправляем на страницу входа
@@ -72,65 +93,65 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
       return;
     }
     
-    if (tasks.length === 0) {
-      setTasks([]);
-    }
-  }, [currentUser, tasks.length, setTasks, navigate]);
-
-  const addTask = (taskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newTask: Task = {
-      ...taskData,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    setTasks([...tasks, newTask]);
-  };
-
-  const updateTask = (id: string, updates: Partial<Task>) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, ...updates, updatedAt: new Date() } : task
-    ));
-  };
-
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  };
-
-  const toggleTaskStatus = (id: string) => {
-    setTasks(tasks.map(task => {
-      if (task.id === id) {
-        const newStatus = task.status === TaskStatus.COMPLETED 
-          ? TaskStatus.PLANNING 
-          : TaskStatus.COMPLETED;
-        return { ...task, status: newStatus, updatedAt: new Date() };
+    // Загружаем сохраненную выбранную доску из localStorage
+    const savedBoardId = localStorage.getItem('selectedBoardId');
+    
+    if (boards.length > 0) {
+      let boardToSelect;
+      
+      if (savedBoardId && boards.find(board => board.id === savedBoardId)) {
+        // Если есть сохраненная доска и она существует, выбираем её
+        boardToSelect = boards.find(board => board.id === savedBoardId);
+      } else if (!currentBoard) {
+        // Если нет сохраненной доски и нет текущей, выбираем первую
+        boardToSelect = boards[0];
       }
-      return task;
-    }));
-  };
+      
+      if (boardToSelect) {
+        setSelectedProject(boardToSelect.id);
+        dispatch(setCurrentBoard(boardToSelect));
+        localStorage.setItem('selectedBoardId', boardToSelect.id);
+      }
+    }
+  }, [currentUser, boards, currentBoard, dispatch, navigate]);
 
-  // Функция для перехода на страницу задачи
+  /**
+   * Обработчик клика по задаче
+   * Переводит пользователя на страницу детального просмотра задачи
+   * @param taskId - ID задачи для перехода
+   */
   const handleTaskClick = (taskId: string) => {
     try {
       navigate(`/todo/task/${taskId}`);
-    } catch (error) {
+    } catch {
       // Ошибка навигации, можно обработать по-другому при необходимости
     }
   };
 
-  // Обработчики для модального окна создания доски
-  const handleCreateBoard = (board: Board) => {
-    // Доска уже создана и добавлена в Redux store через NewBoardModal
-    // Здесь можно добавить дополнительную логику, например:
-    // - Переключение на созданную доску
-    // - Показ уведомления
-    // - Обновление UI
+  /**
+   * Обработчик создания новой доски
+   * Вызывается после успешного создания доски в модальном окне
+   * Автоматически выбирает созданную доску
+   */
+  const handleCreateBoard = (newBoardId?: string) => {
+    if (newBoardId) {
+      // Автоматически выбираем созданную доску
+      const newBoard = boards.find(board => board.id === newBoardId);
+      if (newBoard) {
+        setSelectedProject(newBoardId);
+        dispatch(setCurrentBoard(newBoard));
+        localStorage.setItem('selectedBoardId', newBoardId);
+      }
+    }
     
-    // Можно также закрыть модальное окно, если нужно
-    // setIsNewBoardModalOpen(false);
+    // Закрываем модальное окно
+    setIsNewBoardModalOpen(false);
   };
 
-  // Обработчики для меню настроек
+  /**
+   * Обработчик добавления/удаления доски из избранного
+   * Использует Redux для обновления состояния и предотвращает двойные клики
+   */
   const handleAddToFavorites = async () => {
     if (currentBoard && !isUpdatingFavorite) {
       setIsUpdatingFavorite(true);
@@ -150,6 +171,10 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
     }
   };
 
+  /**
+   * Обработчик добавления доски в "Мои проекты"
+   * Заглушка для будущей функциональности
+   */
   const handleAddToMyProjects = () => {
     // Здесь будет логика для добавления доски в "Мои проекты"
     // Например, если у пользователя есть список "Мои проекты", добавить туда текущую
@@ -157,6 +182,11 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
     setIsSettingsMenuOpen(false);
   };
 
+  /**
+   * Обработчик удаления доски
+   * Предоставляет подробное подтверждение с информацией о последствиях
+   * Особенно внимателен к случаю удаления единственной доски пользователя
+   */
   const handleDelete = () => {
     if (currentBoard) {
       // Подсчитываем общее количество задач во всех колонках
@@ -167,6 +197,7 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
         board.ownerId === currentUser?.id?.toString()
       );
       
+      // Формируем подробное сообщение для подтверждения
       let confirmMessage = `🗑️  УДАЛЕНИЕ ДОСКИ\n\n` +
         `Название: "${currentBoard.title}"\n`;
       
@@ -174,6 +205,7 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
         confirmMessage += `📋 Задач в доске: ${totalTasks}\n`;
       }
       
+      // Специальное предупреждение для единственной доски
       if (userBoards.length === 1) {
         confirmMessage += `🚨  КРИТИЧЕСКОЕ ПРЕДУПРЕЖДЕНИЕ: Это ваша единственная доска!\n` +
           `После удаления у вас не останется ни одной доски.\n\n`;
@@ -211,7 +243,8 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
         
         // Если удаляемая доска была выбранной, сбрасываем выбор
         if (selectedProject === currentBoard.id) {
-          setSelectedProject('Student Project');
+          setSelectedProject('');
+          localStorage.removeItem('selectedBoardId');
         }
         
         // Показываем уведомление об успешном удалении
@@ -228,27 +261,46 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
     }
   };
 
+  /**
+   * Обработчик архивирования доски
+   * Заглушка для будущей функциональности
+   */
   const handleArchive = () => {
     if (confirm('Архивировать доску?')) {
       setIsSettingsMenuOpen(false);
     }
   };
 
+  /**
+   * Обработчик дублирования доски
+   * Заглушка для будущей функциональности
+   */
   const handleDuplicate = () => {
     setIsSettingsMenuOpen(false);
   };
 
+  /**
+   * Обработчик совместного использования доски
+   * Заглушка для будущей функциональности
+   */
   const handleShare = () => {
     setIsSettingsMenuOpen(false);
   };
 
-  // Получаем задачи для текущего проекта
+  /**
+   * Получение задач для текущего выбранного проекта
+   * @returns массив задач для текущего проекта
+   */
   const getProjectTasks = () => {
-    // В реальном приложении здесь была бы фильтрация по проекту
-    // Сейчас возвращаем все задачи для демонстрации
-    return tasks;
+    if (!currentBoard) return [];
+    return currentBoard.columns.flatMap(column => column.tasks);
   };
 
+  /**
+   * Рендер контента в зависимости от выбранного режима отображения
+   * Переключает между списком, доской и календарем
+   * @returns JSX элемент соответствующего представления
+   */
   const renderContentView = () => {
     const projectTasks = getProjectTasks();
     
@@ -257,30 +309,23 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
         return (
           <TodoList
             tasks={projectTasks}
-            onUpdateTask={updateTask}
-            onDeleteTask={deleteTask}
-            onToggleStatus={toggleTaskStatus}
+            onUpdateTask={() => {}} // Заглушка, так как теперь обновление идет через Redux
+            onDeleteTask={() => {}} // Заглушка, так как теперь удаление идет через Redux
+            onToggleStatus={() => {}} // Заглушка, так как теперь переключение идет через Redux
             onTaskClick={handleTaskClick}
           />
         );
       case 'board':
         return (
           <TodoBoard
-            tasks={projectTasks}
-            onAddTask={addTask}
-            onUpdateTask={updateTask}
-            onDeleteTask={deleteTask}
-            onToggleStatus={toggleTaskStatus}
             onTaskClick={handleTaskClick}
+            onCreateBoard={() => setIsNewBoardModalOpen(true)}
           />
         );
       case 'calendar':
         return (
           <TodoCalendar
             tasks={projectTasks}
-            onUpdateTask={updateTask}
-            onDeleteTask={deleteTask}
-            onToggleStatus={toggleTaskStatus}
             onTaskClick={handleTaskClick}
           />
         );
@@ -291,96 +336,112 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
 
   return (
     <div className={styles.todoPage}>
+      {/* Боковая панель с проектами/досками */}
       <TodoSidebar 
         selectedProject={selectedProject}
         onProjectChange={handleProjectChange}
       />
       
+      {/* Основной контент страницы */}
       <div className={styles.mainContent}>
-        <div className={styles.header}>
-          <div className={styles.projectInfo}>
-            <div className={styles.breadcrumbs}>
-              <span>Project Management</span>
-              <span>/</span>
-                          <span className={styles.currentProject}>
-              {selectedProject}
-            </span>
-            </div>
-            <p className={styles.description}>
-              Система управления задачами для эффективного планирования и выполнения проектов
-            </p>
-          </div>
-          
-          <div className={styles.headerActions}>
-            <div className={styles.viewToggles}>
-              <button 
-                className={`${styles.viewBtn} ${viewMode === 'list' ? styles.active : ''}`}
-                onClick={() => setViewMode('list')}
-              >
-                List
-              </button>
-              <button 
-                className={`${styles.viewBtn} ${viewMode === 'board' ? styles.active : ''}`}
-                onClick={() => setViewMode('board')}
-              >
-                Board
-              </button>
-              <button 
-                className={`${styles.viewBtn} ${viewMode === 'calendar' ? styles.active : ''}`}
-                onClick={() => setViewMode('calendar')}
-              >
-                Calendar
-              </button>
+        {/* Заголовок с информацией о проекте и действиями */}
+        {userBoards.length > 0 && (
+          <div className={styles.header}>
+            {/* Информация о текущем проекте */}
+            <div className={styles.projectInfo}>
+              <div className={styles.breadcrumbs}>
+                <span>Project Management</span>
+                <span>/</span>
+                <span className={styles.currentProject}>
+                  {currentBoard?.title || 'Доска не выбрана'}
+                </span>
+              </div>
+              <p className={styles.description}>
+                {currentBoard?.description || 'Система управления задачами для эффективного планирования и выполнения проектов'}
+              </p>
             </div>
             
-            <div className={styles.globalActions}>
-              <button 
-                className={styles.searchBtn}
-                onClick={() => setIsSearchOpen(true)}
-                title="Поиск задач (Ctrl+K)"
-              >
-                🔍 Поиск
-                <span className={styles.shortcut}>⌘K</span>
-              </button>
-              <button 
-                className={styles.newBoardBtn}
-                onClick={() => setIsNewBoardModalOpen(true)}
-              >
-                + Новая доска
-              </button>
-              <button className={styles.actionBtn}>👤</button>
-              <button className={styles.actionBtn}>💬</button>
-              <div className={styles.settingsContainer}>
+            {/* Действия в заголовке */}
+            <div className={styles.headerActions}>
+              {/* Переключатели режимов отображения */}
+              <div className={styles.viewToggles}>
                 <button 
-                  className={`${styles.actionBtn} ${isSettingsMenuOpen ? styles.active : ''}`}
-                  onClick={() => setIsSettingsMenuOpen(!isSettingsMenuOpen)}
-                  title="Настройки доски"
+                  className={`${styles.viewBtn} ${viewMode === 'list' ? styles.active : ''}`}
+                  onClick={() => setViewMode('list')}
                 >
-                  ⋯
+                  List
                 </button>
+                <button 
+                  className={`${styles.viewBtn} ${viewMode === 'board' ? styles.active : ''}`}
+                  onClick={() => setViewMode('board')}
+                >
+                  Board
+                </button>
+                <button 
+                  className={`${styles.viewBtn} ${viewMode === 'calendar' ? styles.active : ''}`}
+                  onClick={() => setViewMode('calendar')}
+                >
+                  Calendar
+                </button>
+              </div>
+              
+              {/* Глобальные действия */}
+              <div className={styles.globalActions}>
+                {/* Кнопка поиска с горячей клавишей */}
+                <button 
+                  className={styles.searchBtn}
+                  onClick={() => setIsSearchOpen(true)}
+                  title="Поиск задач (Ctrl+K)"
+                >
+                  🔍 Поиск
+                  <span className={styles.shortcut}>⌘K</span>
+                </button>
+                {/* Кнопка создания новой доски */}
+                <button 
+                  className={styles.newBoardBtn}
+                  onClick={() => setIsNewBoardModalOpen(true)}
+                >
+                  + Новая доска
+                </button>
+                {/* Кнопки профиля и чата (заглушки) */}
+                <button className={styles.actionBtn}>👤</button>
+                <button className={styles.actionBtn}>💬</button>
                 
-                {/* Меню настроек доски */}
-                {isSettingsMenuOpen && (
-                  <BoardSettingsMenu
-                    key={`${currentBoard?.id}-${currentBoard?.isFavorite}`}
-                    isOpen={isSettingsMenuOpen}
-                    onClose={() => setIsSettingsMenuOpen(false)}
-                    onAddToFavorites={handleAddToFavorites}
-                    onAddToMyProjects={handleAddToMyProjects}
-                    onDelete={handleDelete}
-                    onArchive={handleArchive}
-                    onDuplicate={handleDuplicate}
-                    onShare={handleShare}
-                    isFavorite={currentBoard?.isFavorite || false}
-                    isInMyProjects={currentBoard?.ownerId === currentUser?.id?.toString()}
-                    isUpdatingFavorite={isUpdatingFavorite}
-                  />
-                )}
+                {/* Контейнер настроек доски */}
+                <div className={styles.settingsContainer}>
+                  <button 
+                    className={`${styles.actionBtn} ${isSettingsMenuOpen ? styles.active : ''}`}
+                    onClick={() => setIsSettingsMenuOpen(!isSettingsMenuOpen)}
+                    title="Настройки доски"
+                    disabled={!currentBoard}
+                  >
+                    ⋯
+                  </button>
+                  
+                  {/* Меню настроек доски */}
+                  {isSettingsMenuOpen && currentBoard && (
+                    <BoardSettingsMenu
+                      key={`${currentBoard?.id}-${currentBoard?.isFavorite}`}
+                      isOpen={isSettingsMenuOpen}
+                      onClose={() => setIsSettingsMenuOpen(false)}
+                      onAddToFavorites={handleAddToFavorites}
+                      onAddToMyProjects={handleAddToMyProjects}
+                      onDelete={handleDelete}
+                      onArchive={handleArchive}
+                      onDuplicate={handleDuplicate}
+                      onShare={handleShare}
+                      isFavorite={currentBoard?.isFavorite || false}
+                      isInMyProjects={currentBoard?.ownerId === currentUser?.id?.toString()}
+                      isUpdatingFavorite={isUpdatingFavorite}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
+        {/* Основной контент с задачами */}
         <div className={styles.content}>
           {renderContentView()}
         </div>
@@ -393,9 +454,9 @@ const Todo: React.FC<TodoProps> = ({ tasks, setTasks }) => {
         onCreateBoard={handleCreateBoard}
       />
 
-      {/* Поиск задач */}
+      {/* Компонент поиска задач */}
       <TodoSearch
-        tasks={tasks}
+        tasks={getProjectTasks()}
         onTaskClick={handleTaskClick}
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
