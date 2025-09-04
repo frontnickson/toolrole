@@ -1,0 +1,256 @@
+@import "../../../../styles/utils/mixins";
+@import '../../../../styles/base/variables';
+
+.friendsList {
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid $gray-200;
+  position: relative;
+  
+  .title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $gray-900;
+    margin: 0 0 0.25rem 0;
+  }
+  
+  .subtitle {
+    font-size: 0.875rem;
+    color: $gray-600;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .count {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: $primary-100;
+    color: $primary-700;
+    padding: 0.25rem 0.75rem;
+    border-radius: $border-radius-full;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.membersList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.memberCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid $gray-100;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background: $gray-50;
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.avatarContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $primary-100;
+  color: $primary-700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.statusIndicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid $white;
+  box-shadow: 0 0 0 2px $gray-200;
+}
+
+.memberDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.memberName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $gray-900;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memberEmail {
+  font-size: 0.75rem;
+  color: $gray-500;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memberStats {
+  display: flex;
+  gap: 0.75rem;
+  
+  .stat {
+    font-size: 0.75rem;
+    color: $gray-600;
+    font-weight: 500;
+  }
+}
+
+.memberStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: auto;
+}
+
+.statusText {
+  font-size: 0.75rem;
+  color: $gray-600;
+  font-weight: 500;
+  text-align: right;
+}
+
+.lastSeen {
+  font-size: 0.75rem;
+  color: $gray-500;
+  text-align: right;
+}
+
+.emptyState {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  
+  .emptyIcon {
+    font-size: 3rem;
+    opacity: 0.5;
+    color: $gray-400;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .emptyText {
+    font-size: 1rem;
+    color: $gray-600;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .emptyDescription {
+    font-size: 0.875rem;
+    color: $gray-500;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.showMoreBtn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: $gray-50;
+  border: none;
+  border-top: 1px solid $gray-200;
+  color: $gray-700;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: $gray-100;
+    color: $gray-800;
+  }
+  
+  &:active {
+    background: $gray-200;
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1rem 0.75rem;
+    
+    .count {
+      position: static;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+  }
+  
+  .memberCard {
+    padding: 0.75rem 1rem;
+  }
+  
+  .memberStats {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .memberStatus {
+    min-width: 60px;
+  }
+  
+  .avatar,
+  .avatarPlaceholder {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .statusIndicator {
+    width: 10px;
+    height: 10px;
+  }
+}

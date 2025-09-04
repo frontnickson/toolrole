@@ -1,0 +1,64 @@
+@import "../../styles/utils/mixins";
+@import "../../styles/base/variables";
+
+.authPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $gray-50 0%, $gray-100 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  width: 100%; // Убеждаемся, что страница использует всю ширину
+}
+
+.backButton {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: $white;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-md;
+  padding: 0.75rem 1.5rem;
+  font-size: $font-size-sm;
+  color: $gray-700;
+  cursor: pointer;
+  transition: all $transition-normal;
+  box-shadow: $shadow-sm;
+  z-index: 10; // Добавляем z-index для отображения поверх контента
+  
+  &:hover {
+    background: $gray-50;
+    border-color: $gray-300;
+    box-shadow: $shadow-md;
+  }
+  
+  @media (max-width: 768px) {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 2rem;
+    z-index: auto;
+  }
+}
+
+.authForm {
+  width: 100%;
+  max-width: 400px; // Возвращаем обычные размеры для форм авторизации
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.wideAuthForm {
+  width: 100%;
+  max-width: 100%; // Широкий контейнер для опросника профессий
+  margin-top: 4rem; // Добавляем отступ сверху для кнопки "вернуться на главную"
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin-top: 0; // На мобильных отступ не нужен
+  }
+}

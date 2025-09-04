@@ -1,0 +1,487 @@
+@import "../../../../styles/utils/mixins";
+@import '../../../../styles/base/variables';
+
+.sidebar {
+  width: 280px;
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  color: var(--sidebar-text);
+}
+
+
+
+
+
+.navigation {
+  padding: 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border-primary);
+  
+  .navItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    cursor: pointer;
+    transition: all $transition-normal;
+    margin-bottom: 0.5rem;
+    
+    &:hover {
+      background: var(--sidebar-hover);
+      padding-left: 0.5rem;
+    }
+    
+    &.active {
+      background: var(--btn-outline-border);
+      padding-left: 0.5rem;
+      
+      span:last-child {
+        color: var(--text-inverse);
+        font-weight: 600;
+      }
+      
+      .navIcon {
+        color: var(--text-inverse);
+      }
+    }
+    
+    .navIcon {
+      font-size: 1.125rem;
+      width: 20px;
+      text-align: center;
+      color: var(--text-tertiary);
+    }
+    
+    span:last-child {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    
+    .notificationBadge {
+      background: var(--accent-primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      min-width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.section {
+  padding: 1.5rem 1.5rem;
+  border-bottom: 1px solid $gray-700;
+  
+  .sectionTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $gray-600;
+  }
+  
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+    
+    .sectionTitle {
+      margin: 0;
+      flex: 1;
+    }
+    
+    .sectionActions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .addProjectBtn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: var(--btn-outline-border);
+      color: var(--text-inverse);
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: var(--btn-outline-hover-bg);
+        transform: scale(1.1);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+    
+    .refreshBtn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: $gray-200;
+      color: $gray-600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: $gray-300;
+        color: $gray-700;
+        transform: scale(1.1);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+  
+  .projectItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    transition: all $transition-normal;
+    position: relative;
+    margin-bottom: 0.25rem;
+    
+    &:hover {
+      background: var(--sidebar-hover);
+      padding-left: 0.5rem;
+      
+      .favoriteBtn {
+        opacity: 1;
+      }
+    }
+    
+    &.active {
+      background: var(--btn-outline-border);
+      color: var(--text-inverse);
+      padding-left: 0.5rem;
+      
+      .projectName {
+        color: var(--text-inverse);
+      }
+      
+      .projectIcon {
+        color: var(--text-inverse);
+      }
+    }
+    
+    .projectIcon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      color: var(--text-tertiary);
+    }
+    
+    .projectName {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      flex: 1;
+    }
+  }
+  
+  .showMoreBtn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--border-secondary);
+    border-radius: $border-radius-md;
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-normal;
+    
+    &:hover {
+      background: var(--sidebar-hover);
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+    }
+    
+    &:active {
+      background: var(--sidebar-active);
+    }
+  }
+}
+
+.settings {
+  margin-top: auto;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid $gray-100;
+  
+  .navItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    cursor: pointer;
+    border-radius: $border-radius-md;
+    transition: background-color $transition-normal;
+    
+    &:hover {
+      background: var(--sidebar-hover);
+    }
+    
+    .navIcon {
+      font-size: 1.125rem;
+      width: 20px;
+      text-align: center;
+    }
+    
+    span:last-child {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+  }
+}
+
+.emptyState {
+  @include flex-safari-column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 0;
+  text-align: center;
+  @include box-sizing-safari;
+  
+  .emptyIcon {
+    font-size: 2rem;
+    opacity: 0.5;
+    color: var(--text-tertiary);
+  }
+  
+  .emptyText {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+}
+
+.errorState {
+  @include flex-safari-column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0;
+  text-align: center;
+  @include box-sizing-safari;
+  
+  .errorIcon {
+    font-size: 1.5rem;
+    color: var(--status-error);
+  }
+  
+  .errorText {
+    font-size: 0.875rem;
+    color: var(--status-error);
+    font-weight: 500;
+  }
+  
+  .errorDetails {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    max-width: 200px;
+    word-wrap: break-word;
+  }
+}
+
+.createFirstBoardBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--btn-outline-border);
+  color: var(--text-inverse);
+  border: none;
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  margin-top: 0.5rem;
+  
+  &:hover {
+    background: var(--btn-outline-hover-bg);
+    @include transform-safari(scale(1.05));
+  }
+  
+  &:active {
+    background: var(--btn-outline-hover-bg);
+    opacity: 0.9;
+    @include transform-safari(scale(0.95));
+  }
+}
+
+.subscriptionSection {
+  margin-top: auto;
+  padding: 1.5rem 1.5rem;
+  border-top: 1px solid $gray-700;
+  
+  .subscriptionBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 50%, #C084FC 100%);
+    border: none;
+    border-radius: $border-radius-md;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $transition-normal;
+    
+    &:hover {
+      background: linear-gradient(135deg, #7C3AED 0%, #9333EA 50%, #A855F7 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    .subscriptionIcon {
+      font-size: 1.125rem;
+    }
+    
+    .subscriptionText {
+      flex: 1;
+      text-align: center;
+    }
+  }
+}
+
+// Стили для кнопки добавления доски
+.addBoardBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
+  animation: fadeInScale 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+  
+  // Добавляем блестящий эффект
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 50%, #065F46 100%);
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    
+    &::before {
+      opacity: 1;
+      animation: shine 0.6s ease-in-out;
+    }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.3);
+  }
+  
+  .addIcon {
+    line-height: 1;
+    font-weight: bold;
+    user-select: none;
+    font-size: 1rem;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+}
+
+// Анимация появления кнопки
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Анимация блеска
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}

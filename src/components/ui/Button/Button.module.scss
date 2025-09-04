@@ -1,0 +1,135 @@
+@import '../../../styles/base/variables';
+@import '../../../styles/utils/mixins';
+
+.btn {
+  @include flex-center;
+  gap: $spacing-sm;
+  border: none;
+  border-radius: $border-radius-md;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all $transition-normal;
+  text-decoration: none;
+  font-family: inherit;
+  line-height: $line-height-normal;
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+/* Размеры */
+.btn--sm {
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-sm;
+  min-height: 2rem;
+}
+
+.btn--md {
+  padding: $spacing-md $spacing-xl;
+  font-size: $font-size-base;
+  min-height: 2rem;
+}
+
+.btn--lg {
+  padding: $spacing-lg $spacing-2xl;
+  font-size: $font-size-lg;
+  min-height: 3rem;
+}
+
+/* Варианты */
+.btn--primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--btn-primary-hover);
+  }
+}
+
+.btn--secondary {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border: 1px solid var(--border-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--btn-secondary-hover);
+  }
+}
+
+.btn--outline {
+  background-color: var(--btn-outline-bg);
+  color: var(--btn-outline-text);
+  border: 2px solid var(--btn-outline-border);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--btn-outline-hover-bg);
+    color: var(--btn-outline-hover-text);
+  }
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+  }
+}
+
+/* Состояние загрузки */
+.btn--loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn__spinner {
+  @include absolute-center;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Специальные стили для кнопки "назад" */
+.btn--back {
+  position: relative;
+  background: var(--btn-secondary-bg);
+  border: 2px solid var(--btn-secondary-border);
+  color: var(--btn-secondary-text);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--btn-secondary-hover);
+    border-color: var(--btn-secondary-hover);
+    color: var(--btn-secondary-text);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* Иконка стрелки */
+  &::before {
+    content: '←';
+    margin-right: 0.5rem;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--text-tertiary);
+  }
+}

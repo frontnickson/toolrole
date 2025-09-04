@@ -1,0 +1,202 @@
+// CSS переменные для тем
+:root {
+  // Светлая тема (по умолчанию)
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --bg-hover: #f3f4f6;
+  --bg-active: #e5e7eb;
+  
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #ffffff;
+  --text-accent: #3b82f6;
+  
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --border-focus: #3b82f6;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  // Цвета для компонентов
+  --btn-primary-bg: #111827;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #374151;
+  
+  --btn-secondary-bg: #f3f4f6;
+  --btn-secondary-text: #111827;
+  --btn-secondary-border: #d1d5db;
+  --btn-secondary-hover: #e5e7eb;
+  
+  --btn-outline-bg: transparent;
+  --btn-outline-text: #F87A21;
+  --btn-outline-border: #F87A21;
+  --btn-outline-hover-bg: #F87A21;
+  --btn-outline-hover-text: #ffffff;
+  
+  --input-bg: #ffffff;
+  --input-text: #111827;
+  --input-border: #d1d5db;
+  --input-focus-border: #3b82f6;
+  --input-focus-shadow: rgba(59, 130, 246, 0.1);
+  
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  
+  --modal-bg: #ffffff;
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+  
+  --sidebar-bg: #1f2937;
+  --sidebar-text: #f9fafb;
+  --sidebar-hover: #374151;
+  --sidebar-active: #4b5563;
+  
+  // Статусы задач
+  --status-planning: #f59e0b;
+  --status-in-progress: #3b82f6;
+  --status-review: #8b5cf6;
+  --status-testing: #ef4444;
+  --status-completed: #10b981;
+  --status-cancelled: #6b7280;
+  --status-blocked: #dc2626;
+  --status-on-hold: #f97316;
+  
+  // Приоритеты
+  --priority-low: #10b981;
+  --priority-medium: #f59e0b;
+  --priority-high: #ef4444;
+  --priority-urgent: #dc2626;
+  --priority-critical: #7c3aed;
+  
+  // Дополнительные переменные для статусов
+  --status-success: #10b981;
+  --status-danger: #ef4444;
+  --status-warning: #f59e0b;
+  --status-info: #3b82f6;
+  --status-purple: #8b5cf6;
+  
+  // Фоны для статусов
+  --status-success-bg: #d1fae5;
+  --status-danger-bg: #fee2e2;
+  --status-warning-bg: #fef3c7;
+  --status-info-bg: #dbeafe;
+  
+  // Границы для статусов
+  --status-success-border: #a7f3d0;
+  --status-danger-border: #fecaca;
+  --status-warning-border: #fde68a;
+  --status-info-border: #93c5fd;
+}
+
+// Темная тема
+.dark-theme {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #374151;
+  --bg-hover: #374151;
+  --bg-active: #4b5563;
+  
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #111827;
+  --text-accent: #60a5fa;
+  
+  --border-primary: #374151;
+  --border-secondary: #4b5563;
+  --border-focus: #60a5fa;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  
+  // Цвета для компонентов
+  --btn-primary-bg: #f9fafb;
+  --btn-primary-text: #111827;
+  --btn-primary-hover: #e5e7eb;
+  
+  --btn-secondary-bg: #374151;
+  --btn-secondary-text: #f9fafb;
+  --btn-secondary-border: #4b5563;
+  --btn-secondary-hover: #4b5563;
+  
+  --btn-outline-bg: transparent;
+  --btn-outline-text: #F87A21;
+  --btn-outline-border: #F87A21;
+  --btn-outline-hover-bg: #F87A21;
+  --btn-outline-hover-text: #ffffff;
+  
+  --input-bg: #1f2937;
+  --input-text: #f9fafb;
+  --input-border: #4b5563;
+  --input-focus-border: #60a5fa;
+  --input-focus-shadow: rgba(96, 165, 250, 0.2);
+  
+  --card-bg: #1f2937;
+  --card-border: #374151;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  
+  --modal-bg: #1f2937;
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  
+  --sidebar-bg: #111827;
+  --sidebar-text: #f9fafb;
+  --sidebar-hover: #374151;
+  --sidebar-active: #4b5563;
+  
+  // Статусы задач (более яркие для темной темы)
+  --status-planning: #fbbf24;
+  --status-in-progress: #60a5fa;
+  --status-review: #a78bfa;
+  --status-testing: #f87171;
+  --status-completed: #34d399;
+  --status-cancelled: #9ca3af;
+  --status-blocked: #f87171;
+  --status-on-hold: #fb923c;
+  
+  // Приоритеты (более яркие для темной темы)
+  --priority-low: #34d399;
+  --priority-medium: #fbbf24;
+  --priority-high: #f87171;
+  --priority-urgent: #f87171;
+  --priority-critical: #a78bfa;
+  
+  // Дополнительные переменные для статусов (темная тема)
+  --status-success: #34d399;
+  --status-danger: #f87171;
+  --status-warning: #fbbf24;
+  --status-info: #60a5fa;
+  --status-purple: #a78bfa;
+  
+  // Фоны для статусов (темная тема)
+  --status-success-bg: #064e3b;
+  --status-danger-bg: #7f1d1d;
+  --status-warning-bg: #78350f;
+  --status-info-bg: #1e3a8a;
+  
+  // Границы для статусов (темная тема)
+  --status-success-border: #047857;
+  --status-danger-border: #b91c1c;
+  --status-warning-border: #a16207;
+  --status-info-border: #2563eb;
+}
+
+// Плавные переходы для всех элементов
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+// Плавный переход при смене темы
+.theme-transitioning * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+// Отключение переходов для элементов, которые не должны их иметь
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}

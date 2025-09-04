@@ -1,0 +1,44 @@
+@import "../../../../styles/utils/mixins";
+@import "../../../../styles/base/variables";
+
+
+.container{
+    position: fixed;
+    top: 0;
+    text-align: center;
+    background-color: $white;
+    gap: 15px;
+    height: 100%;
+    width: 100%;
+}
+
+.navigation{
+    @include flex-column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 80px;
+}
+
+.nav{
+    @include flex-column;
+    margin-bottom: 50px;
+    gap: 25px;
+    width: 100%;
+
+    & h3:hover {
+        color: $primary-color;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+}
+
+.buttons{
+    @include flex-column;
+    gap: 15px;
+}
+
+.close{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+}

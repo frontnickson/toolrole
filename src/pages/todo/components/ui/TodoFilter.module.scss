@@ -1,0 +1,123 @@
+@import "../../../styles/utils/mixins";
+@import "../../../styles/base/variables";
+
+.todoFilter {
+  background: $white;
+  border-radius: $border-radius-xl;
+  padding: 1.5rem;
+  box-shadow: $shadow-lg;
+  
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $gray-800;
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+  }
+}
+
+.searchBox {
+  position: relative;
+  margin-bottom: 1.5rem;
+  
+  .searchInput {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-md;
+    font-size: 0.875rem;
+    transition: border-color $transition-normal;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+  
+  .searchIcon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $gray-400;
+    font-size: 1rem;
+  }
+}
+
+.filterOptions {
+  margin-bottom: 1.5rem;
+  
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $gray-700;
+    margin: 0 0 1rem 0;
+  }
+}
+
+.filterOption {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  
+  input[type="radio"] {
+    margin-right: 0.75rem;
+    accent-color: $primary-color;
+  }
+  
+  .filterLabel {
+    font-size: 0.875rem;
+    color: $gray-600;
+    transition: color $transition-normal;
+  }
+  
+  &:hover .filterLabel {
+    color: $gray-800;
+  }
+  
+  input[type="radio"]:checked + .filterLabel {
+    color: $primary-color;
+    font-weight: 500;
+  }
+}
+
+.filterStats {
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $gray-700;
+    margin: 0 0 1rem 0;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.statItem {
+  text-align: center;
+  padding: 0.75rem;
+  background: $gray-50;
+  border-radius: $border-radius-md;
+  border: 1px solid $gray-200;
+  
+  .statNumber {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .statLabel {
+    font-size: 0.75rem;
+    color: $gray-600;
+    font-weight: 500;
+  }
+}

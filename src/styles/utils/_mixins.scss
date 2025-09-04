@@ -1,0 +1,441 @@
+// Миксины для flexbox
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Миксины для позиционирования
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin fixed-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Миксины для кнопок
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+// Миксины для анимаций
+@mixin fade-in($duration: 0.3s) {
+  opacity: 0;
+  animation: fadeIn $duration ease-in-out forwards;
+}
+
+@mixin slide-up($duration: 0.3s) {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp $duration ease-out forwards;
+}
+
+// Миксины для медиа-запросов
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: 1440px) {
+    @content;
+  }
+}
+
+// Миксины для типографики
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-truncate-multiline($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Миксины для градиентов
+@mixin gradient-primary {
+  background: linear-gradient(135deg, $primary-color 0%, $primary-hover 100%);
+}
+
+@mixin gradient-secondary {
+  background: linear-gradient(135deg, $secondary-color 0%, $secondary-hover 100%);
+}
+
+// Миксины для теней
+@mixin shadow-hover {
+  transition: box-shadow $transition-normal;
+  
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
+}
+
+// Миксины для фокуса
+@mixin focus-ring($color: $primary-color) {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 2px;
+  }
+}
+
+// ===== КРОСС-БРАУЗЕРНЫЕ МИКСИНЫ ДЛЯ SAFARI =====
+
+// Flexbox с поддержкой Safari
+@mixin flex-safari($direction: row, $wrap: nowrap, $justify: flex-start, $align: stretch) {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  
+  @if $direction == column {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  } @else {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  
+  @if $wrap == wrap {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  } @else {
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+  
+  @if $justify == center {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  } @else if $justify == flex-end {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  } @else if $justify == space-between {
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  } @else if $justify == space-around {
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  } @else {
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+  
+  @if $align == center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  } @else if $align == flex-end {
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+  } @else if $align == stretch {
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+  } @else {
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+}
+
+// Flex с поддержкой Safari
+@mixin flex-safari-center {
+  @include flex-safari(row, nowrap, center, center);
+}
+
+@mixin flex-safari-between {
+  @include flex-safari(row, nowrap, space-between, center);
+}
+
+@mixin flex-safari-column {
+  @include flex-safari(column, nowrap, flex-start, stretch);
+}
+
+// Grid с поддержкой Safari
+@mixin grid-safari($columns: 1, $gap: 0) {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  
+  > * {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 calc(100% / #{$columns});
+    -ms-flex: 0 0 calc(100% / #{$columns});
+    flex: 0 0 calc(100% / #{$columns});
+    margin: #{$gap / 2};
+  }
+}
+
+// Трансформации с поддержкой Safari
+@mixin transform-safari($transform) {
+  -webkit-transform: $transform;
+  -ms-transform: $transform;
+  transform: $transform;
+}
+
+// Переходы с поддержкой Safari
+@mixin transition-safari($properties...) {
+  $transitions: ();
+  @each $property in $properties {
+    $transitions: append($transitions, $property $transition-normal, comma);
+  }
+  
+  -webkit-transition: $transitions;
+  -moz-transition: $transitions;
+  -o-transition: $transitions;
+  transition: $transitions;
+}
+
+// Анимации с поддержкой Safari
+@mixin keyframes-safari($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-o-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+// Скрытие скроллбара для Safari
+@mixin hide-scrollbar-safari {
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+// Поддержка backdrop-filter для Safari
+@mixin backdrop-blur-safari($blur: 10px) {
+  -webkit-backdrop-filter: blur($blur);
+  backdrop-filter: blur($blur);
+  
+  // Fallback для Safari < 9
+  @supports not (-webkit-backdrop-filter: blur($blur)) {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// Поддержка user-select для Safari
+@mixin user-select-safari($select: none) {
+  -webkit-user-select: $select;
+  -moz-user-select: $select;
+  -ms-user-select: $select;
+  user-select: $select;
+}
+
+// Поддержка appearance для Safari
+@mixin appearance-safari($appearance: none) {
+  -webkit-appearance: $appearance;
+  -moz-appearance: $appearance;
+  appearance: $appearance;
+}
+
+// Поддержка box-sizing для Safari
+@mixin box-sizing-safari($box-sizing: border-box) {
+  -webkit-box-sizing: $box-sizing;
+  -moz-box-sizing: $box-sizing;
+  box-sizing: $box-sizing;
+}
+
+// Поддержка border-radius для Safari
+@mixin border-radius-safari($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+// Поддержка box-shadow для Safari
+@mixin box-shadow-safari($shadow) {
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
+
+// Поддержка text-shadow для Safari
+@mixin text-shadow-safari($shadow) {
+  -webkit-text-shadow: $shadow;
+  -moz-text-shadow: $shadow;
+  text-shadow: $shadow;
+}
+
+// Поддержка linear-gradient для Safari
+@mixin linear-gradient-safari($direction, $color-stops...) {
+  background: -webkit-linear-gradient($direction, $color-stops);
+  background: -moz-linear-gradient($direction, $color-stops);
+  background: -o-linear-gradient($direction, $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+// Поддержка radial-gradient для Safari
+@mixin radial-gradient-safari($shape, $color-stops...) {
+  background: -webkit-radial-gradient($shape, $color-stops);
+  background: -moz-radial-gradient($shape, $color-stops);
+  background: -o-radial-gradient($shape, $color-stops);
+  background: radial-gradient($shape, $color-stops);
+}
+
+// ===== СУЩЕСТВУЮЩИЕ МИКСИНЫ =====
+
+@mixin header-logo {
+  @include flex-center;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-normal;
+  
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+@mixin header-nav {
+  @include flex-between;
+  gap: $spacing-lg;
+  
+  @include mobile {
+    display: none;
+  }
+}
+
+@mixin header-nav-link {
+  @include flex-center;
+  padding: $spacing-sm $spacing-md;
+  color: $gray-700;
+  text-decoration: none;
+  border-radius: $border-radius-sm;
+  transition: all $transition-normal;
+  position: relative;
+  
+  &:hover {
+    color: $primary-color;
+    background-color: $gray-50;
+  }
+  
+  &.active {
+    color: $white;
+    background-color: $primary-color;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2px;
+      background-color: $primary-color;
+    }
+  }
+}
+
+@mixin mobile-menu-toggle {
+  @include flex-center;
+  @include button-reset;
+  padding: $spacing-sm;
+  color: $gray-700;
+  transition: color $transition-normal;
+  
+  &:hover {
+    color: $primary-color;
+  }
+  
+  @include desktop {
+    display: none;
+  }
+}

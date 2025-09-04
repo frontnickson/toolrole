@@ -1,0 +1,281 @@
+@import '../../../../styles/base/variables';
+
+.taskRow {
+  transition: background-color $transition-normal;
+
+  &:hover {
+    background: var(--bg-hover);
+  }
+
+  &.overdue {
+    background: var(--status-danger-bg);
+  }
+}
+
+.editingRow {
+  background: var(--status-info-bg);
+}
+
+// Колонки таблицы
+.checkboxCol {
+  text-align: center;
+}
+
+.titleCol {
+  .taskTitle {
+    .titleText {
+      font-weight: 500;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .description {
+      font-size: $font-size-xs;
+      color: var(--text-secondary);
+      display: block;
+      line-height: 1.4;
+    }
+  }
+}
+
+.statusCol {
+  .statusBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+  }
+}
+
+.priorityCol {
+  .priorityBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+  }
+}
+
+.assigneeCol {
+  .assignee {
+    color: var(--text-secondary);
+    font-size: $font-size-sm;
+  }
+}
+
+.dueDateCol {
+  .dueDate {
+    color: var(--text-secondary);
+    font-size: $font-size-sm;
+
+    &.overdue {
+      color: var(--status-danger);
+      font-weight: 500;
+
+      .overdueLabel {
+        display: block;
+        font-size: $font-size-xs;
+        color: var(--status-danger);
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .noDueDate {
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+}
+
+.tagsCol {
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    .tag {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      padding: 0.125rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-xs;
+      font-weight: 500;
+    }
+
+    .moreTags {
+      background: var(--bg-tertiary);
+      color: var(--text-tertiary);
+      padding: 0.125rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-xs;
+      font-weight: 500;
+    }
+  }
+}
+
+.commentsCol {
+  text-align: center;
+  
+  .commentCount {
+    color: var(--text-secondary);
+    font-weight: 500;
+    background: var(--status-info-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: $border-radius-sm;
+    border: 1px solid var(--status-info-border);
+    font-size: $font-size-xs;
+    display: inline-block;
+    
+    // Стили для задач с комментариями
+    &.hasComments {
+      background: var(--status-success-bg);
+      border-color: var(--status-success-border);
+      color: var(--status-success);
+      font-weight: 600;
+    }
+    
+    // Стили для задач без комментариев
+    &.noComments {
+      background: var(--bg-secondary);
+      border-color: var(--border-primary);
+      color: var(--text-tertiary);
+      font-weight: 400;
+    }
+  }
+}
+
+.actionsCol {
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+
+    .actionBtn {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: $border-radius-sm;
+      cursor: pointer;
+      transition: all $transition-normal;
+      font-size: 1rem;
+
+      &:hover {
+        background: var(--bg-hover);
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .editActions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+
+    .saveBtn,
+    .cancelBtn {
+      padding: 0.25rem 0.5rem;
+      border: none;
+      border-radius: $border-radius-sm;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all $transition-normal;
+    }
+
+    .saveBtn {
+      background: var(--status-success);
+      color: var(--text-inverse);
+
+      &:hover {
+        background: var(--status-success);
+        opacity: 0.8;
+      }
+    }
+
+    .cancelBtn {
+      background: var(--status-danger);
+      color: var(--text-inverse);
+
+      &:hover {
+        background: var(--status-danger);
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// Поля редактирования
+.editInput {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--input-border);
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 2px var(--input-focus-shadow);
+  }
+}
+
+.editSelect {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--input-border);
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 2px var(--input-focus-shadow);
+  }
+}
+
+// Чекбокс
+.taskCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--btn-outline-border);
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .taskRow {
+    td {
+      padding: 0.5rem 0.25rem;
+    }
+  }
+
+  .titleCol .taskTitle .description {
+    display: none;
+  }
+
+  .tagsCol .tags {
+    .tag:not(:first-child) {
+      display: none;
+    }
+  }
+
+  .actionsCol .actions {
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .actionBtn {
+      padding: 0.25rem;
+      font-size: 0.875rem;
+    }
+  }
+}

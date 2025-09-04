@@ -1,0 +1,316 @@
+@import "../../styles/utils/mixins";
+@import '../../styles/base/variables';
+
+.notificationsPage {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: 2rem 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+  
+  .headerTop {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+    
+    button {
+      align-self: flex-start;
+    }
+  }
+  
+  .headerContent {
+    text-align: center;
+    
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $gray-900;
+      margin: 0 0 1rem 0;
+    }
+    
+    .subtitle {
+      font-size: 1.125rem;
+      color: $gray-600;
+      margin: 0;
+    }
+  }
+}
+
+.content {
+  background: $white;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+  background: $gray-50;
+  border-bottom: 1px solid $gray-200;
+}
+
+.statCard {
+  text-align: center;
+  padding: 1.5rem;
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  
+  .statNumber {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $primary-600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .statLabel {
+    font-size: 0.875rem;
+    color: $gray-600;
+    font-weight: 500;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid $gray-200;
+  background: $white;
+  
+  .filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .filterLabel {
+      font-weight: 500;
+      color: $gray-700;
+      font-size: 0.875rem;
+    }
+    
+    .filterSelect {
+      padding: 0.5rem;
+      border: 1px solid $gray-300;
+      border-radius: $border-radius-md;
+      font-size: 0.875rem;
+      background: $white;
+      color: $gray-700;
+      min-width: 120px;
+    }
+  }
+}
+
+.notificationsList {
+  padding: 2rem;
+}
+
+.notificationItem {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid $gray-100;
+  transition: background-color 0.2s ease;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &:hover {
+    background-color: $gray-50;
+  }
+  
+  &.unread {
+    background-color: #f0f9ff;
+    border-left: 4px solid $primary-500;
+  }
+}
+
+.notificationIcon {
+  flex-shrink: 0;
+  
+  .icon {
+    font-size: 2rem;
+    display: block;
+  }
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  
+  .notificationTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $gray-900;
+    margin: 0;
+  }
+  
+  .notificationTime {
+    font-size: 0.875rem;
+    color: $gray-500;
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
+}
+
+.notificationMessage {
+  color: $gray-700;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.notificationActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  
+  .emptyIcon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .emptyTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $gray-700;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .emptyMessage {
+    color: $gray-500;
+    margin: 0;
+  }
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 1.125rem;
+  color: $gray-600;
+}
+
+.error {
+  color: $red-600;
+}
+
+// Анимации
+.notificationsPage {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .notificationsPage {
+    padding: 1rem 0;
+  }
+  
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .header {
+    margin-bottom: 2rem;
+    
+    .title {
+      font-size: 2rem;
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .stats {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+  
+  .filters {
+    flex-direction: column;
+    padding: 1.5rem;
+    
+    .filterGroup {
+      .filterSelect {
+        min-width: auto;
+      }
+    }
+  }
+  
+  .notificationItem {
+    padding: 1rem;
+    flex-direction: column;
+    
+    .notificationIcon {
+      align-self: flex-start;
+      
+      .icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+      }
+    }
+    
+    .notificationHeader {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      
+      .notificationTime {
+        margin-left: 0;
+      }
+    }
+    
+    .notificationActions {
+      justify-content: flex-start;
+    }
+  }
+  
+  .emptyState {
+    padding: 2rem 1rem;
+    
+    .emptyIcon {
+      font-size: 3rem;
+    }
+    
+    .emptyTitle {
+      font-size: 1.25rem;
+    }
+  }
+}

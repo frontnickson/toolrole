@@ -1,0 +1,78 @@
+@import "../../../../styles/utils/mixins";
+@import "../../../../styles/base/variables";
+
+.wrapper {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    border-bottom: 1px solid rgb(201, 201, 201);
+    background-color: $white;
+    z-index: 1000;
+}
+
+.container{
+    @include flex-between;
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 15px 0px;
+}
+
+.logo {
+    text-decoration: none;
+    color: inherit;
+    
+    h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $primary-color;
+    }
+}
+
+.menu {
+    @include flex-between;
+    gap: 30px
+}
+
+.nav {
+    @include flex-between;
+    gap: 20px;
+
+    & p:hover {
+        color: $primary-color;
+        cursor: pointer;
+    }
+}
+
+.buttons {
+    @include flex-between;
+    gap: 10px;
+    
+    a {
+        text-decoration: none;
+    }
+}
+
+.burger {
+    display: none;
+    stroke: $primary-color;
+
+    // path {
+    //     stroke: $primary-color;
+    // }
+}
+
+@media (max-width: 900px) {
+
+    .nav {
+        display: none;
+    }
+
+    .buttons {
+        display: none;
+    }
+
+    .burger {
+        display: flex;
+    }
+}

@@ -1,0 +1,280 @@
+@import "../../../../styles/utils/mixins";
+@import '../../../../styles/base/variables';
+
+.todoList {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-sm);
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-primary);
+
+  .headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    h2 {
+      margin: 0;
+      font-size: $font-size-xl;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .searchBox {
+      position: relative;
+      
+      .searchInput {
+        width: 300px;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid var(--input-border);
+        background: var(--input-bg);
+        color: var(--input-text);
+        border-radius: $border-radius-md;
+        font-size: $font-size-sm;
+        transition: all $transition-normal;
+
+        &:focus {
+          outline: none;
+          border-color: var(--input-focus-border);
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+      }
+
+      .searchIcon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $gray-400;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .headerRight {
+    .filters {
+      display: flex;
+      gap: 1rem;
+
+      .filterSelect {
+        padding: 0.5rem 1rem;
+        border: 1px solid $gray-300;
+        border-radius: $border-radius-md;
+        font-size: $font-size-sm;
+        background: $white;
+        cursor: pointer;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-500;
+        }
+      }
+    }
+  }
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.tasksTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-sm;
+
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid $gray-100;
+  }
+
+  th {
+    background: $gray-50;
+    font-weight: 600;
+    color: $gray-700;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .sortableHeader {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color $transition-normal;
+
+    &:hover {
+      background: $gray-100;
+    }
+  }
+
+  .checkboxCol {
+    width: 50px;
+    text-align: center;
+  }
+
+  .titleCol {
+    width: 25%;
+  }
+
+  .statusCol {
+    width: 120px;
+  }
+
+  .priorityCol {
+    width: 120px;
+  }
+
+  .assigneeCol {
+    width: 150px;
+  }
+
+  .dueDateCol {
+    width: 120px;
+  }
+
+  .tagsCol {
+    width: 150px;
+  }
+
+  .commentsCol {
+    width: 120px;
+    text-align: center;
+  }
+
+  .actionsCol {
+    width: 100px;
+    text-align: center;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+
+  .emptyContent {
+    .emptyIcon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      color: $gray-700;
+      font-size: $font-size-lg;
+    }
+
+    p {
+      margin: 0;
+      color: $gray-500;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Статусы задач
+.todoStatus {
+  background: $gray-100;
+  color: $gray-700;
+}
+
+.inProgressStatus {
+  background: $blue-100;
+  color: $blue-700;
+}
+
+.reviewStatus {
+  background: $yellow-100;
+  color: $yellow-700;
+}
+
+.testingStatus {
+  background: $purple-100;
+  color: $purple-700;
+}
+
+.completedStatus {
+  background: $green-100;
+  color: $green-700;
+}
+
+.overdueStatus {
+  background: $red-100;
+  color: $red-700;
+}
+
+// Приоритеты
+.urgentPriority {
+  background: $red-100;
+  color: $red-700;
+}
+
+.highPriority {
+  background: $orange-100;
+  color: $orange-700;
+}
+
+.mediumPriority {
+  background: $yellow-100;
+  color: $yellow-700;
+}
+
+.lowPriority {
+  background: $green-100;
+  color: $green-700;
+}
+
+// Чекбоксы
+.selectAllCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+// Адаптивность
+@media (max-width: 1024px) {
+  .listHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .headerLeft {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .searchBox .searchInput {
+        width: 100%;
+        min-width: 250px;
+      }
+    }
+  }
+
+  .tasksTable {
+    font-size: $font-size-xs;
+
+    th, td {
+      padding: 0.75rem 0.5rem;
+    }
+
+    .titleCol {
+      width: 30%;
+    }
+
+    .statusCol,
+    .priorityCol,
+    .assigneeCol,
+    .dueDateCol,
+    .tagsCol {
+      display: none;
+    }
+  }
+}

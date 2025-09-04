@@ -1,0 +1,1044 @@
+@import '../../../../styles/base/variables';
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+  
+  // Фиксированная ширина для всех карточек
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  
+  // Фиксированная высота для всех карточек
+  height: 180px !important; // Принудительно устанавливаем высоту
+  min-height: 180px !important;
+  max-height: 180px !important;
+  
+  // Обеспечиваем правильное отображение содержимого
+  box-sizing: border-box;
+  
+  // Обеспечиваем правильное распределение содержимого
+  display: flex;
+  flex-direction: column;
+  
+  // Принудительно устанавливаем размеры
+  flex-shrink: 0;
+  flex-grow: 0;
+  
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+    z-index: 2;
+  }
+}
+
+.overdue {
+  border-left: 4px solid var(--status-danger);
+}
+
+.completed {
+  border-left: 4px solid var(--status-success);
+}
+
+.cardTop {
+  padding: 12px 16px 8px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+  position: relative;
+}
+
+.dragHandle {
+  width: 24px;
+  height: 3px;
+  background: var(--text-tertiary);
+  border-radius: 2px;
+  margin: 0 auto 8px;
+}
+
+.cardContent {
+  padding: 16px;
+  
+  // Обеспечиваем правильное распределение по фиксированной высоте
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100% !important; // Принудительно занимаем всю высоту
+  min-height: 180px !important; // Принудительно устанавливаем минимальную высоту
+  max-height: 180px !important; // Принудительно устанавливаем максимальную высоту
+  box-sizing: border-box;
+  
+  // Принудительно устанавливаем размеры
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+.taskHeader {
+  margin-bottom: 12px;
+  
+  // Фиксированная высота для заголовка
+  flex-shrink: 0 !important; // Не сжимаем заголовок
+  min-height: 60px !important; // Принудительно устанавливаем минимальную высоту
+  max-height: 60px !important; // Принудительно устанавливаем максимальную высоту
+  height: 60px !important; // Принудительно устанавливаем высоту
+  
+  // Принудительно устанавливаем размеры
+  display: flex;
+  flex-direction: column;
+}
+
+.taskTitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  
+  // Обеспечиваем правильное отображение длинного текста
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.titlePart {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  // Обеспечиваем правильное отображение длинного текста
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.titleLabel {
+  font-weight: 600;
+  color: var(--text-primary);
+  
+  // Обеспечиваем правильное отображение длинного текста
+  white-space: nowrap;
+}
+
+.titleValue {
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  border: 1px solid var(--border-primary);
+  
+  // Обеспечиваем правильное отображение длинного текста
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+  
+  // Специальные стили для количества комментариев
+  &.commentsCount {
+    background: var(--status-success-bg);
+    border-color: var(--status-success-border);
+    color: var(--status-success);
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+  }
+}
+
+.titleSeparator {
+  color: var(--text-tertiary);
+  font-weight: 400;
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+}
+
+.taskDescription {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  
+  // Обеспечиваем правильное отображение длинного текста
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  
+  // Занимаем оставшееся пространство
+  flex: 1 !important; // Принудительно занимаем оставшееся пространство
+  min-height: 0 !important; // Минимальная высота 0
+  max-height: none !important; // Без ограничений по максимальной высоте
+  
+  // Обеспечиваем правильное отображение
+  margin: 8px 0;
+  
+  // Принудительно устанавливаем размеры
+  box-sizing: border-box;
+}
+
+.taskMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  flex-wrap: wrap;
+  
+  // Обеспечиваем правильное отображение длинного текста
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  
+  // Фиксированная высота для мета-информации
+  flex-shrink: 0 !important; // Не сжимаем мета-информацию
+  min-height: 32px !important; // Принудительно устанавливаем минимальную высоту
+  max-height: 32px !important; // Принудительно устанавливаем максимальную высоту
+  height: 32px !important; // Принудительно устанавливаем высоту
+  
+  // Принудительно устанавливаем размеры
+  display: flex;
+  align-items: center;
+}
+
+.statusSection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.statusIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  border: 2px solid var(--text-tertiary);
+  color: var(--text-tertiary);
+  background: var(--card-bg);
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+}
+
+.status_completed {
+  border-color: var(--status-completed);
+  background: var(--status-completed);
+  color: var(--text-inverse);
+}
+
+.status_in_progress {
+  border-color: var(--status-in-progress);
+  background: var(--card-bg);
+  color: var(--status-in-progress);
+}
+
+.status_planning {
+  border-color: var(--status-planning);
+  background: var(--card-bg);
+  color: var(--status-planning);
+}
+
+.status_review {
+  border-color: var(--status-review);
+  background: var(--card-bg);
+  color: var(--status-review);
+}
+
+.status_testing {
+  border-color: var(--status-testing);
+  background: var(--card-bg);
+  color: var(--status-testing);
+}
+
+.status_cancelled {
+  border-color: var(--status-cancelled);
+  background: var(--card-bg);
+  color: var(--status-cancelled);
+}
+
+.status_blocked {
+  border-color: var(--status-blocked);
+  background: var(--card-bg);
+  color: var(--status-blocked);
+}
+
+.status_on_hold {
+  border-color: var(--status-on-hold);
+  background: var(--card-bg);
+  color: var(--status-on-hold);
+}
+
+
+.statusText {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  
+  // Обеспечиваем правильное отображение длинного текста
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.separator {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-weight: 400;
+  margin: 0 4px;
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+}
+
+.priorityText {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 2px 8px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  
+  // Обеспечиваем правильное отображение длинного текста
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.priority_critical {
+  background: var(--bg-secondary);
+  border-color: var(--priority-critical);
+  color: var(--priority-critical);
+}
+
+.priority_high {
+  background: var(--bg-secondary);
+  border-color: var(--priority-high);
+  color: var(--priority-high);
+}
+
+.priority_medium {
+  background: var(--bg-secondary);
+  border-color: var(--priority-medium);
+  color: var(--priority-medium);
+}
+
+.priority_low {
+  background: var(--bg-secondary);
+  border-color: var(--priority-low);
+  color: var(--priority-low);
+}
+
+.priority_urgent {
+  background: var(--bg-secondary);
+  border-color: var(--priority-urgent);
+  color: var(--priority-urgent);
+}
+
+.taskFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-primary);
+  margin-top: 12px;
+  
+  // Обеспечиваем правильное отображение
+  width: 100%;
+  
+  // Фиксированная высота для футера
+  flex-shrink: 0 !important; // Не сжимаем футер
+  min-height: 40px !important; // Принудительно устанавливаем минимальную высоту
+  max-height: 40px !important; // Принудительно устанавливаем максимальную высоту
+  height: 40px !important; // Принудительно устанавливаем высоту
+  
+  // Принудительно устанавливаем размеры
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.dateLabel {
+  font-size: 13px;
+  color: var(--status-success);
+  font-weight: 500;
+  
+  // Обеспечиваем правильное отображение длинного текста
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+  min-width: 80px;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
+.commentCount {
+  font-size: 12px;
+  color: var(--text-accent);
+  font-weight: 600;
+  background: var(--status-info-bg);
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--status-info-border);
+  box-shadow: var(--shadow-sm);
+  
+  // Обеспечиваем правильное отображение
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: center;
+  
+  // Добавляем иконку комментария
+  &::before {
+    content: '💬';
+    margin-right: 4px;
+  }
+}
+
+// Editing state
+.cardEditing {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 0.75rem;
+  border: 2px solid var(--border-focus);
+  
+  // Обеспечиваем правильное отображение
+  width: 100%;
+  box-sizing: border-box;
+  
+  // Фиксированная высота для состояния редактирования
+  height: 180px !important;
+  min-height: 180px !important;
+  max-height: 180px !important;
+  
+  // Обеспечиваем правильное распределение содержимого
+  display: flex;
+  flex-direction: column;
+}
+
+.editHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  
+  // Фиксированная высота для заголовка редактирования
+  flex-shrink: 0;
+  min-height: 32px;
+  max-height: 32px;
+  
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    
+    // Обеспечиваем правильное отображение
+    flex-shrink: 0;
+    
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+}
+
+.editTitleInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  
+  // Обеспечиваем правильное отображение
+  box-sizing: border-box;
+  
+  // Занимаем оставшееся пространство
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px var(--input-focus-shadow);
+  }
+}
+
+.editActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  
+  // Обеспечиваем правильное отображение
+  width: 100%;
+  
+  // Фиксированная высота для действий редактирования
+  flex-shrink: 0;
+  min-height: 40px;
+  max-height: 40px;
+}
+
+.saveBtn, .cancelBtn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+  
+  // Обеспечиваем правильное отображение
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.saveBtn {
+  background: var(--btn-outline-border);
+  color: var(--text-inverse);
+  border-color: var(--btn-outline-border);
+  
+  &:hover {
+    background: var(--btn-outline-hover-bg);
+    border-color: var(--btn-outline-hover-bg);
+  }
+}
+
+.cancelBtn {
+  background: var(--btn-secondary-bg);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+  
+  &:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-secondary);
+  }
+}
+
+// Responsive styles
+@media (max-width: 1200px) {
+  .card {
+    margin-bottom: 0.5rem;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    
+    // Адаптивная высота для больших экранов
+    height: 170px;
+    min-height: 170px;
+    max-height: 170px;
+  }
+  
+  .cardEditing {
+    height: 170px;
+    min-height: 170px;
+    max-height: 170px;
+  }
+  
+  .cardTop {
+    padding: 10px 14px 6px;
+  }
+  
+  .cardContent {
+    padding: 14px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 170px;
+    max-height: 170px;
+  }
+  
+  .taskHeader {
+    min-height: 55px;
+    max-height: 55px;
+  }
+  
+  .taskTitle {
+    font-size: 11px;
+    gap: 6px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .titleValue {
+    padding: 1px 4px;
+    font-size: 10px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 70px;
+  }
+  
+  .taskDescription {
+    font-size: 15px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    border-radius: 10px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    
+    // Адаптивная высота для планшетов
+    height: 160px;
+    min-height: 160px;
+    max-height: 160px;
+  }
+  
+  .cardEditing {
+    height: 160px;
+    min-height: 160px;
+    max-height: 160px;
+  }
+  
+  .cardTop {
+    padding: 8px 12px 6px;
+  }
+  
+  .dragHandle {
+    width: 20px;
+    height: 2px;
+    margin-bottom: 6px;
+  }
+  
+  .cardContent {
+    padding: 12px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 160px;
+    max-height: 160px;
+  }
+  
+  .taskHeader {
+    margin-bottom: 10px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для планшетов
+    min-height: 50px;
+    max-height: 50px;
+  }
+  
+  .taskTitle {
+    font-size: 10px;
+    gap: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    // Адаптивная высота для планшетов
+    height: 50px;
+    min-height: 50px;
+    max-height: 50px;
+  }
+  
+  .titlePart {
+    gap: 3px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+  }
+  
+  .titleValue {
+    padding: 1px 3px;
+    font-size: 9px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 60px;
+  }
+  
+  .titleSeparator {
+    display: none;
+  }
+  
+  .taskDescription {
+    font-size: 14px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .taskMeta {
+    margin-bottom: 10px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для планшетов
+    min-height: 28px;
+    max-height: 28px;
+  }
+  
+  .statusIcon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .statusText {
+    font-size: 13px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 80px;
+  }
+  
+  .taskFooter {
+    padding-top: 10px;
+    margin-top: 10px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для планшетов
+    min-height: 35px;
+    max-height: 35px;
+  }
+  
+  .dateLabel, .commentCount {
+    font-size: 12px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    border-radius: 8px;
+    margin-bottom: 0.4rem;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    
+    // Адаптивная высота для мобильных
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+  }
+  
+  .cardEditing {
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+  }
+  
+  .cardTop {
+    padding: 6px 10px 4px;
+  }
+  
+  .dragHandle {
+    width: 18px;
+    height: 2px;
+    margin-bottom: 4px;
+  }
+  
+  .cardContent {
+    padding: 10px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 150px;
+    max-height: 150px;
+  }
+  
+  .taskHeader {
+    margin-bottom: 8px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для мобильных
+    min-height: 45px;
+    max-height: 45px;
+  }
+  
+  .taskTitle {
+    font-size: 9px;
+    gap: 3px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    // Адаптивная высота для мобильных
+    height: 45px;
+    min-height: 45px;
+    max-height: 45px;
+  }
+  
+  .titleValue {
+    padding: 1px 2px;
+    font-size: 8px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 50px;
+  }
+  
+  .taskDescription {
+    font-size: 13px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .taskMeta {
+    margin-bottom: 8px;
+    gap: 6px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для мобильных
+    min-height: 25px;
+    max-height: 25px;
+  }
+  
+  .statusIcon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .statusText {
+    font-size: 12px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 70px;
+  }
+  
+  .taskFooter {
+    padding-top: 8px;
+    margin-top: 8px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для мобильных
+    min-height: 30px;
+    max-height: 30px;
+  }
+  
+  .dateLabel, .commentCount {
+    font-size: 11px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 60px;
+  }
+}
+
+@media (max-width: 360px) {
+  .card {
+    border-radius: 6px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    
+    // Адаптивная высота для очень маленьких экранов
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+  }
+  
+  .cardEditing {
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+  }
+  
+  .cardTop {
+    padding: 5px 8px 3px;
+  }
+  
+  .dragHandle {
+    width: 16px;
+    height: 1px;
+    margin-bottom: 3px;
+  }
+  
+  .cardContent {
+    padding: 8px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 140px;
+    max-height: 140px;
+  }
+  
+  .taskHeader {
+    margin-bottom: 6px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для очень маленьких экранов
+    min-height: 40px;
+    max-height: 40px;
+  }
+  
+  .taskTitle {
+    font-size: 8px;
+    gap: 2px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    // Адаптивная высота для очень маленьких экранов
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+  }
+  
+  .titleValue {
+    padding: 1px 2px;
+    font-size: 7px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 40px;
+  }
+  
+  .taskDescription {
+    font-size: 12px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .taskMeta {
+    margin-bottom: 6px;
+    gap: 4px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для очень маленьких экранов
+    min-height: 22px;
+    max-height: 22px;
+  }
+  
+  .statusIcon {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .statusText {
+    font-size: 11px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 60px;
+  }
+  
+  .taskFooter {
+    padding-top: 6px;
+    margin-top: 6px;
+    
+    // Обеспечиваем правильное отображение
+    width: 100%;
+    
+    // Адаптивная высота для очень маленьких экранов
+    min-height: 25px;
+    max-height: 25px;
+  }
+  
+  .dateLabel, .commentCount {
+    font-size: 10px;
+    
+    // Обеспечиваем правильное отображение длинного текста
+    max-width: 50px;
+  }
+}

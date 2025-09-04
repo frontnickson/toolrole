@@ -1,0 +1,44 @@
+@import './styles/base/variables';
+@import './styles/themes/variables';
+@import './styles/utils/mixins';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  line-height: $line-height-normal;
+  font-size: 16px;
+  min-height: 100vh;
+  color: var(--text-primary);
+}
+
+ul{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+code {
+  font-family: $font-family-mono;
+}
+
+h1,h2,h3,h4,h5,h6{
+  margin: 0;
+  padding: 0;
+}

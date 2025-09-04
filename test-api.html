@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест API</title>
+</head>
+<body>
+    <h1>Тест API регистрации</h1>
+    
+    <form id="testForm">
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="test@example.com" required>
+        </div>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" value="testuser" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="TestPass123!" required>
+        </div>
+        <div>
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" value="Test User" required>
+        </div>
+        <button type="submit">Тест регистрации</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Отправляем запрос...';
+            
+            try {
+                const formData = {
+                    email: document.getElementById('email').value,
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value,
+                    full_name: document.getElementById('full_name').value,
+                    first_name: 'Test',
+                    last_name: 'User'
+                };
+                
+                console.log('Отправляем данные:', formData);
+                
+                const response = await fetch('http://localhost:8000/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Статус ответа:', response.status);
+                console.log('Заголовки ответа:', Object.fromEntries(response.headers.entries()));
+                
+                const data = await response.json();
+                console.log('Данные ответа:', data);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<h3>✅ Успех!</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<h3>❌ Ошибка ${response.status}</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+                
+            } catch (error) {
+                console.error('Ошибка:', error);
+                resultDiv.innerHTML = `<h3>❌ Исключение</h3><pre>${error.message}</pre>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+@import '../../../../styles/base/variables';
+
+.todoCalendar {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-sm);
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-primary);
+
+  .headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+  }
+
+  .taskCountInfo {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    
+    span {
+      padding: 0.25rem 0.5rem;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      border: 1px solid var(--border-primary);
+    }
+  }
+
+  .viewModeToggle {
+    display: flex;
+    gap: 0.5rem;
+    
+    .viewBtn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      color: var(--input-text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: var(--bg-hover);
+        border-color: var(--border-secondary);
+      }
+      
+      &.active {
+        background: var(--btn-outline-border);
+        color: var(--text-inverse);
+        border-color: var(--btn-outline-border);
+      }
+    }
+  }
+
+  .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .navigation {
+      display: flex;
+      gap: 0.5rem;
+
+      .navBtn {
+        padding: 0.5rem;
+        border: 1px solid var(--input-border);
+        background: var(--input-bg);
+        border-radius: $border-radius-md;
+        cursor: pointer;
+        transition: all $transition-normal;
+
+        &:hover {
+          background: var(--bg-hover);
+          border-color: var(--border-secondary);
+        }
+      }
+
+      .todayBtn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--btn-outline-border);
+        background: var(--btn-outline-border);
+        color: var(--text-inverse);
+        border-radius: $border-radius-md;
+        font-size: $font-size-sm;
+        cursor: pointer;
+        transition: all $transition-normal;
+
+        &:hover {
+          background: var(--btn-outline-hover-bg);
+          border-color: var(--btn-outline-hover-bg);
+        }
+      }
+    }
+
+    .currentMonth {
+      font-size: $font-size-lg;
+      font-weight: 600;
+      color: var(--text-primary);
+      min-width: 150px;
+      text-align: center;
+    }
+  }
+}
+
+.calendarGrid {
+  .weekdayHeaders {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    margin-bottom: 1px;
+
+    .weekdayHeader {
+      padding: 1rem;
+      background: var(--bg-secondary);
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: $font-size-sm;
+    }
+  }
+
+  .daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--border-primary);
+
+    .dayCell {
+      background: var(--card-bg);
+      min-height: 120px;
+      padding: 0.5rem;
+      position: relative;
+
+      &.otherMonth {
+        background: var(--bg-secondary);
+        color: var(--text-tertiary);
+      }
+
+      &.today {
+        background: var(--status-info-bg);
+        border: 2px solid var(--status-info);
+      }
+
+      .dayHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        .dayNumber {
+          font-weight: 600;
+          font-size: $font-size-sm;
+          color: var(--text-primary);
+        }
+
+        .taskCount {
+          background: var(--text-accent);
+          color: var(--text-inverse);
+          padding: 0.125rem 0.5rem;
+          border-radius: $border-radius-full;
+          font-size: $font-size-xs;
+          font-weight: 500;
+          min-width: 20px;
+          text-align: center;
+        }
+      }
+
+      .dayTasks {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .calendarTask {
+          padding: 0.25rem 0.5rem;
+          border-radius: $border-radius-sm;
+          font-size: $font-size-xs;
+          cursor: pointer;
+          transition: all $transition-normal;
+
+          &:hover {
+            transform: scale(1.02);
+            box-shadow: $shadow-sm;
+          }
+
+          .taskHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.125rem;
+
+            .taskTitle {
+              font-weight: 500;
+              color: var(--text-primary);
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              flex: 1;
+            }
+
+            .taskPriority {
+              font-size: 0.75rem;
+              margin-left: 0.25rem;
+            }
+          }
+
+          .taskDescription {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+        }
+
+        .moreTasks {
+          text-align: center;
+          color: var(--text-tertiary);
+          font-size: $font-size-xs;
+          font-style: italic;
+          padding: 0.25rem;
+          background: var(--bg-secondary);
+          border-radius: $border-radius-sm;
+        }
+      }
+    }
+  }
+}
+
+.calendarLegend {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-primary);
+
+  .legendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: $font-size-sm;
+    color: var(--text-secondary);
+
+    .legendColor {
+      width: 16px;
+      height: 16px;
+      border-radius: $border-radius-sm;
+    }
+  }
+}
+
+// Статусы задач
+.todoStatus {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.inProgressStatus {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.reviewStatus {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.testingStatus {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.completedStatus {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.overdueStatus {
+  background: var(--status-error-bg);
+  color: var(--status-error);
+}
+
+.cancelledStatus {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+// Приоритеты
+.urgentPriority {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.highPriority {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.mediumPriority {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.lowPriority {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+// Адаптивность
+@media (max-width: 1024px) {
+  .calendarHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .headerLeft {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .headerRight {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .calendarGrid {
+    .weekdayHeaders .weekdayHeader {
+      padding: 0.5rem 0.25rem;
+      font-size: $font-size-xs;
+    }
+
+    .daysGrid .dayCell {
+      min-height: 80px;
+      padding: 0.25rem;
+
+      .dayHeader .dayNumber {
+        font-size: $font-size-xs;
+      }
+
+      .dayTasks .calendarTask {
+        padding: 0.125rem 0.25rem;
+        font-size: 0.625rem;
+
+        .taskHeader .taskTitle {
+          font-size: 0.625rem;
+        }
+
+        .taskDescription {
+          font-size: 0.625rem;
+        }
+      }
+    }
+  }
+
+  .calendarLegend {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+
+    .legendItem {
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .calendarGrid {
+    .weekdayHeaders .weekdayHeader {
+      padding: 0.25rem 0.125rem;
+      font-size: 0.625rem;
+    }
+
+    .daysGrid .dayCell {
+      min-height: 60px;
+      padding: 0.125rem;
+
+      .dayHeader {
+        margin-bottom: 0.25rem;
+
+        .dayNumber {
+          font-size: 0.625rem;
+        }
+
+        .taskCount {
+          font-size: 0.5rem;
+          padding: 0.0625rem 0.25rem;
+          min-width: 16px;
+        }
+      }
+
+      .dayTasks {
+        gap: 0.125rem;
+
+        .calendarTask {
+          padding: 0.0625rem 0.125rem;
+
+          .taskHeader .taskTitle {
+            font-size: 0.5rem;
+          }
+
+          .taskDescription {
+            display: none;
+          }
+        }
+
+        .moreTasks {
+          font-size: 0.5rem;
+          padding: 0.125rem;
+        }
+      }
+    }
+  }
+}
+
+// Недельный вид
+.weekGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--border-primary);
+
+  .weekDayCell {
+    background: var(--card-bg);
+    min-height: 150px;
+    padding: 0.5rem;
+    position: relative;
+
+    &.today {
+      background: var(--status-info-bg);
+      border: 2px solid var(--status-info);
+    }
+  }
+}
+
+// Дневной вид
+.dayView {
+  .dayViewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: $border-radius-lg;
+    margin-bottom: 2rem;
+
+    .dayViewDate {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+
+      .dayViewDay {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--text-accent);
+      }
+
+      .dayViewMonth {
+        font-size: $font-size-xl;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+
+      .dayViewYear {
+        font-size: $font-size-lg;
+        color: var(--text-tertiary);
+      }
+    }
+
+    .dayViewWeekday {
+      font-size: $font-size-xl;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 1rem 2rem;
+      background: var(--card-bg);
+      border-radius: $border-radius-lg;
+      border: 1px solid var(--border-primary);
+    }
+  }
+
+  .dayViewTasks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .emptyDay {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--bg-secondary);
+      border-radius: $border-radius-lg;
+      border: 2px dashed var(--border-primary);
+
+      .emptyIcon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        display: block;
+        color: var(--text-tertiary);
+      }
+
+      h3 {
+        margin: 0 0 0.5rem 0;
+        color: var(--text-secondary);
+        font-size: $font-size-lg;
+      }
+
+      p {
+        margin: 0;
+        color: var(--text-tertiary);
+        font-size: $font-size-sm;
+      }
+    }
+
+    .dayViewTask {
+      padding: 1.5rem;
+      border-radius: $border-radius-lg;
+      border: 1px solid var(--border-primary);
+      background: var(--card-bg);
+      transition: all $transition-normal;
+
+      &:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .taskHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .taskTitle {
+          font-size: $font-size-lg;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .taskPriority {
+          font-size: 1.25rem;
+        }
+      }
+
+      .taskDescription {
+        color: var(--text-secondary);
+        font-size: $font-size-sm;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .taskMeta {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        .taskStatus {
+          padding: 0.25rem 0.75rem;
+          border-radius: $border-radius-full;
+          font-size: $font-size-xs;
+          font-weight: 500;
+          background: var(--bg-secondary);
+          color: var(--text-secondary);
+        }
+
+        .taskAssignee {
+          font-size: $font-size-sm;
+          color: var(--text-secondary);
+        }
+      }
+    }
+  }
+}
+
+// Улучшенные заголовки дней недели для недельного вида
+.weekdayHeaders .weekdayHeader {
+  .weekdayName {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .weekdayDate {
+    font-size: $font-size-xs;
+    color: var(--text-tertiary);
+  }
+}

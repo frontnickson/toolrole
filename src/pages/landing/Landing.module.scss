@@ -1,0 +1,13 @@
+@import "../../styles/utils/mixins";
+@import "../../styles/base/variables";
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  margin-top: 80px; // Отступ для фиксированного header
+}

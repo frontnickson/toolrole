@@ -1,0 +1,438 @@
+@import '../../../../styles/base/variables';
+@import '../../../../styles/utils/mixins';
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-overlay);
+  @include flex-safari-center;
+  z-index: 1000;
+  padding: 1rem;
+  @include box-sizing-safari;
+}
+
+.modal {
+  background: var(--modal-bg);
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari($shadow-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+  @include box-sizing-safari;
+  @include hide-scrollbar-safari;
+}
+
+@include keyframes-safari(slideIn) {
+  from {
+    opacity: 0;
+    @include transform-safari(translateY(-20px));
+  }
+  to {
+    opacity: 1;
+    @include transform-safari(translateY(0));
+  }
+}
+
+.modalHeader {
+  @include flex-safari(row, nowrap, space-between, center);
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+
+  h2 {
+    margin: 0;
+    font-size: $font-size-xl;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $gray-400;
+    cursor: pointer;
+    padding: 0.5rem;
+    @include border-radius-safari($border-radius-md);
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+
+    &:hover {
+      background: $gray-100;
+      color: $gray-600;
+    }
+  }
+}
+
+.form {
+  padding: 1.5rem;
+  @include box-sizing-safari;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  @include box-sizing-safari;
+
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: $gray-700;
+    font-size: $font-size-sm;
+  }
+
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--input-text);
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    @include transition-safari(all);
+    @include box-sizing-safari;
+    @include appearance-safari;
+
+    &:focus {
+      outline: none;
+      border-color: var(--input-focus-border);
+      @include box-shadow-safari(0 0 0 3px rgba(59, 130, 246, 0.1));
+    }
+
+    &.error {
+      border-color: $red-500;
+      @include box-shadow-safari(0 0 0 3px rgba($red-500, 0.1));
+    }
+  }
+
+  .textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .errorText {
+    color: $error-color;
+    font-size: $font-size-xs;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  .preview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: $gray-50;
+    @include border-radius-safari($border-radius-sm);
+    font-size: $font-size-xs;
+    color: $gray-600;
+    border-left: 3px solid $primary-500;
+    @include box-sizing-safari;
+  }
+
+  .selectedPreview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    @include border-radius-safari($border-radius-sm);
+    font-size: $font-size-xs;
+    color: var(--text-secondary);
+    @include flex-safari(row, nowrap, flex-start, center);
+    gap: 0.5rem;
+    @include box-sizing-safari;
+  }
+
+  .finalPreview {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: $gray-50;
+    @include border-radius-safari($border-radius-md);
+    border: 1px solid $gray-200;
+    @include box-sizing-safari;
+
+    h4 {
+      margin: 0 0 1rem 0;
+      font-size: $font-size-sm;
+      color: $gray-700;
+      font-weight: 600;
+    }
+
+    .boardPreview {
+      .boardHeader {
+        @include flex-safari(row, nowrap, flex-start, center);
+        gap: 1rem;
+        padding: 1rem;
+        @include border-radius-safari($border-radius-md);
+        margin-bottom: 1rem;
+        @include box-sizing-safari;
+
+        .boardIcon {
+          font-size: 2rem;
+          flex-shrink: 0;
+          -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+        }
+
+        .boardInfo {
+          h3 {
+            margin: 0 0 0.25rem 0;
+            color: $white;
+            font-size: $font-size-lg;
+            font-weight: 600;
+          }
+
+          p {
+            margin: 0;
+            color: rgba($white, 0.9);
+            font-size: $font-size-sm;
+          }
+        }
+      }
+
+      .boardTemplate {
+        font-size: $font-size-xs;
+        color: $gray-600;
+        padding: 0.5rem;
+        background: $white;
+        @include border-radius-safari($border-radius-sm);
+        border: 1px solid $gray-200;
+        @include box-sizing-safari;
+      }
+    }
+  }
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  min-width: 200px;
+
+  .templateOption {
+    padding: 1rem;
+    border: 2px solid $gray-200;
+    @include border-radius-safari($border-radius-md);
+    cursor: pointer;
+    @include transition-safari(all);
+    @include flex-safari(row, nowrap, flex-start, center);
+    gap: 1rem;
+    @include box-sizing-safari;
+
+    &:hover {
+      border-color: $primary-300;
+      background: rgba($primary-50, 0.1);
+    }
+
+    &.selected {
+      border-color: $primary-500;
+      background: rgba($primary-50, 0.2);
+    }
+
+    .templateIcon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+    }
+
+    .templateInfo {
+      h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: $font-size-sm;
+        font-weight: 600;
+        color: $gray-900;
+      }
+
+      p {
+        margin: 0;
+        font-size: $font-size-xs;
+        color: $gray-600;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.5rem;
+
+  .colorOption {
+    width: 32px;
+    height: 32px;
+    border: 2px solid $gray-200;
+    @include border-radius-safari($border-radius-md);
+    cursor: pointer;
+    @include transition-safari(all);
+    position: relative;
+    @include box-sizing-safari;
+
+    &:hover {
+      @include transform-safari(scale(1.1));
+      border-color: $gray-400;
+    }
+
+    &.selected {
+      border-color: $gray-800;
+      @include transform-safari(scale(1.1));
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform-safari(translate(-50%, -50%));
+        color: $white;
+        font-weight: bold;
+        font-size: 0.875rem;
+        @include text-shadow-safari(0 0 2px rgba(0, 0, 0, 0.5));
+      }
+    }
+  }
+}
+
+.formActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 1rem;
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  padding-top: 1rem;
+  border-top: 1px solid $gray-200;
+  @include box-sizing-safari;
+
+  .cancelBtn,
+  .createBtn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+  }
+
+  .cancelBtn {
+    background: $gray-100;
+    color: $gray-700;
+
+    &:hover {
+      background: $gray-200;
+    }
+  }
+
+  .createBtn {
+    background: $primary-500;
+    color: $white;
+
+    &:hover {
+      background: $primary-600;
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  .modalHeader {
+    padding: 1rem 1rem 0.75rem;
+
+    h2 {
+      font-size: $font-size-lg;
+    }
+  }
+
+  .form {
+    padding: 1rem;
+  }
+
+  .templateGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .colorGrid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+
+    .colorOption {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .formActions {
+    @include flex-safari-column;
+
+    .cancelBtn,
+    .createBtn {
+      width: 100%;
+    }
+  }
+}
+
+// ===== SAFARI-СПЕЦИФИЧНЫЕ ИСПРАВЛЕНИЯ =====
+@supports (-webkit-touch-callout: none) {
+  // Safari на iOS
+  .modalOverlay {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .modal {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+// Исправления для Safari на macOS
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .modal {
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--text-tertiary);
+      border-radius: 4px;
+      border: 1px solid var(--bg-tertiary);
+      
+      &:hover {
+        background: var(--text-secondary);
+      }
+    }
+  }
+}
+
+// Дополнительные исправления для Safari
+@supports (-webkit-appearance: none) {
+  .input,
+  .textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  .closeBtn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}

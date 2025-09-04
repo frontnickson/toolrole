@@ -1,0 +1,16 @@
+// Базовые стили
+@import './base/variables';
+@import './themes/variables';
+@import './utils/mixins';
+
+// Safari-специфичные исправления
+@import './utils/safari-fixes';
+
+// Глобальные стили
+@import '../index.scss';
+
+// Компоненты
+@import '../components/ui/Button/Button.module.scss';
+
+// Страницы
+@import '../App.scss';

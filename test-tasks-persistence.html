@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест сохранения задач</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Тест сохранения задач в Redux</h1>
+    
+    <div class="test-section">
+        <h2>📋 Инструкции по тестированию</h2>
+        <ol>
+            <li>Откройте приложение в браузере (обычно <code>http://localhost:5173</code>)</li>
+            <li>Создайте доску с несколькими задачами</li>
+            <li>Обновите страницу (F5 или Ctrl+R)</li>
+            <li>Проверьте, что задачи остались на месте</li>
+            <li>Переключитесь между досками</li>
+            <li>Проверьте, что задачи загружаются корректно</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Проверка localStorage</h2>
+        <p>Откройте DevTools (F12) и проверьте вкладку Application → Local Storage:</p>
+        <pre>persist:root</pre>
+        <p>Должны быть сохранены данные о досках и задачах.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Проверка Redux DevTools</h2>
+        <p>Если установлено расширение Redux DevTools:</p>
+        <ol>
+            <li>Откройте Redux DevTools</li>
+            <li>Проверьте состояние <code>boards</code></li>
+            <li>Убедитесь, что в колонках есть задачи</li>
+            <li>Проверьте, что <code>currentBoard</code> содержит задачи</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🐛 Отладка</h2>
+        <p>Если задачи все еще исчезают, проверьте консоль браузера на наличие ошибок:</p>
+        <ul>
+            <li>Ошибки загрузки API</li>
+            <li>Ошибки Redux</li>
+            <li>Ошибки сериализации</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Ожидаемое поведение</h2>
+        <ul>
+            <li class="success">✅ Задачи сохраняются при обновлении страницы</li>
+            <li class="success">✅ Задачи загружаются при клике на доску</li>
+            <li class="success">✅ Кэширование работает (нет повторных запросов)</li>
+            <li class="success">✅ Redux-Persist сохраняет состояние</li>
+            <li class="success">✅ Создание/изменение задач работает</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 API Endpoints</h2>
+        <p>Убедитесь, что бекенд запущен на порту 8001:</p>
+        <ul>
+            <li><code>GET http://localhost:8001/api/v1/boards</code> - получение досок</li>
+            <li><code>GET http://localhost:8001/api/v1/boards/:id/tasks</code> - получение задач доски</li>
+        </ul>
+    </div>
+
+    <script>
+        // Простая проверка API
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/boards');
+                const data = await response.json();
+                console.log('✅ API доступен:', data);
+                return true;
+            } catch (error) {
+                console.error('❌ API недоступен:', error);
+                return false;
+            }
+        }
+
+        // Проверяем API при загрузке страницы
+        testAPI();
+    </script>
+</body>
+</html>
+

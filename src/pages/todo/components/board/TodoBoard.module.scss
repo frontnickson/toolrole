@@ -1,0 +1,1484 @@
+@import "../../../../styles/utils/mixins";
+@import '../../../../styles/base/variables';
+
+// ===== ОСНОВНОЙ КОНТЕЙНЕР ДОСКИ =====
+.board {
+  @include flex-safari-column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  @include box-sizing-safari;
+  position: relative;
+  min-width: 0;
+  
+  // Убираем ограничения по ширине, но оставляем возможность прокрутки
+  max-width: none;
+  
+  // Обеспечиваем правильное распределение пространства
+  align-items: stretch;
+  
+  // Обеспечиваем правильное отображение
+  display: flex;
+  flex-direction: column;
+  
+  // Убираем принудительное удаление ограничений по высоте
+  // * {
+  //   height: auto !important;
+  //   min-height: auto !important;
+  //   max-height: none !important;
+  // }
+}
+
+// ===== РЕЖИМ TODAY =====
+.todayBoard {
+  @include flex-safari-column;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  overflow: hidden;
+  @include box-sizing-safari;
+  position: relative;
+  min-width: 0;
+  background: var(--bg-primary);
+  
+  // Убираем ограничения по ширине, но оставляем возможность прокрутки
+  max-width: none;
+  
+  .todayBoardHeader {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 0.5rem 0;
+    }
+    
+    p {
+      color: var(--text-secondary);
+      margin: 0;
+      font-size: 1rem;
+    }
+  }
+  
+  .todayBoardContent {
+    @include flex-safari-column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    min-width: 0;
+    
+    // Кастомные стили для скроллбара в режиме Today
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+    
+    // Webkit стили для скроллбара
+    &::-webkit-scrollbar {
+      width: 8px; // Увеличиваем ширину скроллбара для лучшей видимости
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1); // Делаем трек более видимым
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.3); // Делаем ползунок более видимым
+      border-radius: 4px;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.5); // Увеличиваем видимость при наведении
+      }
+    }
+    
+    .todayBoardSection {
+      background: var(--card-bg);
+      border-radius: $border-radius-lg;
+      border: 1px solid var(--border-primary);
+      box-shadow: $shadow-sm;
+      overflow: hidden;
+      
+      .boardHeader {
+        @include flex-safari(row, nowrap, space-between, center);
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-primary);
+        background: var(--bg-secondary);
+        
+        .boardTitle {
+          @include flex-safari(row, nowrap, flex-start, center);
+          gap: 0.5rem;
+          margin: 0;
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          
+          .boardIcon {
+            font-size: 1.25rem;
+          }
+        }
+        
+        .boardCommentsStats {
+          @include flex-safari(row, nowrap, flex-start, center);
+          gap: 0.25rem;
+          padding: 0.25rem 0.5rem;
+          background: rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.2);
+          @include border-radius-safari($border-radius-sm);
+          font-size: 0.75rem;
+          color: var(--status-info);
+          @include transition-safari(all);
+          
+          &:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+          }
+        }
+      }
+      
+      .boardTitle {
+        @include flex-safari(row, nowrap, flex-start, center);
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-primary);
+        margin: 0;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        
+        .boardIcon {
+          font-size: 1.25rem;
+        }
+      }
+      
+      .todayTasks {
+        padding: 1rem;
+        @include flex-safari-column;
+        gap: 0.75rem;
+        
+        // Устанавливаем разумную максимальную высоту для задач в режиме Today
+        max-height: 300px; // Уменьшаем с 400px до 300px
+        overflow-y: auto;
+        overflow-x: hidden;
+        
+        // Стили для скроллбара в задачах
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+        
+        // Webkit стили для скроллбара
+        &::-webkit-scrollbar {
+          width: 8px; // Увеличиваем ширину скроллбара для лучшей видимости
+        }
+        
+        &::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.1); // Делаем трек более видимым
+          border-radius: 4px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.3); // Делаем ползунок более видимым
+          border-radius: 4px;
+          
+          &:hover {
+            background: rgba(0, 0, 0, 0.5); // Увеличиваем видимость при наведении
+          }
+        }
+        
+        // Обеспечиваем правильное отображение задач
+        .card, .task {
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+          flex-shrink: 0 !important;
+          
+          // Фиксированная высота для задач в режиме Today
+          height: 180px !important;
+          min-height: 180px !important;
+          max-height: 180px !important;
+          
+          // Обеспечиваем правильное отображение содержимого
+          .cardContent, .taskContent {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            height: 100% !important;
+            min-height: 180px !important;
+            max-height: 180px !important;
+            display: flex !important;
+            flex-direction: column !important;
+          }
+          
+          .taskTitle, .cardTitle {
+            width: 100% !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            height: 60px !important;
+            min-height: 60px !important;
+            max-height: 60px !important;
+            flex-shrink: 0 !important;
+          }
+          
+          .taskDescription, .cardDescription {
+            width: 100% !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            flex: 1 !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            overflow: hidden !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 3 !important;
+            -webkit-box-orient: vertical !important;
+          }
+        }
+        
+        &::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+          background: transparent;
+          border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+          background: $gray-300;
+          border-radius: 3px;
+          
+          &:hover {
+            background: $gray-400;
+          }
+        }
+      }
+    }
+  }
+}
+
+.boardContent {
+  @include flex-safari(row, nowrap, flex-start, stretch);
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: calc(100vh - 200px);
+  height: 100%;
+  width: 100%;
+  @include box-sizing-safari;
+  @include hide-scrollbar-safari;
+  position: relative;
+  
+  // Убираем ограничения по ширине, чтобы колонки могли уходить под sidebar
+  min-width: 100%;
+  max-width: none;
+  
+  // Обеспечиваем правильную прокрутку
+  flex-wrap: nowrap;
+  align-items: stretch;
+  
+  // Обеспечиваем синхронизацию высоты колонок
+  align-content: stretch;
+  
+  // Обеспечиваем правильное отображение колонок
+  display: flex;
+  flex-direction: row;
+  
+  // Убираем принудительное удаление ограничений по высоте
+  // * {
+  //   height: auto !important;
+  //   min-height: auto !important;
+  //   max-height: none !important;
+  // }
+  
+  // Плавная прокрутка
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  // Улучшенная прокрутка для Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+  
+  // Webkit стили для скроллбара
+  &::-webkit-scrollbar {
+    height: 8px; // Высота для горизонтального скроллбара
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1); // Делаем трек более видимым
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3); // Делаем ползунок более видимым
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.5); // Увеличиваем видимость при наведении
+    }
+  }
+  
+  // Убираем скрытие скроллбара для отладки
+  // @include hide-scrollbar-safari;
+}
+
+// ===== КОЛОНКА =====
+.column {
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari($shadow-sm);
+  border: 1px solid var(--border-primary);
+  width: 320px; // Увеличиваем ширину для лучшего отображения задач
+  min-width: 320px;
+  max-width: 320px;
+  @include flex-safari-column;
+  @include box-sizing-safari;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s ease;
+  
+  // Обеспечиваем правильную работу с flexbox
+  flex-basis: 320px;
+  flex-grow: 0;
+  
+  // Обеспечиваем синхронизацию высоты с другими колонками
+  align-self: stretch;
+  height: auto;
+  min-height: 400px; // Устанавливаем разумную минимальную высоту
+  
+  // Убираем слишком строгие настройки overflow
+  // overflow: hidden;
+  
+  // Обеспечиваем правильное отображение содержимого
+  display: flex;
+  flex-direction: column;
+  
+  // Убираем принудительное удаление ограничений по высоте
+  // * {
+  //   height: auto !important;
+  //   min-height: auto !important;
+  //   max-height: none !important;
+  // }
+  
+  &:hover {
+    @include box-shadow-safari($shadow-md);
+    @include transform-safari(translateY(-1px));
+    z-index: 2;
+    border-color: $gray-300;
+  }
+  
+  &:active {
+    @include transform-safari(translateY(0));
+    @include box-shadow-safari($shadow-sm);
+  }
+}
+
+// ===== ЗАГОЛОВОК КОЛОНКИ =====
+.columnHeader {
+  @include flex-safari(row, nowrap, space-between, center);
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  @include border-radius-safari($border-radius-md $border-radius-md 0 0);
+  @include box-sizing-safari;
+  
+  // Если нет кнопок действий, заголовок занимает всю ширину
+  &:has(.columnActions:empty) {
+    .columnTitle {
+      flex: 1;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+    }
+  }
+  
+  // Альтернативный способ для браузеров без поддержки :has()
+  .columnActions:empty + .columnTitle {
+    flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+  }
+}
+
+.columnTitle {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.75rem;
+  @include box-sizing-safari;
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  
+  h3 {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.4;
+    @include transition-safari(color);
+    
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+}
+
+.columnTitleContent {
+  @include flex-safari(column, nowrap, flex-start, flex-start);
+  gap: 0.25rem;
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+}
+
+.columnStats {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.25rem;
+  margin-top: 0.125rem;
+}
+
+.commentsStats {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  @include border-radius-safari($border-radius-sm);
+  font-size: 0.75rem;
+  color: $blue-700;
+  @include transition-safari(all);
+  
+  &:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+.commentsIcon {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.commentsCount {
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.tasksWithComments {
+  font-size: 0.625rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.columnTitleInput {
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  padding: 0.5rem;
+  border: 2px solid $blue-300;
+  @include border-radius-safari($border-radius-sm);
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $gray-800;
+  background: $white;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    outline: none;
+    border-color: $blue-500;
+    @include box-shadow-safari(0 0 0 3px rgba(59, 130, 246, 0.1));
+  }
+}
+
+.columnActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 0.5rem;
+  @include box-sizing-safari;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  
+  // Если нет кнопок действий, скрываем контейнер
+  &:empty {
+    display: none;
+  }
+}
+
+.columnActionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  @include border-radius-safari($border-radius-sm);
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  font-size: 0.875rem;
+  opacity: 0.7;
+  
+  &:hover {
+    opacity: 1;
+    background: $gray-100;
+    @include transform-safari(scale(1.1));
+  }
+  
+  &:active {
+    @include transform-safari(scale(0.95));
+  }
+}
+
+.taskCount {
+  background: #3b82f6;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  @include box-shadow-safari(0 1px 3px rgba(0, 0, 0, 0.1));
+  @include appearance-safari;
+}
+
+// ===== КОНТЕНТ КОЛОНКИ =====
+.columnContent {
+  padding: 0.75rem;
+  @include flex-safari-column;
+  gap: 0.5rem;
+  @include box-sizing-safari;
+  
+  // Устанавливаем разумную минимальную высоту для колонок
+  min-height: 200px; // Уменьшаем с 300px до 200px
+  height: auto;
+  
+  // Обеспечиваем правильное распределение пространства
+  flex: 1;
+  justify-content: flex-start;
+  
+  // Обеспечиваем правильное растягивание по содержимому
+  align-items: stretch;
+  
+  // Убираем слишком строгие настройки
+  // min-height: 0;
+  
+  // Добавляем вертикальный скролл для большого количества задач
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  // Скрываем скроллбар для красивого вида
+  @include hide-scrollbar-safari;
+  
+  // Плавная прокрутка
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  // Улучшенная прокрутка для Firefox
+  scrollbar-width: thin;
+  scrollbar-color: $gray-300 transparent;
+  
+  // Устанавливаем разумную максимальную высоту
+  max-height: calc(100vh - 250px);
+  
+  // Убираем принудительное удаление ограничений по высоте
+  // * {
+  //   height: auto !important;
+  //   min-height: auto !important;
+  //   max-height: none !important;
+  // }
+  
+  // Стили для задач внутри колонок
+  .card, .task {
+    flex-shrink: 0 !important; // Задачи не должны сжиматься
+    height: 180px !important; // Фиксированная высота для задач
+    min-height: 180px !important; // Фиксированная минимальная высота
+    max-height: 180px !important; // Фиксированная максимальная высота
+    width: 100% !important; // Задачи занимают всю ширину колонки
+    max-width: 100% !important; // Ограничиваем максимальную ширину
+    margin-bottom: 0.5rem !important; // Отступ между задачами
+    box-sizing: border-box !important; // Правильный расчет размеров
+    
+    &:last-child {
+      margin-bottom: 0 !important; // Убираем отступ у последней задачи
+    }
+    
+    // Обеспечиваем правильное отображение содержимого задач
+    .cardContent, .taskContent {
+      height: 100% !important; // Занимаем всю высоту карточки
+      min-height: 180px !important; // Фиксированная минимальная высота
+      max-height: 180px !important; // Фиксированная максимальная высота
+      flex: 1 !important;
+      padding: 16px !important; // Восстанавливаем правильные отступы
+      width: 100% !important; // Занимаем всю ширину
+      box-sizing: border-box !important; // Правильный расчет размеров
+      display: flex !important; // Flexbox для правильного распределения
+      flex-direction: column !important; // Вертикальное распределение
+    }
+    
+    .taskTitle, .cardTitle {
+      height: 60px !important; // Фиксированная высота для заголовка
+      min-height: 60px !important;
+      max-height: 60px !important;
+      line-height: 1.4 !important;
+      font-size: 16px !important; // Восстанавливаем правильный размер шрифта
+      margin-bottom: 8px !important; // Восстанавливаем отступы
+      width: 100% !important; // Занимаем всю ширину
+      word-wrap: break-word !important; // Перенос длинных слов
+      overflow-wrap: break-word !important; // Современный перенос слов
+      flex-shrink: 0 !important; // Не сжимаем заголовок
+    }
+    
+    .taskDescription, .cardDescription {
+      height: auto !important; // Автоматическая высота по содержимому
+      min-height: 0 !important; // Минимальная высота 0
+      max-height: none !important; // Без ограничений по максимальной высоте
+      line-height: 1.3 !important;
+      font-size: 14px !important; // Восстанавливаем правильный размер шрифта
+      margin: 8px 0 !important; // Восстанавливаем отступы
+      width: 100% !important; // Занимаем всю ширину
+      word-wrap: break-word !important; // Перенос длинных слов
+      overflow-wrap: break-word !important; // Современный перенос слов
+      flex: 1 !important; // Занимаем оставшееся пространство
+      overflow: hidden !important; // Скрываем переполнение
+      display: -webkit-box !important; // Webkit box для обрезки
+      -webkit-line-clamp: 3 !important; // Максимум 3 строки
+      -webkit-box-orient: vertical !important; // Вертикальная ориентация
+    }
+    
+    // Исправляем все внутренние элементы задач
+    * {
+      box-sizing: border-box !important; // Правильный расчет размеров
+    }
+    
+    // Специально для заголовка задачи
+    .taskHeader {
+      height: 60px !important; // Фиксированная высота для заголовка
+      min-height: 60px !important;
+      max-height: 60px !important;
+      margin-bottom: 12px !important;
+      width: 100% !important; // Занимаем всю ширину
+      flex-shrink: 0 !important; // Не сжимаем заголовок
+    }
+    
+    // Специально для мета-информации
+    .taskMeta {
+      height: 32px !important; // Фиксированная высота для мета-информации
+      min-height: 32px !important;
+      max-height: 32px !important;
+      margin: 8px 0 !important;
+      width: 100% !important; // Занимаем всю ширину
+      flex-shrink: 0 !important; // Не сжимаем мета-информацию
+    }
+    
+    // Специально для футера задачи
+    .taskFooter {
+      height: 40px !important; // Фиксированная высота для футера
+      min-height: 40px !important;
+      max-height: 40px !important;
+      margin-top: 12px !important;
+      width: 100% !important; // Занимаем всю ширину
+      flex-shrink: 0 !important; // Не сжимаем футер
+    }
+  }
+  
+  // Кастомные стили для скроллбара (Webkit)
+  &::-webkit-scrollbar {
+    width: 8px; // Увеличиваем ширину скроллбара для лучшей видимости
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1); // Делаем трек более видимым
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3); // Делаем ползунок более видимым
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.5); // Увеличиваем видимость при наведении
+    }
+  }
+  
+  &::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0.1); // Делаем угол более видимым
+  }
+  
+  // Убираем скрытие скроллбара для отладки
+  // @include hide-scrollbar-safari;
+}
+
+// ===== КНОПКА ДОБАВЛЕНИЯ ЗАДАЧИ =====
+.addTaskButton {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-primary);
+  @include border-radius-safari($border-radius-md);
+  color: var(--text-secondary);
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  @include flex-safari-center;
+  
+  // Обеспечиваем правильное позиционирование внизу колонки
+  margin-top: auto;
+  flex-shrink: 0;
+  
+  &:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-secondary);
+    color: var(--text-primary);
+    @include transform-safari(scale(1.02));
+  }
+  
+  &:active {
+    @include transform-safari(scale(0.98));
+  }
+}
+
+// ===== ФОРМА ДОБАВЛЕНИЯ ЗАДАЧИ =====
+.addTaskForm {
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-md);
+  @include box-shadow-safari(var(--shadow-md));
+  border: 1px solid var(--border-primary);
+  padding: 0.75rem;
+  @include flex-safari-column;
+  gap: 0.5rem;
+  @include box-sizing-safari;
+  
+  // Обеспечиваем правильное позиционирование
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+  
+  .formHeader {
+    @include flex-safari-column;
+    gap: 0.25rem;
+    @include box-sizing-safari;
+    
+    h4 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    small {
+      font-size: $font-size-xs;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+  }
+}
+
+.taskTitleInput, .taskDescriptionInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--input-border);
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  color: var(--input-text);
+  background: var(--input-bg);
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    @include box-shadow-safari(var(--input-focus-shadow));
+  }
+  
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+}
+
+.taskTitleInput {
+  font-weight: 500;
+}
+
+.taskDescriptionInput {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.taskFormActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  @include box-sizing-safari;
+  
+  .addTaskBtn, .cancelBtn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid;
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+    
+    &:hover {
+      opacity: 0.9;
+      @include transform-safari(translateY(-1px));
+    }
+    
+    &:active {
+      @include transform-safari(translateY(0));
+    }
+  }
+  
+  .addTaskBtn {
+    background: var(--btn-outline-border);
+    color: var(--text-inverse);
+    border-color: var(--btn-outline-border);
+    
+    &:hover {
+      background: var(--btn-outline-hover-bg);
+      border-color: var(--btn-outline-hover-bg);
+    }
+    
+    &:disabled {
+      background: var(--text-tertiary);
+      border-color: var(--text-tertiary);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+  
+  .cancelBtn {
+    background: var(--input-bg);
+    color: var(--text-secondary);
+    border-color: var(--input-border);
+    
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-secondary);
+    }
+  }
+}
+
+// ===== КНОПКА ДОБАВЛЕНИЯ КОЛОНКИ =====
+.addColumnButton {
+  width: 320px; // Фиксированная ширина, как у колонок
+  min-width: 320px;
+  max-width: 320px;
+  height: 60px;
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-primary);
+  @include border-radius-safari($border-radius-lg);
+  color: var(--text-secondary);
+  font-size: $font-size-base;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  @include flex-safari-center;
+  align-self: flex-start; // Выравнивание по верху
+  margin-top: 0; // Убираем отступ сверху
+  
+  &:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-secondary);
+    color: var(--text-primary);
+    @include transform-safari(scale(1.02));
+  }
+  
+  &:active {
+    @include transform-safari(scale(0.98));
+  }
+  
+  // Адаптивность для разных размеров экрана
+  @media (min-width: 1201px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: 60px;
+  }
+  
+  @media (max-width: 1200px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: 55px;
+  }
+  
+  @media (max-width: 768px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: 50px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    height: 45px;
+  }
+}
+
+// ===== ФОРМА ДОБАВЛЕНИЯ КОЛОНКИ =====
+.addColumnForm {
+  width: 320px; // Фиксированная ширина, как у колонок
+  min-width: 320px;
+  max-width: 320px;
+  height: fit-content; // Высота по содержимому
+  max-height: 400px; // Максимальная высота
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari(var(--shadow-lg));
+  border: 1px solid var(--border-primary);
+  padding: 1rem; // Уменьшили padding для компактности
+  @include flex-safari-column;
+  gap: 0.75rem; // Уменьшили gap между элементами
+  @include box-sizing-safari;
+  align-self: flex-start; // Выравнивание по верху
+  margin-top: 0; // Убираем отступ сверху
+  
+  // Адаптивность для разных размеров экрана
+  @media (min-width: 1201px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    padding: 1rem;
+  }
+  
+  @media (max-width: 1200px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    padding: 0.875rem;
+  }
+  
+  @media (max-width: 768px) {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    padding: 0.875rem;
+  }
+  
+  @media (max-width: 480px) {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    padding: 0.75rem;
+  }
+}
+
+.addColumnHeader {
+  @include flex-safari(row, nowrap, space-between, center);
+  margin-bottom: 0.25rem; // Уменьшили отступ
+  @include box-sizing-safari;
+  
+  h4 {
+    font-size: $font-size-base; // Уменьшили размер шрифта
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  .closeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    @include border-radius-safari($border-radius-sm);
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+    font-size: 1.25rem;
+    color: var(--text-tertiary);
+    
+    &:hover {
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+    }
+    
+    &:active {
+      background: var(--bg-active);
+    }
+  }
+}
+
+.columnDescriptionInput {
+  width: 100%;
+  padding: 0.5rem; // Уменьшили padding
+  border: 1px solid var(--input-border);
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  color: var(--input-text);
+  background: var(--input-bg);
+  resize: vertical;
+  min-height: 60px; // Уменьшили минимальную высоту
+  max-height: 120px; // Добавили максимальную высоту
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    @include box-shadow-safari(var(--input-focus-shadow));
+  }
+  
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+}
+
+.columnFormActions {
+  @include flex-safari(row, nowrap, flex-end, center);
+  gap: 0.5rem; // Уменьшили gap
+  margin-top: 0.25rem; // Уменьшили отступ сверху
+  @include box-sizing-safari;
+  
+  .addColumnBtn, .cancelBtn {
+    padding: 0.5rem 1rem; // Уменьшили padding кнопок
+    border: 1px solid;
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition-safari(all);
+    @include appearance-safari;
+    @include box-sizing-safari;
+    
+    &:hover {
+      opacity: 0.9;
+      @include transform-safari(translateY(-1px));
+    }
+    
+    &:active {
+      @include transform-safari(translateY(0));
+    }
+  }
+  
+  .addColumnBtn {
+    background: var(--btn-outline-border);
+    color: var(--text-inverse);
+    border-color: var(--btn-outline-border);
+    
+    &:hover {
+      background: var(--btn-outline-hover-bg);
+      border-color: var(--btn-outline-hover-bg);
+    }
+    
+    &:disabled {
+      background: var(--text-tertiary);
+      border-color: var(--text-tertiary);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+  
+  .cancelBtn {
+    background: var(--input-bg);
+    color: var(--text-secondary);
+    border-color: var(--input-border);
+    
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-secondary);
+    }
+  }
+}
+
+// ===== СООБЩЕНИЕ ОБ ОТСУТСТВИИ ДОСКИ =====
+.noBoard {
+  @include flex-safari-center;
+  height: 60vh;
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem;
+  @include box-sizing-safari;
+  background: $gray-50;
+  @include border-radius-safari($border-radius-lg);
+  border: 2px dashed $gray-300;
+  margin: 1.5rem;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  
+  // Убираем ограничения по ширине, но оставляем возможность прокрутки
+  max-width: none;
+}
+
+.noBoardContent {
+  @include flex-safari-column;
+  gap: 1rem;
+  max-width: 500px;
+  @include box-sizing-safari;
+  
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  p {
+    font-size: $font-size-lg;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.noBoardActions {
+  @include flex-safari-column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  @include box-sizing-safari;
+}
+
+.createFirstBoardBtn, .selectBoardBtn {
+  padding: 0.75rem 1.5rem;
+  background: $blue-500;
+  color: $white;
+  border: none;
+  @include border-radius-safari($border-radius-lg);
+  font-size: $font-size-lg;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    background: $blue-600;
+    @include transform-safari(translateY(-2px));
+    @include box-shadow-safari($shadow-lg);
+  }
+  
+  &:active {
+    background: $blue-700;
+    @include transform-safari(translateY(0));
+  }
+}
+
+.noBoardHint {
+  font-size: $font-size-sm;
+      color: var(--text-tertiary);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+// ===== АДАПТИВНОСТЬ =====
+@media (min-width: 1201px) {
+  .board {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .column {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+  }
+  
+  .addColumnForm {
+    height: fit-content;
+    max-height: 400px;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnButton {
+    align-self: flex-start;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .board {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+  
+  .column {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+  }
+  
+  .addColumnForm {
+    height: fit-content;
+    max-height: 380px;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnButton {
+    align-self: flex-start;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .board {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .column {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+  }
+  
+  .columnHeader {
+    padding: 0.75rem 0.75rem 0.5rem 0.75rem;
+  }
+  
+  .columnTitle {
+    margin-bottom: 0.375rem;
+    
+    h3 {
+      font-size: 0.875rem;
+    }
+  }
+  
+  .columnContent {
+    padding: 0.5rem;
+    gap: 0.375rem;
+  }
+  
+  .addTaskForm {
+    padding: 0.75rem;
+  }
+  
+  .addColumnButton {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnForm {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: fit-content;
+    max-height: 350px;
+    padding: 0.75rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .taskFormActions,
+  .columnFormActions {
+    @include flex-safari-column;
+    gap: 0.375rem;
+    
+    .addTaskBtn,
+    .cancelBtn,
+    .addColumnBtn {
+      justify-content: center;
+      -webkit-justify-content: center;
+      -ms-flex-pack: center;
+      padding: 0.625rem 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .board {
+    @include flex-safari-column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+  
+  .column {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+  
+  .columnHeader {
+    padding: 0.5rem;
+  }
+  
+  .columnContent {
+    padding: 0.375rem;
+  }
+  
+  .addTaskButton {
+    padding: 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .addTaskForm {
+    padding: 0.625rem;
+  }
+  
+  .addColumnButton {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    padding: 0.625rem;
+    font-size: 0.75rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .addColumnForm {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    height: fit-content;
+    max-height: 300px;
+    padding: 0.625rem;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .taskTitleInput,
+  .taskDescriptionInput,
+  .columnTitleInput,
+  .columnDescriptionInput {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .taskFormActions,
+  .columnFormActions {
+    .addTaskBtn,
+    .cancelBtn,
+    .addColumnBtn {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// ===== SAFARI-СПЕЦИФИЧНЫЕ ИСПРАВЛЕНИЯ =====
+@supports (-webkit-touch-callout: none) {
+  // Safari на iOS
+  .boardContent {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .column {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  .addColumnButton,
+  .addColumnForm {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+// Исправления для Safari на macOS
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .boardContent {
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 8px;
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f3f4;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #c1c7cd;
+      border-radius: 4px;
+      border: 1px solid #f1f3f4;
+      
+      &:hover {
+        background: #a8b0b8;
+      }
+    }
+  }
+}
+
+.columnIcon {
+  font-size: 1.125rem;
+  opacity: 0.8;
+  color: $gray-600;
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  @include box-sizing-safari;
+}
+
+// ===== СТИЛИ ДЛЯ СТАНДАРТНЫХ КОЛОНОК =====
+.standardColumnTitle {
+  position: relative;
+  color: $gray-600 !important;
+  font-weight: 500 !important;
+  
+  &:hover {
+    color: $gray-600 !important;
+  }
+}
+
+.standardColumnBadge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  cursor: help;
+  @include transition-safari(opacity);
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// ===== СТИЛИ ДЛЯ КОЛОНКИ ПРОСРОЧЕННЫХ ЗАДАЧ =====
+.overdueInfo {
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 6px;
+  text-align: center;
+  
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #dc2626;
+    font-weight: 500;
+  }
+}
+
+// Стили для заголовков стандартных колонок
+.columnTitle h3.standardColumnTitle {
+  cursor: not-allowed !important;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(156, 163, 175, 0.1);
+    @include border-radius-safari($border-radius-sm);
+    pointer-events: none;
+  }
+}

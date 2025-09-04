@@ -1,0 +1,323 @@
+@import "../../../styles/utils/mixins";
+@import '../../../styles/base/variables';
+
+.userProfile {
+  position: relative;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border-primary);
+  z-index: 100;
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition: all $transition-normal;
+  background: transparent;
+  border: 1px solid transparent;
+  width: 100%;
+  
+  &:hover {
+    background: var(--bg-hover);
+  }
+  
+  &:active {
+    background: var(--bg-active);
+  }
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-inverse);
+  background: linear-gradient(135deg, var(--btn-outline-border), var(--btn-outline-hover-bg));
+  flex-shrink: 0;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.userInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.userName {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.userStatus {
+  font-size: 0.7rem;
+  color: var(--status-success);
+  font-weight: 500;
+}
+
+.dropdownIcon {
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  transition: transform $transition-normal;
+  flex-shrink: 0;
+  
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--modal-bg);
+  border: 1px solid var(--border-primary);
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  margin-top: 0.5rem;
+  width: calc(100% - 2rem);
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+
+
+.menuDivider {
+  height: 1px;
+  background: var(--border-primary);
+  margin: 0.25rem 0;
+}
+
+.menuItems {
+  padding: 0 1rem;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all $transition-normal;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  border-radius: 0;
+  
+  &:first-child {
+    padding-top: 1.25rem;
+  }
+  
+  &:last-child {
+    padding-bottom: 1.25rem;
+  }
+  
+  &:hover {
+    background: var(--bg-hover);
+    color: var(--text-accent);
+  }
+  
+  &:active {
+    background: var(--bg-active);
+  }
+  
+  .menuIcon {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: transform $transition-normal;
+  }
+  
+  &:hover .menuIcon {
+    transform: scale(1.1);
+  }
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all $transition-normal;
+  font-size: 0.875rem;
+  color: var(--status-danger);
+  font-weight: 500;
+  border-top: 1px solid var(--border-primary);
+  padding-top: 0.875rem;
+  padding-bottom: 1.25rem;
+  box-sizing: border-box;
+  
+  &:hover {
+    background: var(--status-danger-bg);
+    color: var(--status-danger);
+  }
+  
+  &:active {
+    background: var(--bg-active);
+  }
+  
+  .menuIcon {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: transform $transition-normal;
+  }
+  
+  &:hover .menuIcon {
+    transform: scale(1.1);
+  }
+}
+
+// Анимация появления dropdown
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 768px) {
+  .dropdownMenu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-radius: $border-radius-lg $border-radius-lg 0 0;
+    max-height: 80vh;
+    overflow-y: auto;
+    height: auto;
+    animation: slideUp 0.2s ease-out;
+  }
+  
+  .profileButton {
+    padding: 0.5rem;
+  }
+  
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+  
+  .userName {
+    font-size: 0.8rem;
+  }
+  
+  .userStatus {
+    font-size: 0.7rem;
+  }
+}
+
+// Состояния загрузки и ошибок
+.loading, .error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 1rem;
+}
+
+.error {
+  color: var(--status-danger);
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  &::before {
+    content: '⚠️';
+    font-size: 1.5rem;
+  }
+}
+
+.loading {
+  color: var(--text-accent);
+  
+  &::before {
+    content: '⏳';
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Стили для кнопки входа
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition: all $transition-normal;
+  background: var(--btn-outline-border);
+  border: none;
+  color: var(--text-inverse);
+  font-weight: 500;
+  font-size: 0.875rem;
+  width: 100%;
+  
+  &:hover {
+    background: var(--btn-outline-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    background: var(--btn-outline-hover-bg);
+    transform: translateY(0);
+  }
+}
+
+.loginIcon {
+  font-size: 1rem;
+}

@@ -1,0 +1,295 @@
+@import "../../styles/utils/mixins";
+@import "../../styles/base/variables";
+
+.todoPage {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-primary);
+  overflow: hidden;
+  
+  // Убираем ограничения по ширине, но оставляем возможность прокрутки
+  max-width: none;
+  min-width: 0;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  
+  // Убираем ограничения по ширине, но оставляем возможность прокрутки
+  max-width: none;
+}
+
+.header {
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 100;
+}
+
+.projectInfo {
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    
+    .currentProject {
+      color: var(--text-primary);
+      font-weight: 600;
+      
+      .searchResultsCount {
+        color: var(--text-tertiary);
+        font-weight: 400;
+        margin-left: 0.5rem;
+      }
+    }
+  }
+  
+  .description {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin: 0;
+    font-style: italic;
+  }
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.viewToggles {
+  display: flex;
+  background: var(--bg-secondary);
+  border-radius: $border-radius-md;
+  padding: 0.25rem;
+  border: 2px solid var(--border-primary);
+  
+  .viewBtn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    border-radius: $border-radius-sm;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all $transition-normal;
+    
+    &:hover {
+      color: var(--btn-outline-text);
+      background: var(--bg-hover);
+    }
+    
+    &.active {
+      background: var(--btn-outline-border);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.05);
+    }
+  }
+}
+
+.globalActions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  .searchBtn {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    padding: 0.75rem 1rem;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-normal;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--btn-outline-border);
+      color: var(--btn-outline-text);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    .shortcut {
+      font-size: 0.75rem;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      padding: 0.25rem 0.5rem;
+      border-radius: $border-radius-sm;
+      margin-left: 0.5rem;
+    }
+  }
+
+  .newBoardBtn {
+    background: var(--btn-outline-border);
+    color: var(--text-inverse);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all $transition-normal;
+
+    &:hover {
+      background: var(--btn-outline-hover-bg);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .createBoardBtn {
+    background: linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    position: relative;
+    overflow: hidden;
+
+    // Добавляем блестящий эффект
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 50%, #065F46 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      
+      &::before {
+        opacity: 1;
+        animation: shine 0.6s ease-in-out;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    .createIcon {
+      font-size: 1rem;
+      font-weight: bold;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .actionBtn {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    padding: 0.75rem;
+    border-radius: $border-radius-md;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all $transition-normal;
+    position: relative;
+
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-secondary);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .settingsContainer {
+    position: relative;
+
+    .actionBtn {
+      &.active {
+        background: var(--status-info-bg);
+        border-color: var(--status-info);
+        color: var(--status-info);
+      }
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg-primary);
+  width: 100%;
+  
+  // Убираем ограничения по ширине, но оставляем возможность прокрутки
+  max-width: none;
+  min-width: 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  
+  p {
+    margin: 0;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: $border-radius-md;
+    border: 1px solid var(--border-primary);
+  }
+}
+
+// Анимация блеска для кнопки создания доски
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+

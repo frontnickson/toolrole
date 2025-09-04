@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест загрузки досок при аутентификации</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 Тест загрузки досок при аутентификации</h1>
+    
+    <div class="test-section">
+        <h2>📋 Инструкции по тестированию</h2>
+        <div class="step">
+            <strong>Шаг 1:</strong> Откройте приложение в браузере (обычно <code>http://localhost:5173</code>)
+        </div>
+        <div class="step">
+            <strong>Шаг 2:</strong> Войдите в аккаунт - доски должны загрузиться автоматически
+        </div>
+        <div class="step">
+            <strong>Шаг 3:</strong> Создайте несколько досок с задачами
+        </div>
+        <div class="step">
+            <strong>Шаг 4:</strong> Выйдите из аккаунта (logout)
+        </div>
+        <div class="step">
+            <strong>Шаг 5:</strong> Войдите обратно - доски должны загрузиться автоматически
+        </div>
+        <div class="step">
+            <strong>Шаг 6:</strong> Кликните на доску - задачи должны загрузиться в колонки
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Проверка в DevTools</h2>
+        <p>Откройте DevTools (F12) и проверьте:</p>
+        <ul>
+            <li><strong>Console:</strong> Должны быть сообщения о загрузке досок после аутентификации</li>
+            <li><strong>Network:</strong> Должны быть запросы на <code>/api/v1/boards</code> после входа</li>
+            <li><strong>Redux DevTools:</strong> Состояние <code>boards</code> должно обновляться</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Ожидаемые сообщения в консоли</h2>
+        <pre>🔐 useAuth: Пользователь найден в Redux store, устанавливаем токен
+🔍 useAuth: токен установлен в API service
+📋 useAuth: Загружаем доски после аутентификации...
+📋 useAuth: Доски загружены после аутентификации: X</pre>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Ожидаемое поведение</h2>
+        <ul>
+            <li class="success">✅ Доски загружаются автоматически при входе</li>
+            <li class="success">✅ Доски загружаются при инициализации (если пользователь уже аутентифицирован)</li>
+            <li class="success">✅ Задачи появляются в колонках при клике на доску</li>
+            <li class="success">✅ Нет дублирования запросов на загрузку досок</li>
+            <li class="success">✅ Работает с fallback пользователем</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🐛 Отладка</h2>
+        <p>Если доски не загружаются, проверьте:</p>
+        <ul>
+            <li>Бекенд запущен на порту 8001</li>
+            <li>API endpoint <code>/api/v1/boards</code> доступен</li>
+            <li>Пользователь аутентифицирован (есть токен)</li>
+            <li>Нет ошибок в консоли браузера</li>
+            <li>Redux store содержит данные пользователя</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 API Endpoints</h2>
+        <p>Убедитесь, что бекенд запущен и доступны endpoints:</p>
+        <ul>
+            <li><code>POST http://localhost:8001/api/v1/auth/login-email</code> - вход в систему</li>
+            <li><code>GET http://localhost:8001/api/v1/auth/me</code> - получение данных пользователя</li>
+            <li><code>GET http://localhost:8001/api/v1/boards</code> - получение досок</li>
+            <li><code>GET http://localhost:8001/api/v1/boards/:id/tasks</code> - получение задач доски</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 Логика работы</h2>
+        <ol>
+            <li><strong>При входе:</strong> Очищаются старые доски → Аутентификация → Загрузка досок</li>
+            <li><strong>При инициализации:</strong> Проверка токена → Загрузка досок (если аутентифицирован)</li>
+            <li><strong>При клике на доску:</strong> Загрузка задач для выбранной доски</li>
+            <li><strong>При выходе:</strong> Очистка досок и данных пользователя</li>
+        </ol>
+    </div>
+
+    <script>
+        // Простая проверка API
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/boards');
+                const data = await response.json();
+                console.log('✅ API доступен:', data);
+                return true;
+            } catch (error) {
+                console.error('❌ API недоступен:', error);
+                return false;
+            }
+        }
+
+        // Проверяем API при загрузке страницы
+        testAPI();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,264 @@
+@import "../../styles/utils/mixins";
+@import '../../styles/base/variables';
+
+.settingsPage {
+  min-height: 100vh;
+  background: $gray-50;
+  padding: 2rem 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+  
+  .headerTop {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+    
+    button {
+      align-self: flex-start;
+    }
+  }
+  
+  .headerContent {
+    text-align: center;
+    
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $gray-900;
+      margin: 0 0 1rem 0;
+    }
+    
+    .subtitle {
+      font-size: 1.125rem;
+      color: $gray-600;
+      margin: 0;
+    }
+  }
+}
+
+.content {
+  background: $white;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+}
+
+.section {
+  padding: 2rem;
+  border-bottom: 1px solid $gray-200;
+  
+  &:last-of-type {
+    border-bottom: none;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $gray-800;
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.settingGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid $gray-100;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .settingLabel {
+    font-weight: 500;
+    color: $gray-700;
+    font-size: 0.875rem;
+    flex: 1;
+  }
+  
+  .settingControl {
+    flex-shrink: 0;
+  }
+}
+
+.select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius-md;
+  font-size: 0.875rem;
+  background: $white;
+  color: $gray-700;
+  min-width: 120px;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px $primary-50;
+  }
+}
+
+// Switch стили
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+    &:checked + .slider {
+      background-color: $primary-500;
+    }
+    
+    &:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $gray-300;
+    transition: $transition-normal;
+    border-radius: 24px;
+    
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: $white;
+      transition: $transition-normal;
+      border-radius: 50%;
+      box-shadow: $shadow-sm;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 2rem;
+  background: $gray-50;
+  border-top: 1px solid $gray-200;
+  
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+// Анимации
+.settingsPage {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .settingsPage {
+    padding: 1rem 0;
+  }
+  
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .header {
+    margin-bottom: 2rem;
+    
+    .title {
+      font-size: 2rem;
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .settingsSection {
+    padding: 1.5rem;
+  }
+  
+  .settingGroup {
+    .settingItem {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+  
+  .actions {
+    padding: 1.5rem;
+  }
+}
+
+// Состояния загрузки и ошибок
+.loading, .error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  font-size: 1.125rem;
+  color: $gray-600;
+}
+
+.error {
+  color: $error-color;
+  flex-direction: column;
+  gap: 1rem;
+  
+  &::before {
+    content: '⚠️';
+    font-size: 3rem;
+  }
+}
+
+.loading {
+  color: $primary-color;
+  
+  &::before {
+    content: '⏳';
+    font-size: 2rem;
+    margin-right: 0.5rem;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,800 @@
+@import '../../../../styles/base/variables';
+@import '../../../../styles/utils/mixins';
+
+.taskPage {
+  height: 100%;
+  background: var(--bg-primary);
+  padding: 2rem;
+  @include box-sizing-safari;
+  overflow-y: auto;
+}
+
+.loading {
+  @include flex-safari-center;
+  height: 50vh;
+  
+  h2 {
+    color: var(--text-secondary);
+    font-size: $font-size-lg;
+  }
+}
+
+.header {
+  @include flex-safari(row, nowrap, space-between, center);
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-lg);
+  @include box-shadow-safari($shadow-sm);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+}
+
+.backButton {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  @include border-radius-safari($border-radius-md);
+  color: var(--text-primary);
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+
+  &:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-secondary);
+  }
+}
+
+.headerActions {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 1rem;
+}
+
+.editButton, .saveButton, .deleteButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+}
+
+.editButton {
+  background: var(--btn-outline-border);
+  color: var(--text-inverse);
+
+  &:hover {
+    background: var(--btn-outline-hover-bg);
+  }
+}
+
+.saveButton {
+  background: var(--status-success);
+  color: var(--text-inverse);
+
+  &:hover {
+    background: var(--status-success);
+    opacity: 0.8;
+  }
+}
+
+.deleteButton {
+  background: var(--status-danger);
+  color: var(--text-inverse);
+
+  &:hover {
+    background: var(--status-danger);
+    opacity: 0.8;
+  }
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  @include box-sizing-safari;
+}
+
+.mainContent {
+  @include flex-safari-column;
+  gap: 2rem;
+}
+
+.taskInfo {
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-lg);
+  padding: 2rem;
+  @include box-shadow-safari($shadow-sm);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+}
+
+.editForm {
+  @include flex-safari-column;
+  gap: 1.5rem;
+}
+
+.titleInput {
+  padding: 1rem;
+  border: 2px solid var(--input-border);
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-lg;
+  font-weight: 600;
+  background: var(--input-bg);
+  color: var(--input-text);
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+  }
+}
+
+.descriptionInput {
+  padding: 1rem;
+  border: 2px solid var(--input-border);
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-base;
+  resize: vertical;
+  background: var(--input-bg);
+  color: var(--input-text);
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+  }
+}
+
+.editFields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  @include box-sizing-safari;
+}
+
+.field {
+  @include flex-safari-column;
+  gap: 0.5rem;
+  @include box-sizing-safari;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  select, input {
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    background: var(--input-bg);
+    color: var(--input-text);
+    @include transition-safari(border-color);
+    @include appearance-safari;
+    @include box-sizing-safari;
+
+    &:focus {
+      outline: none;
+      border-color: var(--input-focus-border);
+    }
+  }
+  
+  .fieldHint {
+    font-size: $font-size-xs;
+    color: var(--text-tertiary);
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+}
+
+// ===== КАСТОМНЫЕ СЕЛЕКТЫ ДЛЯ SAFARI =====
+.customSelect {
+  position: relative;
+  @include box-sizing-safari;
+}
+
+.customSelectTrigger {
+  @include flex-safari(row, nowrap, space-between, center);
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--input-border);
+  @include border-radius-safari($border-radius-md);
+  background: var(--input-bg);
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    border-color: var(--border-secondary);
+    background: var(--bg-hover);
+  }
+  
+  &.open {
+    border-color: var(--input-focus-border);
+    @include box-shadow-safari(0 0 0 3px var(--input-focus-shadow));
+  }
+  
+  .selectedValue {
+    font-size: $font-size-sm;
+    color: var(--input-text);
+    font-weight: 500;
+  }
+  
+  .arrow {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    @include transition-safari(transform);
+    
+    &.open {
+      @include transform-safari(rotate(180deg));
+    }
+  }
+}
+
+.customSelectDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-primary);
+  @include border-radius-safari($border-radius-md);
+  @include box-shadow-safari($shadow-lg);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  @include box-sizing-safari;
+  @include hide-scrollbar-safari;
+  
+  .customSelectOption {
+    padding: 0.75rem;
+    cursor: pointer;
+    @include transition-safari(background-color);
+    @include box-sizing-safari;
+    
+    &:hover {
+      background: var(--bg-hover);
+    }
+    
+    &.selected {
+      background: var(--status-info-bg);
+      color: var(--status-info);
+      font-weight: 500;
+    }
+    
+    .optionLabel {
+      font-size: $font-size-sm;
+      color: inherit;
+    }
+    
+    .optionColor {
+      width: 12px;
+      height: 12px;
+      @include border-radius-safari(50%);
+      display: inline-block;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+  }
+}
+
+// ===== СТАТУС И ПРИОРИТЕТ =====
+.status, .priority {
+  padding: 0.5rem 1rem;
+  @include border-radius-safari($border-radius-full);
+  color: var(--text-inverse);
+  font-size: $font-size-xs;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  @include box-sizing-safari;
+  @include box-shadow-safari(var(--shadow-sm));
+}
+
+.taskTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.taskDescription {
+  font-size: $font-size-lg;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+
+.taskMeta {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 1rem;
+  flex-wrap: wrap;
+  @include box-sizing-safari;
+}
+
+.metaItem {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  @include box-sizing-safari;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: auto;
+  white-space: nowrap;
+}
+
+.separator {
+  font-size: $font-size-sm;
+  color: var(--text-tertiary);
+  font-weight: 400;
+  margin: 0 0.25rem;
+  opacity: 0.7;
+}
+
+.dueDate {
+  font-size: $font-size-sm;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.changeDateBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  @include border-radius-safari($border-radius-sm);
+  @include transition-safari(background-color);
+  font-size: 0.875rem;
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    background-color: var(--bg-hover);
+  }
+  
+  &:active {
+    background-color: var(--bg-active);
+  }
+}
+
+.quickDateChange {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.5rem;
+  @include box-sizing-safari;
+}
+
+.quickDateInput {
+  padding: 0.5rem;
+  border: 1px solid var(--input-border);
+  @include border-radius-safari($border-radius-sm);
+  font-size: $font-size-sm;
+  background: var(--input-bg);
+  color: var(--input-text);
+  outline: none;
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:focus {
+    border-color: var(--input-focus-border);
+    @include box-shadow-safari(0 0 0 2px var(--input-focus-shadow));
+  }
+}
+
+.cancelDateBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  @include border-radius-safari($border-radius-sm);
+  @include transition-safari(background-color);
+  font-size: 0.875rem;
+  color: var(--status-danger);
+  @include appearance-safari;
+  @include box-sizing-safari;
+  
+  &:hover {
+    background-color: var(--status-danger-bg);
+  }
+  
+  &:active {
+    background-color: var(--status-danger-bg);
+    opacity: 0.8;
+  }
+}
+
+.dateHint {
+  font-size: $font-size-xs;
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
+.tags {
+  @include flex-safari(row, nowrap, flex-start, center);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  @include box-sizing-safari;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  @include border-radius-safari($border-radius-full);
+  font-size: $font-size-xs;
+  color: var(--text-secondary);
+  font-weight: 500;
+  @include box-sizing-safari;
+}
+
+.commentCount {
+  color: var(--text-secondary);
+  font-weight: 500;
+  background: var(--bg-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  border: 1px solid var(--border-primary);
+}
+
+.subtasks, .attachments, .comments {
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-lg);
+  padding: 2rem;
+  @include box-shadow-safari($shadow-sm);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+
+  h3 {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.subtasksList {
+  @include flex-safari-column;
+  gap: 0.75rem;
+}
+
+.subtask {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  @include border-radius-safari($border-radius-md);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--status-success);
+    @include appearance-safari;
+    @include box-sizing-safari;
+  }
+
+  span {
+    font-size: $font-size-sm;
+    color: var(--text-secondary);
+    font-weight: 500;
+
+    &.completed {
+      text-decoration: line-through;
+      color: var(--text-tertiary);
+    }
+  }
+}
+
+.attachmentsList {
+  @include flex-safari-column;
+  gap: 0.75rem;
+}
+
+.attachment {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  @include border-radius-safari($border-radius-md);
+  border: 1px solid var(--border-primary);
+  @include transition-safari(all);
+  @include box-sizing-safari;
+
+  &:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-secondary);
+  }
+}
+
+.attachmentIcon {
+  font-size: 1.25rem;
+}
+
+.attachmentName {
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  font-size: $font-size-sm;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.attachmentSize {
+  font-size: $font-size-xs;
+  color: var(--text-tertiary);
+}
+
+.addComment {
+  margin-bottom: 2rem;
+  @include box-sizing-safari;
+}
+
+.addComment textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--input-border);
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-base;
+  resize: vertical;
+  margin-bottom: 1rem;
+  background: var(--input-bg);
+  color: var(--input-text);
+  @include transition-safari(border-color);
+  @include appearance-safari;
+  @include box-sizing-safari;
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+  }
+}
+
+.addCommentButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--btn-outline-border);
+  color: var(--text-inverse);
+  border: none;
+  @include border-radius-safari($border-radius-md);
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  @include transition-safari(all);
+  @include appearance-safari;
+  @include box-sizing-safari;
+
+  &:hover:not(:disabled) {
+    background: var(--btn-outline-hover-bg);
+  }
+
+  &:disabled {
+    background: var(--text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+.commentsList {
+  @include flex-safari-column;
+  gap: 1.5rem;
+}
+
+.comment {
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  @include border-radius-safari($border-radius-md);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+}
+
+.commentHeader {
+  @include flex-safari(row, nowrap, space-between, center);
+  margin-bottom: 1rem;
+  @include box-sizing-safari;
+}
+
+.commentAuthor {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.commentDate {
+  font-size: $font-size-xs;
+  color: var(--text-tertiary);
+}
+
+.commentContent {
+  font-size: $font-size-base;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.sidebar {
+  @include flex-safari-column;
+  gap: 2rem;
+  @include box-sizing-safari;
+}
+
+.quickActions, .activity {
+  background: var(--card-bg);
+  @include border-radius-safari($border-radius-lg);
+  padding: 1.5rem;
+  @include box-shadow-safari($shadow-sm);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+
+  h3 {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.actionGroup {
+  @include flex-safari-column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  @include box-sizing-safari;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  select {
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    @include border-radius-safari($border-radius-md);
+    font-size: $font-size-sm;
+    background: var(--input-bg);
+    color: var(--input-text);
+    @include transition-safari(border-color);
+    @include appearance-safari;
+    @include box-sizing-safari;
+
+    &:focus {
+      outline: none;
+      border-color: var(--input-focus-border);
+    }
+  }
+}
+
+.activityList {
+  @include flex-safari-column;
+  gap: 1rem;
+}
+
+.activityItem {
+  @include flex-safari(row, nowrap, flex-start, center);
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  @include border-radius-safari($border-radius-md);
+  border: 1px solid var(--border-primary);
+  @include box-sizing-safari;
+}
+
+.activityIcon {
+  font-size: 1rem;
+  margin-top: 0.125rem;
+}
+
+.activityContent {
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  @include flex-safari-column;
+  gap: 0.25rem;
+  @include box-sizing-safari;
+}
+
+.activityAction {
+  font-size: $font-size-sm;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.activityTime {
+  font-size: $font-size-xs;
+  color: var(--text-tertiary);
+}
+
+// ===== SAFARI-СПЕЦИФИЧНЫЕ ИСПРАВЛЕНИЯ =====
+@supports (-webkit-touch-callout: none) {
+  // Safari на iOS
+  .customSelectDropdown {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .quickDateInput {
+    -webkit-appearance: none;
+    border-radius: 6px;
+  }
+}
+
+// Исправления для Safari на macOS
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .customSelectTrigger {
+    &::-webkit-select-placeholder {
+      color: var(--text-tertiary);
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .taskPage {
+    padding: 1rem;
+  }
+
+  .header {
+    @include flex-safari-column;
+    gap: 1rem;
+    align-items: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+  }
+
+  .headerActions {
+    justify-content: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+  }
+
+  .taskTitle {
+    font-size: 1.5rem;
+  }
+
+  .editFields {
+    grid-template-columns: 1fr;
+  }
+  
+  .customSelectDropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    @include transform-safari(translate(-50%, -50%));
+    width: 90vw;
+    max-width: 300px;
+    max-height: 60vh;
+  }
+}

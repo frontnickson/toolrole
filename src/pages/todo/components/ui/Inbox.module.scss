@@ -1,0 +1,425 @@
+@import "../../../../styles/utils/mixins";
+@import "../../../../styles/base/variables";
+
+.inbox {
+  @include flex-safari-column;
+  min-height: 100%; // Минимальная высота вместо фиксированной
+  background: var(--bg-primary);
+  @include box-sizing-safari;
+  min-height: 0; // Важно для flexbox
+}
+
+.header {
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  flex-shrink: 0; // Не сжимаемся
+  
+  .headerContent {
+    margin-bottom: 1rem;
+    
+    .title {
+      @include flex-safari(row, nowrap, flex-start, center);
+      gap: 0.75rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 0.5rem 0;
+      
+      .icon {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+  
+  .headerActions {
+    @include flex-safari(row, nowrap, flex-end, center);
+    
+    .markAllReadBtn {
+      padding: 0.5rem 1rem;
+      background: var(--btn-outline-border);
+      color: var(--text-inverse);
+      border: none;
+      border-radius: $border-radius-md;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all $transition-normal;
+      
+      &:hover:not(:disabled) {
+        background: var(--btn-outline-hover-bg);
+        transform: translateY(-1px);
+      }
+      
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+      
+      &:disabled {
+        background: var(--text-tertiary);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-primary);
+  flex-shrink: 0; // Не сжимаемся
+  
+  .statCard {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: $border-radius-lg;
+    border: 1px solid var(--border-primary);
+    
+    .statNumber {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      margin-bottom: 0.25rem;
+    }
+    
+    .statLabel {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+.filters {
+  @include flex-safari(row, wrap, flex-start, center);
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--card-bg);
+  flex-shrink: 0; // Не сжимаемся
+  
+  .filterGroup {
+    @include flex-safari-column;
+    gap: 0.5rem;
+    
+    .filterLabel {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .filterSelect {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--input-border);
+      border-radius: $border-radius-md;
+      font-size: 0.875rem;
+      color: var(--input-text);
+      background: var(--input-bg);
+      cursor: pointer;
+      transition: border-color $transition-normal;
+      
+      &:hover {
+        border-color: var(--border-secondary);
+      }
+      
+      &:focus {
+        outline: none;
+        border-color: var(--input-focus-border);
+        box-shadow: 0 0 0 3px var(--input-focus-shadow);
+      }
+    }
+  }
+}
+
+.itemsList {
+  flex: 1;
+  overflow-y: visible; // Убираем локальный скролл
+  padding: 1rem 0 2rem 0; // Добавляем отступ снизу
+  min-height: 0; // Важно для flexbox
+  height: auto; // Автоматическая Всвысота вместо фиксированной
+  
+  // Убираем стили скроллбара, так как теперь скролл по всей странице
+  
+  .emptyState {
+    @include flex-safari-column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    text-align: center;
+    
+    .emptyIcon {
+      font-size: 3rem;
+      opacity: 0.5;
+      margin-bottom: 1rem;
+    }
+    
+    .emptyTitle {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .emptyMessage {
+      color: var(--text-tertiary);
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  .loadingState {
+    @include flex-safari-column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    text-align: center;
+    
+    .loadingIcon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      animation: spin 1s linear infinite;
+    }
+    
+    p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+  
+  .inboxItem {
+    @include flex-safari(row, nowrap, flex-start, flex-start);
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-primary);
+    transition: background-color $transition-normal;
+    cursor: pointer;
+    min-height: 120px; // Минимальная высота для лучшего скролла
+    
+    &:hover {
+      background: var(--bg-hover);
+    }
+    
+    &:last-child {
+      border-bottom: none; // Убираем границу у последнего элемента
+    }
+    
+    &.unread {
+      background: var(--status-info-bg);
+      border-left: 4px solid var(--status-info);
+      
+      &:hover {
+        background: var(--status-info-bg);
+        opacity: 0.8;
+      }
+      
+      .itemTitle {
+        font-weight: 600;
+      }
+    }
+    
+    .itemIcon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: var(--bg-secondary);
+      border-radius: 50%;
+      @include flex-safari(row, nowrap, center, center);
+      
+      .icon {
+        font-size: 1.25rem;
+      }
+    }
+    
+    .itemContent {
+      flex: 1;
+      min-width: 0;
+      
+      .itemHeader {
+        @include flex-safari(row, nowrap, space-between, flex-start);
+        margin-bottom: 0.5rem;
+        
+        .itemTitle {
+          font-size: 1rem;
+          font-weight: 500;
+          color: var(--text-primary);
+          margin: 0;
+          flex: 1;
+          margin-right: 1rem;
+        }
+        
+        .itemMeta {
+          @include flex-safari-column;
+          align-items: flex-end;
+          gap: 0.25rem;
+          flex-shrink: 0;
+          
+          .priority {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: $border-radius-sm;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          
+          .time {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+          }
+        }
+      }
+      
+      .itemMessage {
+        color: var(--text-secondary);
+        margin: 0 0 0.75rem 0;
+        font-size: 0.875rem;
+        line-height: 1.4;
+      }
+      
+      .itemDetails {
+        @include flex-safari(row, wrap, flex-start, center);
+        gap: 1rem;
+        margin-bottom: 1rem;
+        
+        .sender, .project {
+          font-size: 0.75rem;
+          color: var(--text-secondary);
+          padding: 0.25rem 0.5rem;
+          background: var(--bg-secondary);
+          border-radius: $border-radius-sm;
+        }
+      }
+      
+      .itemActions {
+        @include flex-safari(row, wrap, flex-start, center);
+        gap: 0.5rem;
+        
+        .actionBtn {
+          padding: 0.375rem 0.75rem;
+          background: var(--bg-secondary);
+          color: var(--text-secondary);
+          border: 1px solid var(--border-primary);
+          border-radius: $border-radius-sm;
+          font-size: 0.75rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all $transition-normal;
+          
+          &:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-secondary);
+          }
+          
+          &:active {
+            transform: translateY(1px);
+          }
+        }
+      }
+    }
+  }
+  
+  .loadMoreBtn {
+    width: calc(100% - 4rem); // Учитываем отступы
+    padding: 1rem 2rem;
+    margin: 1rem 2rem 0 2rem;
+    background: var(--card-bg);
+    color: var(--text-accent);
+    border: 2px solid var(--border-primary);
+    border-radius: $border-radius-lg;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $transition-normal;
+    
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-secondary);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: var(--input-focus-border);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+  }
+}
+
+// Приоритеты
+.urgentPriority {
+  .itemIcon {
+    background: var(--status-danger-bg) !important;
+  }
+  
+  .priority {
+    background: var(--status-danger) !important;
+    color: var(--text-inverse) !important;
+  }
+}
+
+.highPriority {
+  .itemIcon {
+    background: var(--status-warning-bg) !important;
+  }
+  
+  .priority {
+    background: var(--status-warning) !important;
+    color: var(--text-inverse) !important;
+  }
+}
+
+.mediumPriority {
+  .itemIcon {
+    background: var(--status-info-bg) !important;
+  }
+  
+  .priority {
+    background: var(--status-info) !important;
+    color: var(--text-inverse) !important;
+  }
+}
+
+.lowPriority {
+  .itemIcon {
+    background: var(--status-success-bg) !important;
+  }
+  
+  .priority {
+    background: var(--status-success) !important;
+    color: var(--text-inverse) !important;
+  }
+}
+
+// Анимация загрузки
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
